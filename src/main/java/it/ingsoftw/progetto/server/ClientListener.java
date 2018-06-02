@@ -7,10 +7,10 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
 import java.util.Set;
 
-import it.ingsoftw.progetto.common.IClientConnection;
+import it.ingsoftw.progetto.common.IClientListener;
 import it.ingsoftw.progetto.common.IClientRmiFactory;
 
-public class ClientListener extends UnicastRemoteObject implements IClientConnection {
+public class ClientListener extends UnicastRemoteObject implements IClientListener {
 
     Set<IClientRmiFactory> connectedUsers;
 
