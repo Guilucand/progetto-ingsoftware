@@ -1,36 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="41165358-253c-4cea-893c-ee88cd810003" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/utils/Password.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/utils/RandomString.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/client/DrugsQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/client/DrugsQuery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/client/MainClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/client/MainClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/AlarmLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/AlarmLevel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/Drug.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/Drug.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/EditableUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/EditableUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IClientListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IClientListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IClientRmiFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IClientRmiFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/ILogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/ILogin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IMonitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IMonitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IPatient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IPatient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IVSConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IVSConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IVSListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/IVSListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/PatientData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/PatientData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/utils/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/common/utils/StringUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/ClientRmiFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/ClientRmiFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/MainServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/MainServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/ServerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/ServerConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/ServerLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/ServerLogin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/database/IUsersDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/database/IUsersDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/database/MainDb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/server/database/DatabaseConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/vsmonitor/VsGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/vsmonitor/VsGui.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/vsmonitor/VsInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/vsmonitor/VsInstance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/vsmonitor/VsMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/ingsoftw/progetto/vsmonitor/VsMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/test/database/TestUsersDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/test/database/TestUsersDatabase.java" afterDir="false" />
-    </list>
+    <list default="true" id="41165358-253c-4cea-893c-ee88cd810003" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -826,29 +797,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.VsMonitor">
+  <component name="RunManager" selected="Application.Server">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-    </configuration>
-    <configuration name="Client" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="it.ingsoftw.progetto.client.MainClient" />
-      <module name="progetto-ingsoftware_main" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-    </configuration>
-    <configuration name="Server" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="it.ingsoftw.progetto.server.MainServer" />
-      <module name="progetto-ingsoftware_main" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-    </configuration>
-    <configuration name="VsMonitor" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="it.ingsoftw.progetto.vsmonitor.VsMain" />
-      <module name="progetto-ingsoftware_main" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
-    <configuration name="progetto-ingsoftware [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="progetto-ingsoftware [build]" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -909,11 +865,6 @@
       <item itemvalue="Application.Server" />
       <item itemvalue="Gradle.progetto-ingsoftware [build]" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Gradle.progetto-ingsoftware [build]" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -1507,7 +1458,7 @@
       </state>
       <state key="FacetStructureConfigurable.UI">
         <settings>
-          <last-edited>No facets are configured</last-edited>
+          <last-edited />
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1566,7 +1517,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>Gradle: junit:junit:4.12</last-edited>
+          <last-edited />
           <splitter-proportions>
             <option name="proportions">
               <list>
