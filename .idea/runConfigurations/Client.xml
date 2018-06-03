@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Client" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="it.ingsoftw.progetto.client.MainClient" />
-    <module name="progetto-ingsoftware_main" />
-    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-    <method />
-  </configuration>
-</component>
