@@ -5,11 +5,13 @@ import java.rmi.server.UnicastRemoteObject;
 
 import it.ingsoftw.progetto.common.IClientRmiFactory;
 import it.ingsoftw.progetto.common.ILogin;
+import it.ingsoftw.progetto.common.IMonitor;
 import test.database.TestUsersDatabase;
 
 public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiFactory {
 
     ILogin loginInterface;
+    IMonitor monitorInterface;
 
     public static TestUsersDatabase testUsersDatabase = new TestUsersDatabase();
 
@@ -23,5 +25,13 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
             loginInterface = new ServerLogin(testUsersDatabase);
         }
         return loginInterface;
+    }
+
+    @Override
+    public IMonitor getMonitorInterface() throws RemoteException {
+        if (monitorInterface == null) {
+//            monitorInterface = new ServerMonitor(testUsersDatabase);
+        }
+        return monitorInterface;
     }
 }

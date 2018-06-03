@@ -4,7 +4,11 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 import it.ingsoftw.progetto.common.IVSListener;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+/**
+ * Classe rappresentante una macchina di monitoraggio
+ */
 public class VsInstance {
 
     public final String ID;
@@ -48,7 +52,7 @@ public class VsInstance {
         });
 
         GUI.setConnectionCallback((newStatus)-> {
-            return newStatus;
+            throw new NotImplementedException(); // Da implementare
         });
     }
 }

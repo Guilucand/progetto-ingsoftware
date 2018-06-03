@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.User;
+import it.ingsoftw.progetto.common.utils.Password;
 import it.ingsoftw.progetto.server.database.IUsersDatabase;
 
 public class TestUsersDatabase implements IUsersDatabase {
@@ -61,17 +62,17 @@ public class TestUsersDatabase implements IUsersDatabase {
     }
 
     @Override
-    public boolean updatePassword(String id, String newPassword) {
+    public boolean updatePassword(String id, Password newPassword) {
         if (getUser(id) == null)
             return false;
 
-        auth.put(id, newPassword);
+        auth.put(id, newPassword.getPasswordHash());
         return true;
     }
 
     @Override
-    public boolean authenticateUser(String id, String password) {
-        if (password.equals(auth.getOrDefault(id, null)))
+    public boolean authenticateUser(String id, Password password) {
+        if (password.equals(Password.fromHash(auth.getOrDefault(id, null))))
             return true;
         return false;
     }

@@ -25,6 +25,9 @@ import java.util.function.Function;
 import it.ingsoftw.progetto.common.AlarmLevel;
 import javafx.util.Pair;
 
+/**
+ * Interfaccia grafica da terminale di una macchina di monitoraggio
+ */
 public class VsGui {
 
     Panel topPanel;

@@ -2,10 +2,13 @@ package it.ingsoftw.progetto.server;
 
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.User;
+import it.ingsoftw.progetto.common.utils.Password;
+import it.ingsoftw.progetto.common.utils.RandomString;
 import it.ingsoftw.progetto.server.database.IUsersDatabase;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+
 
 public class ServerLogin extends UnicastRemoteObject implements ILogin {
 
@@ -28,7 +31,7 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
     }
 
     @Override
-    public LoginStatus doLogin(String userId, String password) {
+    public LoginStatus doLogin(String userId, Password password) {
 
         boolean loginSuccessful = usersDbConnection.authenticateUser(userId, password);
 
@@ -60,14 +63,15 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
 
         if (user == null) return false;
 
-        String tempPassword = "x21mu32ir";
-        usersDbConnection.updatePassword(user.getId(), tempPassword);
+
+        String tempPassword = new RandomString(12).nextString();
+        usersDbConnection.updatePassword(user.getId(), Password.fromPassword(tempPassword));
         EmailSender.sendForgotPasswordMail(email, tempPassword);
         return true;
     }
 
     @Override
-    public boolean changePassword(String oldPassword, String newPassword) {
+    public boolean changePassword(Password oldPassword, Password newPassword) {
         return false;
     }
 

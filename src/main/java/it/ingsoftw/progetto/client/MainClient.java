@@ -6,6 +6,7 @@ import it.ingsoftw.progetto.common.Drug;
 import it.ingsoftw.progetto.common.IClientListener;
 import it.ingsoftw.progetto.common.IClientRmiFactory;
 import it.ingsoftw.progetto.common.ILogin;
+import it.ingsoftw.progetto.common.utils.Password;
 
 public class MainClient {
 
@@ -15,7 +16,7 @@ public class MainClient {
         System.out.println("Hello, world1!");
 
         DrugsQuery q = new DrugsQuery();
-        Drug[] d = q.queryDatabase("Tachip");
+        Drug[] d = q.queryDatabase("Tachip", DrugsQuery.QueryType.ActivePrinciple, true);
 
         for (Drug dr : d) {
             System.out.println(dr.drugDescription + " " + dr.company);
@@ -30,8 +31,8 @@ public class MainClient {
 
             ILogin loginInterface = serverFactory.getLoginInterface();
 
-            System.out.println("Test wrong login: " + loginInterface.doLogin("test", "test").toString());
-            System.out.println("Test correct login: " + loginInterface.doLogin("test", "prova").toString());
+            System.out.println("Test wrong login: " + loginInterface.doLogin("test", Password.fromPassword("test")).toString());
+            System.out.println("Test correct login: " + loginInterface.doLogin("test", Password.fromPassword("prova")).toString());
 
             loginInterface.passwordForgotten("guilucand@gmail.com");
 

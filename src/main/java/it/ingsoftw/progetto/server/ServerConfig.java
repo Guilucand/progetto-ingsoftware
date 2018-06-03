@@ -1,6 +1,17 @@
 package it.ingsoftw.progetto.server;
 
-public class ServerConfig {
+/**
+ * Classe contenente le impostazioni statiche del server
+ */
+public final class ServerConfig {
+
+    /**
+     * La porta di comunicazione
+     */
     public static final int port = 8080;
+
+    /**
+     * Il nome DNS del server
+     */
     public static String hostname = "localhost";
 }

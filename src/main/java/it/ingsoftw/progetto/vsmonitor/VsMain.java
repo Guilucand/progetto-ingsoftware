@@ -14,14 +14,24 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
 
+/**
+ * Classe principale dell'interfaccia di simulazione delle
+ * macchine di monitoraggio
+ * Inizializza e visualizza un numero definito di macchine per il monitoraggio
+ */
 public class VsMain {
+
+    /**
+     * Numero di istanze da far partire
+     */
+    static final int INSTANCES_COUNT = 10;
+
 
     public static void main(String[] args) {
 
-        int instancesCount = 10;
 
-        VsInstance[] instances = new VsInstance[instancesCount];
-        for (int i = 0; i < instancesCount; i++) {
+        VsInstance[] instances = new VsInstance[INSTANCES_COUNT];
+        for (int i = 0; i < INSTANCES_COUNT; i++) {
             instances[i] = new VsInstance(String.valueOf(i));
         }
 
@@ -44,7 +54,7 @@ public class VsMain {
             // Create gui and start gui
             MultiWindowTextGUI gui = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.DEFAULT));
 
-            for (int i = 0; i < instancesCount; i++) {
+            for (int i = 0; i < INSTANCES_COUNT; i++) {
                 instances[i].GUI.setMainWindow(gui);
                 mainPanel.addComponent(instances[i].GUI.getPanel());
             }

@@ -3,10 +3,16 @@ package it.ingsoftw.progetto.common.utils;
 import java.io.StringWriter;
 import java.util.HashMap;
 
-// Taken from https://stackoverflow.com/questions/994331/java-how-to-unescape-html-character-entities-in-java
-
+/**
+ * Taken from https://stackoverflow.com/questions/994331/java-how-to-unescape-html-character-entities-in-java
+ */
 public class StringUtils {
 
+    /**
+     * Funzione per convertire i caratteri di escape Html in testo normale
+     * @param input la stringa Html da convertire
+     * @return la stringa convertita
+     */
     public static final String unescapeHtml3(final String input) {
         StringWriter writer = null;
         int len = input.length();

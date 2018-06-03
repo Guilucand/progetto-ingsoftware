@@ -1,9 +1,21 @@
 package it.ingsoftw.progetto.common;
 
+/**
+ * Classe che rappresenta un utente del programma
+ */
 public class User {
 
+    /**
+     * La tipologia di utente
+     */
     public enum UserType {
+        /**
+         * L'utente e' un medico
+         */
         Medic,
+        /**
+         * L'utente e' un'infermiere
+         */
         Nurse
     }
 
