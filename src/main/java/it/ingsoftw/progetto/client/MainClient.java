@@ -8,12 +8,18 @@ import it.ingsoftw.progetto.common.IClientRmiFactory;
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.utils.Password;
 
+import javax.swing.*;
+
 public class MainClient {
 
     static IClientRmiFactory serverFactory;
 
     public static void main(String[] args) {
         System.out.println("Hello, world1!");
+
+        clientGUI clientFrame = new clientGUI();
+
+        System.out.println(clientFrame.getUsername());
 
         DrugsQuery q = new DrugsQuery();
         Drug[] d = q.queryDatabase("Tachip", DrugsQuery.QueryType.ActivePrinciple, true);
