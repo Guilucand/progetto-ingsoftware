@@ -17,27 +17,25 @@ public class clientGUI extends JFrame {
     private String password;
 
     public clientGUI(){
+        // Con 'super' chiamo il costruttore della classe JFrame
+        // a cui passo il titplo della finestra
+        super("login-gui");
+        logInButton.addActionListener(e -> {
 
-
-        logInButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                username = usernameTextField.getText();
-                //JOptionPane.showMessageDialog(null,"effettuo il login");
-
-            }
+            username = usernameTextField.getText();
+            //JOptionPane.showMessageDialog(null,"effettuo il login");
         });
 
-        forgotPasswordButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        forgotPasswordButton.addActionListener(e -> {
 
-                password = String.valueOf(passwordPasswordField.getPassword());
-                //JOptionPane.showMessageDialog(null,"ops.... password dimenticata");
-            }
+            password = String.valueOf(passwordPasswordField.getPassword());
+            //JOptionPane.showMessageDialog(null,"ops.... password dimenticata");
         });
-        
+
+        // Inizializzo qui la finestra
+        this.setContentPane(MainPanel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();
     }
 
 
@@ -54,18 +52,8 @@ public class clientGUI extends JFrame {
 
         System.out.println("entro nel main");
 
-        JFrame frame = new JFrame("Log-in");
-
-        frame.setContentPane(new clientGUI().MainPanel);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        frame.pack();
-
+        JFrame frame = new clientGUI();
         frame.setVisible(true);
-
-
-
     }
 
 
