@@ -1,6 +1,7 @@
 package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.ILogin;
+import it.ingsoftw.progetto.common.utils.Password;
 import javafx.scene.shape.CubicCurve;
 
 import javax.swing.*;
@@ -10,8 +11,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Dimension;
+import java.rmi.RemoteException;
 
-public class clientGUI extends JFrame {
+public class ClientGUI extends JFrame {
     private JTextField usernameTextField;
     private JPasswordField passwordPasswordField;
     private JPanel MainPanel;
@@ -22,35 +24,34 @@ public class clientGUI extends JFrame {
     private JButton forgotPasswordButton;
     private String username;
     private String password;
+    private ILogin loginInterface;
+    private ILogin.LoginStatus loginStatus;
+    private IClientGuiCallback resultsCallback;
 
-    public clientGUI(){
+    public ClientGUI(ILogin loginInterface, IClientGuiCallback resultsCallback){
         // Con 'super' chiamo il costruttore della classe JFrame
-        // a cui passo il titplo della finestra
+        // a cui passo il titolo della finestra
         super("login-gui");
+
+        this.loginInterface = loginInterface;
+        this.resultsCallback = resultsCallback;
 
         logInButton.addActionListener(e -> {
 
             username = usernameTextField.getText();
             password = String.valueOf(passwordPasswordField.getPassword());
 
-            ILogin.LoginStatus loginStatus = MainClient.LogIn(this);
-
-            switch (loginStatus){
-
-                case NOTLOGGED: JOptionPane.showMessageDialog(null,"USERNAME O PASSWORD ERRATI");
-                    break;
-                case MEDIC_LOGGED: JOptionPane.showMessageDialog(null,"LOGGATO COME MEDICO");
-                                   MainClient.MedicLogged(this);
-                    break;
-                case NURSE_LOGGED: JOptionPane.showMessageDialog(null,"LOG-IN COME INFERMIERE");
-                    break;
-                case PRIMARY_LOGGED: JOptionPane.showMessageDialog(null,"LOG-IN COME PRIMARIO");
-                    break;
-                case ADMIN_LOGGED: JOptionPane.showMessageDialog(null,"LOG-IN COME AMMINISTRATORE");
-                    break;
+            try {
+                loginStatus = loginInterface.doLogin(username, Password.fromPassword(password));
+            }
+            catch (RemoteException ex) {
+                loginStatus = ILogin.LoginStatus.NOTLOGGED;
             }
 
-
+            if (loginStatus != ILogin.LoginStatus.NOTLOGGED) {
+                this.dispose();
+                resultsCallback.onLoginSuccessful(loginStatus, username);
+            }
 
             //JOptionPane.showMessageDialog(null,"effettuo il login");
         });
@@ -78,22 +79,6 @@ public class clientGUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setSize(400, 300);
-
         this.setVisible(true);
-
-
     }
-
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-
-
-
 }

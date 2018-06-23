@@ -1,25 +1,56 @@
 package it.ingsoftw.progetto.client;
 
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 
 import it.ingsoftw.progetto.common.Drug;
 import it.ingsoftw.progetto.common.IClientListener;
 import it.ingsoftw.progetto.common.IClientRmiFactory;
 import it.ingsoftw.progetto.common.ILogin;
-import it.ingsoftw.progetto.common.utils.Password;
+import it.ingsoftw.progetto.server.ServerConfig;
 
 import javax.swing.*;
 
 public class MainClient {
 
-    static IClientRmiFactory serverFactory;
-
     public static void main(String[] args) {
 
-        System.out.println("Hello, world1!");
+        try {
 
-        clientGUI clientlogin = CreaLoginGUI();
+            // Connessione al server
+            IClientRmiFactory serverConnection = connectToServer();
 
+
+            // Ottenimento dell'interfaccia di login
+            ILogin loginInterface = serverConnection.getLoginInterface();
+
+            // Avvio della GUI di login
+            new ClientGUI(loginInterface, (status, username) -> {
+
+                // Callback in caso di login andato a buon fine
+                switch (status) {
+                    case MEDIC_LOGGED:
+                        JOptionPane.showMessageDialog(null, "LOGGATO COME MEDICO");
+                        medicLogged(username);
+                        break;
+                    case NURSE_LOGGED:
+                        JOptionPane.showMessageDialog(null, "LOG-IN COME INFERMIERE");
+                        break;
+                    case PRIMARY_LOGGED:
+                        JOptionPane.showMessageDialog(null, "LOG-IN COME PRIMARIO");
+                        break;
+                    case ADMIN_LOGGED:
+                        JOptionPane.showMessageDialog(null, "LOG-IN COME AMMINISTRATORE");
+                        break;
+                }
+            });
+
+        }
+        catch (RemoteException e) {
+            System.out.println("Connessione con il server persa: " + e.getMessage());
+        }
+
+        // TEST
         DrugsQuery q = new DrugsQuery();
         Drug[] d = q.queryDatabase("Tachip", DrugsQuery.QueryType.ActivePrinciple, true);
 
@@ -30,86 +61,51 @@ public class MainClient {
 
     }
 
-    public static ILogin.LoginStatus LogIn(clientGUI clientlogin) {
-
-        String userID = clientlogin.getUsername();
-        String password = clientlogin.getPassword();
-        ILogin.LoginStatus loginstatus = ILogin.LoginStatus.NOTLOGGED;
-
-
+    /**
+     * Metodo per connettersi al server
+     * @return istanza della factory per richiedere
+     * interfacce di connessione al server
+     * @throws RemoteException
+     */
+    public static IClientRmiFactory connectToServer() throws RemoteException {
+        IClientListener connection;
+        String url = "//" + ServerConfig.hostname + ":" + ServerConfig.port + "/auth";
         try {
-
-            IClientListener connection;
-            String url = "//localhost:8080/auth";
             connection = (IClientListener) Naming.lookup(url);
-            serverFactory = connection.estabilishConnection();
-
-            ILogin loginInterface = serverFactory.getLoginInterface();
-
-            System.out.println("tento il login con userID = "+userID+" e password = "+password);
-
-            System.out.println("Test wrong login: " + loginInterface.doLogin("test", Password.fromPassword("test")).toString());
-            System.out.println("Test correct login: " + loginInterface.doLogin(userID, Password.fromPassword(password)).toString());
-
-            loginstatus = loginInterface.doLogin(userID, Password.fromPassword(password));
-
-
         }
         catch (Exception e) {
-            System.out.println("Error! " + e.toString());
+            throw new RemoteException();
         }
 
-        return loginstatus;
-
-
+        return connection.estabilishConnection();
     }
 
 
-    public static void MedicLogged(clientGUI clientlogin){
-
-        clientlogin.dispose();
+    private static void medicLogged(String username){
         MonitorGUI monitor = CreaMonitorGUI();
-
-
         monitor.AddPatient();
-
     }
 
 
-    public static void PasswordForgotten( clientGUI clintepswforgotten){
+    public static void passwordForgotten(){
 
         try {
 
-            IClientListener connection;
-            String url = "//localhost:8080/auth";
-            connection = (IClientListener) Naming.lookup(url);
-            serverFactory = connection.estabilishConnection();
+//            loginInterface.passwordForgotten("guilucand@gmail.com");
 
-            ILogin loginInterface = serverFactory.getLoginInterface();
-
-            loginInterface.passwordForgotten("guilucand@gmail.com");
-
-            System.out.println("Mail sent!");
+//            System.out.println("Mail sent!");
 
 
 
         }catch (Exception e) {
-            System.out.println("Error! " + e.toString());
+//            System.out.println("Error! " + e.toString());
         }
 
     }
 
 
-    public static clientGUI CreaLoginGUI(){
-
-        return new clientGUI();
-
-    }
-
     public static MonitorGUI CreaMonitorGUI(){
-
         return new MonitorGUI();
-
     }
 
 
