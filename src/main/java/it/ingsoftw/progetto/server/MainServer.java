@@ -38,9 +38,14 @@ public class MainServer {
 
             serverRegistry.rebind("auth", clientListener);
             serverRegistry.rebind("vsauth", vsListener);
+
+
+
+
         }
         catch (Exception e) {
             System.out.println("Connection error: " + e.toString());
         }
+
     }
 }
