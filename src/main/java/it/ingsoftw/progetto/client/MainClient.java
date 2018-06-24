@@ -13,13 +13,16 @@ import javax.swing.*;
 
 public class MainClient {
 
+    private static ILogin.LoginStatus loginstatus = ILogin.LoginStatus.NOTLOGGED;
+
+    static IClientRmiFactory serverFactory;
+
     public static void main(String[] args) {
 
         try {
 
             // Connessione al server
             IClientRmiFactory serverConnection = connectToServer();
-
 
             // Ottenimento dell'interfaccia di login
             ILogin loginInterface = serverConnection.getLoginInterface();
@@ -30,7 +33,7 @@ public class MainClient {
                 // Callback in caso di login andato a buon fine
                 switch (status) {
                     case MEDIC_LOGGED:
-                        JOptionPane.showMessageDialog(null, "LOGGATO COME MEDICO");
+                        JOptionPane.showMessageDialog(null, "LOGGATO COME MEDICO (qui)");
                         medicLogged(username);
                         break;
                     case NURSE_LOGGED:
@@ -70,6 +73,28 @@ public class MainClient {
     public static IClientRmiFactory connectToServer() throws RemoteException {
         IClientListener connection;
         String url = "//" + ServerConfig.hostname + ":" + ServerConfig.port + "/auth";
+
+
+        try{
+
+            connection=(IClientListener) Naming.lookup(url);
+
+        }catch (Exception e){
+
+            throw new RemoteException();
+
+        }
+
+        return connection.estabilishConnection();
+
+
+    }
+
+    /*public static ILogin.LoginStatus LogIn(ClientGUI clientlogin) {
+
+        String userID = clientlogin.getUsername();
+        String password = clientlogin.getPassword();
+
         try {
             connection = (IClientListener) Naming.lookup(url);
         }
@@ -80,33 +105,44 @@ public class MainClient {
         return connection.estabilishConnection();
     }
 
-
-    private static void medicLogged(String username){
+*/
+    private static void medicLogged(String username) {
         MonitorGUI monitor = CreaMonitorGUI();
         monitor.AddPatient();
     }
 
+    public static void Logged (ClientGUI clientlogin){
 
-    public static void passwordForgotten(){
+        clientlogin.dispose();
+        MonitorGUI monitor = CreaMonitorGUI();
+        //monitor.AddPatient();
+
+
+    }
+
+
+    public static void passwordForgotten () {
 
         try {
 
-//            loginInterface.passwordForgotten("guilucand@gmail.com");
+            //loginInterface.passwordForgotten("guilucand@gmail.com");
 
-//            System.out.println("Mail sent!");
+            //System.out.println("Mail sent!");
 
 
-
-        }catch (Exception e) {
-//            System.out.println("Error! " + e.toString());
+        } catch (Exception e) {
+            //System.out.println("Error! " + e.toString());
         }
 
     }
 
 
-    public static MonitorGUI CreaMonitorGUI(){
+    public static MonitorGUI CreaMonitorGUI () {
+
         return new MonitorGUI();
     }
+
+
 
 
 }
