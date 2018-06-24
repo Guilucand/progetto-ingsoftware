@@ -14,24 +14,31 @@ public class MonitorGUI extends JFrame{
     private JLabel battiti;
     private JLabel pressione;
     private JLabel altro;
-    private JButton aggiungi2;
 
     private JPanel Stanza1;
     private JPanel Stanza2;
-    private JPanel stanza3;
-    private JPanel stanza4;
-    private JPanel stanza5;
-    private JPanel stanza6;
-    private JPanel stanza7;
-    private JPanel stanza8;
-    private JPanel stanza9;
-    private JPanel stanza10;
 
     private JLabel nomestanza1;
     private JLabel cognomestanza1;
     private JPanel MainPanel;
-    private JButton aggiungi3;
     private JButton modificaButtonStanza1;
+    private JPanel Stanza5;
+    private JPanel Stanza3;
+    private JPanel Stanza4;
+    private JButton addBotton3;
+    private JButton addBotton2;
+    private JButton addBotton4;
+    private JButton aggiungi2;
+    private JPanel Stanza7;
+    private JPanel Stanza8;
+    private JPanel Stanza9;
+    private JPanel Stanza10;
+    private JButton addBotton7;
+    private JButton addBotton8;
+    private JButton addBotton9;
+    private JButton addBotton10;
+    private JPanel Stanza6;
+    private JButton addBotton6;
 
 
     public MonitorGUI(){
@@ -69,16 +76,22 @@ public class MonitorGUI extends JFrame{
 
     public void AddPatient(){
 
-        Stanza2.remove(aggiungi3);
-        stanza3.add(new JLabel("immagine paz 3" , SwingConstants.CENTER));
-        stanza3.add(new JLabel ("rino ", SwingConstants.RIGHT));
-        stanza3.add(new JLabel ("gattuso ", SwingConstants.RIGHT));
+        //Stanza2.remove(aggiungi2);
 
-        stanza3.revalidate();
-        stanza3.repaint();
+        /*JPanel NewStanza = Stanza2;
+
+
+        NewStanza.add(new JLabel("immagine paz 3" , SwingConstants.CENTER));
+        NewStanza.add(new JLabel ("rino ", SwingConstants.RIGHT));
+        NewStanza.add(new JLabel ("gattuso ", SwingConstants.RIGHT));
+
+        NewStanza.revalidate();
+        NewStanza.repaint();
+
+        this.add(NewStanza);
 
         this.pack();
-
+*/
         System.out.println("aggiungo");
 
     }

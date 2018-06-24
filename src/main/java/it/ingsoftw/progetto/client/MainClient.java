@@ -107,6 +107,8 @@ public class MainClient {
 
 */
     private static void medicLogged(String username) {
+
+
         MonitorGUI monitor = CreaMonitorGUI();
         monitor.AddPatient();
     }

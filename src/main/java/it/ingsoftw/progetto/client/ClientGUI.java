@@ -65,7 +65,8 @@ public class ClientGUI extends JFrame{
 
 
             if (loginStatus != ILogin.LoginStatus.NOTLOGGED) {
-                this.dispose();
+
+                Dispose();
                 resultsCallback.onLoginSuccessful(loginStatus, username);
             }
 
@@ -141,7 +142,7 @@ public class ClientGUI extends JFrame{
 
                     if (loginStatus != ILogin.LoginStatus.NOTLOGGED) {
 
-                        //this.dispose();
+                        Dispose();
                         resultsCallback.onLoginSuccessful(loginStatus, username);
                     }
 
@@ -149,10 +150,15 @@ public class ClientGUI extends JFrame{
                 }
 
             }
+
         });
     }
 
 
+    public void Dispose(){
+
+        this.dispose();
+    }
 
     // CREO UN LOCK DI 30 SECONDI OGNI 5 TENTATIVI SBAGLIATI
 
