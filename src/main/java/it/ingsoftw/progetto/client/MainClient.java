@@ -34,16 +34,19 @@ public class MainClient {
                 switch (status) {
                     case MEDIC_LOGGED:
                         JOptionPane.showMessageDialog(null, "LOGGATO COME MEDICO (qui)");
-                        medicLogged(username);
+                        Logged(status);
                         break;
                     case NURSE_LOGGED:
                         JOptionPane.showMessageDialog(null, "LOG-IN COME INFERMIERE");
+                        Logged(status);
                         break;
                     case PRIMARY_LOGGED:
                         JOptionPane.showMessageDialog(null, "LOG-IN COME PRIMARIO");
+                        Logged(status);
                         break;
                     case ADMIN_LOGGED:
                         JOptionPane.showMessageDialog(null, "LOG-IN COME AMMINISTRATORE");
+                        Logged(status);
                         break;
                 }
             });
@@ -106,21 +109,20 @@ public class MainClient {
     }
 
 */
-    private static void medicLogged(String username) {
+    private static void Logged(ILogin.LoginStatus status) {
 
+        new MonitorGUI(status);
 
-        MonitorGUI monitor = CreaMonitorGUI();
-        monitor.AddPatient();
     }
 
-    public static void Logged (ClientGUI clientlogin){
+    /*public static void Logged (ClientGUI clientlogin){
 
         clientlogin.dispose();
         MonitorGUI monitor = CreaMonitorGUI();
         //monitor.AddPatient();
 
 
-    }
+    }*/
 
 
     public static void passwordForgotten () {
@@ -139,10 +141,6 @@ public class MainClient {
     }
 
 
-    public static MonitorGUI CreaMonitorGUI () {
-
-        return new MonitorGUI();
-    }
 
 
 
