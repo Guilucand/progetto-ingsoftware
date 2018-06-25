@@ -39,9 +39,9 @@ public class MonitorGUI extends JFrame{
 
         for(int i = 0; i<4; i++){
 
-            TopPanel.add(new AddPatient(),FlowLayout.LEFT);
-            MidPanel.add(new AddPatient(),FlowLayout.LEFT);
-            if(i<2)BottomPanel.add(new AddPatient(),FlowLayout.LEFT);
+            TopPanel.add(new PatientMonitor(),FlowLayout.LEFT);
+            MidPanel.add(new PatientMonitor(),FlowLayout.LEFT);
+            if(i<2)BottomPanel.add(new PatientMonitor(),FlowLayout.LEFT);
 
         }
 

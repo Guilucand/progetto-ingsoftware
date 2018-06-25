@@ -4,7 +4,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 import it.ingsoftw.progetto.common.IVSListener;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import jdk.jshell.spi.ExecutionControl;
 
 /**
  * Classe rappresentante una macchina di monitoraggio
@@ -52,7 +52,7 @@ public class VsInstance {
         });
 
         GUI.setConnectionCallback((newStatus)-> {
-            throw new NotImplementedException(); // Da implementare
+            throw new UnsupportedOperationException(); // Da implementare
         });
     }
 }

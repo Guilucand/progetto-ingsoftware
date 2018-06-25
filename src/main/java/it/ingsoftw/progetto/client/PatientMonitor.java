@@ -1,11 +1,12 @@
 package it.ingsoftw.progetto.client;
 
+import java.awt.Dimension;
+import java.util.Random;
+
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PatientMonitor extends JPanel{
-    private JPanel MainPanel;
+    private JPanel patientPanel;
     private JLabel image;
     private JLabel nomePaziente;
     private JLabel cognomePaziente;
@@ -21,17 +22,31 @@ public class PatientMonitor extends JPanel{
     private JLabel temperatura;
     private JButton modificaButton;
 
+    private EmptyRoom emptyRoom;
 
+
+
+    public class EmptyRoom {
+        public JPanel panel;
+        public JLabel roomNameLabel;
+        public JButton assignButton;
+    }
+
+
+    static Random r = new Random();
     public PatientMonitor() {
+        emptyRoom = new EmptyRoom();
+        modificaButton.addActionListener(e -> EditaPaz());
 
-        modificaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        Dimension preferredDimension = new Dimension(400, 200);
 
-                EditaPaz();
+        emptyRoom.panel.setPreferredSize(preferredDimension);
+        patientPanel.setPreferredSize(preferredDimension);
 
-            }
-        });
+        if (r.nextBoolean())
+            this.add(emptyRoom.panel, 0);
+        else
+            this.add(patientPanel, 0);
     }
 
 

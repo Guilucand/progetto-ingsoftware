@@ -1,7 +1,5 @@
 package it.ingsoftw.progetto.common.utils;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
-
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -50,7 +48,7 @@ public class Password implements Serializable {
     public static Password fromHash(String hash) {
         if (hash == null)
             return null;
-        return new Password(HexBin.decode(hash));
+        return new Password(StringUtils.bytesFromHex(hash));
     }
 
     /**
@@ -80,7 +78,7 @@ public class Password implements Serializable {
     }
 
     public String getPasswordHash() {
-        return HexBin.encode(passHash);
+        return StringUtils.hexFromBytes(passHash);
     }
 
     /**

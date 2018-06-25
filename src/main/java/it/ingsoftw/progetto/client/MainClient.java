@@ -20,7 +20,7 @@ public class MainClient {
     public static void main(String[] args) {
 
         try {
-
+            
             // Connessione al server
             IClientRmiFactory serverConnection = connectToServer();
 
@@ -34,19 +34,19 @@ public class MainClient {
                 switch (status) {
                     case MEDIC_LOGGED:
                         JOptionPane.showMessageDialog(null, "LOGGATO COME MEDICO (qui)");
-                        Logged(status);
+                        logged(status);
                         break;
                     case NURSE_LOGGED:
                         JOptionPane.showMessageDialog(null, "LOG-IN COME INFERMIERE");
-                        Logged(status);
+                        logged(status);
                         break;
                     case PRIMARY_LOGGED:
                         JOptionPane.showMessageDialog(null, "LOG-IN COME PRIMARIO");
-                        Logged(status);
+                        logged(status);
                         break;
                     case ADMIN_LOGGED:
                         JOptionPane.showMessageDialog(null, "LOG-IN COME AMMINISTRATORE");
-                        Logged(status);
+                        logged(status);
                         break;
                 }
             });
@@ -109,13 +109,13 @@ public class MainClient {
     }
 
 */
-    private static void Logged(ILogin.LoginStatus status) {
+    private static void logged(ILogin.LoginStatus status) {
 
         new MonitorGUI(status);
 
     }
 
-    /*public static void Logged (ClientGUI clientlogin){
+    /*public static void logged (ClientGUI clientlogin){
 
         clientlogin.dispose();
         MonitorGUI monitor = CreaMonitorGUI();

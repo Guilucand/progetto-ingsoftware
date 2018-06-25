@@ -1,6 +1,5 @@
 package it.ingsoftw.progetto.client;
 
-import com.sun.deploy.util.Waiter;
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.utils.Password;
 import javafx.scene.shape.CubicCurve;

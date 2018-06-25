@@ -208,4 +208,22 @@ public class StringUtils {
             lookupMap.put(seq[1].toString(), seq[0]);
     }
 
+    public static String hexFromBytes(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02X", b));
+        }
+        return result.toString();
+    }
+
+    public static byte[] bytesFromHex(String hex) {
+
+        byte[] result = new byte[hex.length()/2];
+        for (int i = 0; i < hex.length()-1; i+=2) {
+
+            String value = hex.substring(i, i+2);
+            result[i/2] = (byte)Integer.parseInt(value, 16);
+        }
+        return result;
+    }
 }
