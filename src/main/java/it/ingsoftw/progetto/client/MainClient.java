@@ -19,8 +19,10 @@ public class MainClient {
 
     public static void main(String[] args) {
 
+        System.setProperty("sun.java2d.uiScale","1");
+
         try {
-            
+
             // Connessione al server
             IClientRmiFactory serverConnection = connectToServer();
 
@@ -32,21 +34,12 @@ public class MainClient {
 
                 // Callback in caso di login andato a buon fine
                 switch (status) {
-                    case MEDIC_LOGGED:
-                        JOptionPane.showMessageDialog(null, "LOGGATO COME MEDICO (qui)");
-                        logged(status);
+                    case NOTLOGGED:
+
                         break;
-                    case NURSE_LOGGED:
-                        JOptionPane.showMessageDialog(null, "LOG-IN COME INFERMIERE");
-                        logged(status);
-                        break;
-                    case PRIMARY_LOGGED:
-                        JOptionPane.showMessageDialog(null, "LOG-IN COME PRIMARIO");
-                        logged(status);
-                        break;
-                    case ADMIN_LOGGED:
-                        JOptionPane.showMessageDialog(null, "LOG-IN COME AMMINISTRATORE");
-                        logged(status);
+
+                    default:
+                        logged(status,username);
                         break;
                 }
             });
@@ -60,9 +53,9 @@ public class MainClient {
         DrugsQuery q = new DrugsQuery();
         Drug[] d = q.queryDatabase("Tachip", DrugsQuery.QueryType.ActivePrinciple, true);
 
-        for (Drug dr : d) {
+        /*for (Drug dr : d) {
             System.out.println(dr.drugDescription + " " + dr.company);
-        }
+        }*/
 
 
     }
@@ -93,50 +86,9 @@ public class MainClient {
 
     }
 
-    /*public static ILogin.LoginStatus LogIn(ClientGUI clientlogin) {
+    private static void logged(ILogin.LoginStatus status, String username) {
 
-        String userID = clientlogin.getUsername();
-        String password = clientlogin.getPassword();
-
-        try {
-            connection = (IClientListener) Naming.lookup(url);
-        }
-        catch (Exception e) {
-            throw new RemoteException();
-        }
-
-        return connection.estabilishConnection();
-    }
-
-*/
-    private static void logged(ILogin.LoginStatus status) {
-
-        new MonitorGUI(status);
-
-    }
-
-    /*public static void logged (ClientGUI clientlogin){
-
-        clientlogin.dispose();
-        MonitorGUI monitor = CreaMonitorGUI();
-        //monitor.AddPatient();
-
-
-    }*/
-
-
-    public static void passwordForgotten () {
-
-        try {
-
-            //loginInterface.passwordForgotten("guilucand@gmail.com");
-
-            //System.out.println("Mail sent!");
-
-
-        } catch (Exception e) {
-            //System.out.println("Error! " + e.toString());
-        }
+        new MonitorGUI(status,username);
 
     }
 

@@ -6,7 +6,9 @@
       <xy x="20" y="20" width="1533" height="614"/>
     </constraints>
     <properties/>
-    <border type="none"/>
+    <border type="line" title="nomeutente" title-justification="2" title-position="2">
+      <font name="Droid Serif" size="14" style="2"/>
+    </border>
     <children/>
   </grid>
 </form>

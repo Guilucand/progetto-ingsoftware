@@ -2,12 +2,9 @@ package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.utils.Password;
-import javafx.scene.shape.CubicCurve;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Dimension;
@@ -17,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ClientGUI extends JFrame{
     private JTextField usernameTextField;
-    private JPasswordField passwordPasswordField;
+    private JPasswordField passwordTextField;
     private  JPanel MainPanel;
     private JLabel imgUser;
     private JLabel imgPassw;
@@ -40,61 +37,44 @@ public class ClientGUI extends JFrame{
         this.loginInterface = loginInterface;
         this.resultsCallback = resultsCallback;
 
-        logInButton.addActionListener(e -> {
-
-            username = usernameTextField.getText();
-            password = String.valueOf(passwordPasswordField.getPassword());
-
-            try {
-                loginStatus = loginInterface.doLogin(username, Password.fromPassword(password));
-            }
-            catch (RemoteException ex) {
-                loginStatus = ILogin.LoginStatus.NOTLOGGED;
-               // ILogin.LoginStatus loginStatus = MainClient.LogIn(this);
-
-            }
-
-            System.out.println(loginStatus);
-
-            if(loginStatus == ILogin.LoginStatus.NOTLOGGED) {
-
-                JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI (qui)");
-                CheckAccess();
-            }
-
-
-            if (loginStatus != ILogin.LoginStatus.NOTLOGGED) {
-
-                Dispose();
-                resultsCallback.onLoginSuccessful(loginStatus, username);
-            }
-
-        });
-
-        forgotPasswordButton.addActionListener(e -> {
-
-            //password = String.valueOf(passwordPasswordField.getPassword());
-
-            //JOptionPane.showMessageDialog(null,"ops.... password dimenticata");
-        });
-
-        /*logInButton.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-
-            }
-        });*/
-
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
+
 
         this.setResizable(false);
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setSize(400, 300);
+        this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
+
         this.setVisible(true);
+
+
+        logInButton.addActionListener(e -> TryAccess());
+
+        forgotPasswordButton.addActionListener(e -> {
+
+            new ConfirmChangePassword(loginInterface);
+
+            /*if (JOptionPane.showConfirmDialog(null, "Conferma cambiamento password (invio nuova password tramite email)") == 0){
+
+                try {
+                    if(loginInterface.passwordForgotten("guilucand@gmail.com") == true){
+
+                        JOptionPane.showMessageDialog(null,"La nuova password è stata inviata per mail");
+
+                    }else{
+
+                        JOptionPane.showMessageDialog(null,"hai inserito una mail non valida");
+
+                    }
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
+
+            }*/
+
+        });
 
 
         usernameTextField.addKeyListener(new KeyAdapter() {
@@ -102,55 +82,56 @@ public class ClientGUI extends JFrame{
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
 
-                if(e.getKeyCode() == 10){
-
-                    passwordPasswordField.requestFocusInWindow();
-
-                }
+                if(e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_DOWN) passwordTextField.requestFocusInWindow();
 
             }
         });
 
 
-        passwordPasswordField.addKeyListener(new KeyAdapter() {
+        passwordTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
 
-                if(e.getKeyCode() == 10){
-
-                    username = usernameTextField.getText();
-                    password = String.valueOf(passwordPasswordField.getPassword());
-
-                    try {
-                        loginStatus = loginInterface.doLogin(username, Password.fromPassword(password));
-                    }
-                    catch (RemoteException ex) {
-                        loginStatus = ILogin.LoginStatus.NOTLOGGED;
-                        // ILogin.LoginStatus loginStatus = MainClient.LogIn(this);
-
-                    }
-
-                    if(loginStatus == ILogin.LoginStatus.NOTLOGGED) {
-
-                        JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI (qui)");
-                        CheckAccess();
-
-                    }
-
-
-                    if (loginStatus != ILogin.LoginStatus.NOTLOGGED) {
-
-                        Dispose();
-                        resultsCallback.onLoginSuccessful(loginStatus, username);
-                    }
-
-
-                }
+                if(e.getKeyCode() == KeyEvent.VK_ENTER) TryAccess();
+                else if (e.getKeyCode() == KeyEvent.VK_UP) usernameTextField.requestFocusInWindow();
+                else if(e.getKeyCode() == KeyEvent.VK_DOWN) logInButton.requestFocusInWindow();
 
             }
 
         });
+
+        logInButton.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+
+                if(e.getKeyCode() == KeyEvent.VK_UP) passwordTextField.requestFocusInWindow();
+                else if(e.getKeyCode() == KeyEvent.VK_DOWN) forgotPasswordButton.requestFocusInWindow();
+                else if (e.getKeyCode() == KeyEvent.VK_ENTER) TryAccess();
+
+            }
+        });
+
+        forgotPasswordButton.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+
+                if(e.getKeyCode() == KeyEvent.VK_UP) logInButton.requestFocusInWindow();
+                if(e.getKeyCode() == KeyEvent.VK_ENTER) new ConfirmChangePassword(loginInterface);
+
+            }
+        });
+
+        usernameTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_F3) RapidAccess();
+            }
+        });
+
     }
 
 
@@ -178,5 +159,75 @@ public class ClientGUI extends JFrame{
         }
 
     }
+
+    public void TryAccess(){
+
+        username = usernameTextField.getText();
+        password = String.valueOf(passwordTextField.getPassword());
+
+        try {
+            loginStatus = loginInterface.doLogin(username, Password.fromPassword(password));
+        }
+        catch (RemoteException ex) {
+            loginStatus = ILogin.LoginStatus.NOTLOGGED;
+            // ILogin.LoginStatus loginStatus = MainClient.LogIn(this);
+
+        }
+
+        //System.out.println(loginStatus);
+
+        if(loginStatus == ILogin.LoginStatus.NOTLOGGED) {
+
+            JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI (qui)");
+            CheckAccess();
+        }
+
+
+        if (loginStatus != ILogin.LoginStatus.NOTLOGGED) {
+
+            Dispose();
+            try {
+                resultsCallback.onLoginSuccessful(loginStatus, username);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void RapidAccess(){
+
+        username = "test";
+        password = "prova";
+
+        try {
+            loginStatus = loginInterface.doLogin(username, Password.fromPassword(password));
+        }
+        catch (RemoteException ex) {
+            loginStatus = ILogin.LoginStatus.NOTLOGGED;
+            // ILogin.LoginStatus loginStatus = MainClient.LogIn(this);
+
+        }
+
+        //System.out.println(loginStatus);
+
+        if(loginStatus == ILogin.LoginStatus.NOTLOGGED) {
+
+            JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI (qui)");
+            CheckAccess();
+        }
+
+
+        if (loginStatus != ILogin.LoginStatus.NOTLOGGED) {
+
+            Dispose();
+            try {
+                resultsCallback.onLoginSuccessful(loginStatus, username);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
 }

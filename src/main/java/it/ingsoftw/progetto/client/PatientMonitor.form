@@ -6,7 +6,9 @@
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
     <properties/>
-    <border type="line" title="Stanza 1"/>
+    <border type="line" title="Stanza 1" title-justification="2" title-position="2">
+      <font size="16" style="3"/>
+    </border>
     <children>
       <component id="6a5fa" class="javax.swing.JLabel" binding="frequenceParameter">
         <constraints>
