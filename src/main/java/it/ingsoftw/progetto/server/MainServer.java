@@ -7,6 +7,7 @@ import it.ingsoftw.progetto.common.IClientListener;
 import it.ingsoftw.progetto.common.IVSListener;
 import it.ingsoftw.progetto.common.User;
 import it.ingsoftw.progetto.common.utils.Password;
+import it.ingsoftw.progetto.server.database.DatabaseConnection;
 import it.ingsoftw.progetto.server.database.IDatabaseConnection;
 import test.database.TestDatabaseConnection;
 
@@ -32,7 +33,7 @@ public class MainServer {
         IDatabaseConnection databaseConnection;
 
         // TEST
-        databaseConnection = new TestDatabaseConnection();
+        databaseConnection = new DatabaseConnection();
         databaseConnection.getUsersInterface().addUser(new User("test", "Ciao", "Ciao2", "guilucand@gmail.com", User.UserType.Medic));
         databaseConnection.getUsersInterface().updatePassword("test", Password.fromPassword("prova"));
 

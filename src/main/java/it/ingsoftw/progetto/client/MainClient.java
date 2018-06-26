@@ -22,7 +22,6 @@ public class MainClient {
         System.setProperty("sun.java2d.uiScale","1");
 
         try {
-
             // Connessione al server
             IClientRmiFactory serverConnection = connectToServer();
 
@@ -91,10 +90,4 @@ public class MainClient {
         new MonitorGUI(status,username);
 
     }
-
-
-
-
-
-
 }
