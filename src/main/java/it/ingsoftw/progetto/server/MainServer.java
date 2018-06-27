@@ -36,6 +36,7 @@ public class MainServer {
         databaseConnection.getUsersInterface().addUser(new User("test", "Ciao", "Ciao2", "guilucand@gmail.com", User.UserType.Medic));
         databaseConnection.getUsersInterface().updatePassword("test", Password.fromPassword("prova"));
 
+
         // Registrazione delle interfacce iniziali di comunicazione con client e macchine di monitoraggio
         try {
             serverRegistry = LocateRegistry.createRegistry(ServerConfig.port);

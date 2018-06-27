@@ -9,8 +9,6 @@ import it.ingsoftw.progetto.common.IClientRmiFactory;
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.server.ServerConfig;
 
-import javax.swing.*;
-
 public class MainClient {
 
     private static ILogin.LoginStatus loginstatus = ILogin.LoginStatus.NOTLOGGED;
@@ -39,7 +37,7 @@ public class MainClient {
                         break;
 
                     default:
-                        logged(status,username);
+                        Logged(status,username);
                         break;
                 }
             });
@@ -67,6 +65,7 @@ public class MainClient {
      * @throws RemoteException
      */
     public static IClientRmiFactory connectToServer() throws RemoteException {
+
         IClientListener connection;
         String url = "//" + ServerConfig.hostname + ":" + ServerConfig.port + "/auth";
 
@@ -86,7 +85,7 @@ public class MainClient {
 
     }
 
-    private static void logged(ILogin.LoginStatus status, String username) {
+    private static void Logged(ILogin.LoginStatus status, String username) {
 
         new MonitorGUI(status,username);
 

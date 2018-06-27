@@ -31,13 +31,16 @@ public class EditPatient extends JFrame{
 
         super("Edit-Patient");
 
+
+
+        this.setContentPane(MainPanel);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        this.pack();
+
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
 
-        this.setContentPane(MainPanel);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        this.pack();
         this.setVisible(true);
 
 

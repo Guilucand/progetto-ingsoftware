@@ -40,6 +40,7 @@ public class PatientMonitor extends JPanel{
 
 
     public class EmptyRoom {
+
         public JPanel panel;
         public JButton assignButton;
 
