@@ -213,7 +213,7 @@ public class ClientGUI extends JFrame{
 
         if(loginStatus == ILogin.LoginStatus.NOTLOGGED) {
 
-            JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI (qui)");
+            JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI");
             CheckAccess();
         }
 

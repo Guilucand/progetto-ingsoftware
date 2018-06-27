@@ -1,10 +1,14 @@
 package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.ILogin;
+import it.ingsoftw.progetto.common.IMonitor;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class MonitorGUI extends JFrame{
 
@@ -13,7 +17,7 @@ public class MonitorGUI extends JFrame{
     private JPanel MidPanel;
     private JPanel BottomPanel;
 
-    public MonitorGUI(ILogin.LoginStatus status,String username){
+    public MonitorGUI(ILogin.LoginStatus status, String username, IMonitor iMonitorInterface) throws RemoteException {
 
         super("Monitor");
 
@@ -22,11 +26,11 @@ public class MonitorGUI extends JFrame{
         this.MainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),""+username,TitledBorder.TOP,TitledBorder.CENTER));
         ((javax.swing.border.TitledBorder) this.MainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
 
-        this.MainPanel.setOpaque(true);
-        this.MainPanel.setBackground(new Color(255,255,255));
-
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.MainPanel.setOpaque(true);
+        this.MainPanel.setBackground(Color.WHITE);
 
         Container c = this.getContentPane();
 
@@ -50,26 +54,35 @@ public class MonitorGUI extends JFrame{
 
         for(int i = 0; i<4; i++){
 
-            TopPanel.add(new PatientMonitor(i+1),i);
-            MidPanel.add(new PatientMonitor(i+5),i);
+            TopPanel.add(new PatientMonitor(i+1, iMonitorInterface ),i);
+            MidPanel.add(new PatientMonitor(i+5, iMonitorInterface),i);
             if(i == 0){
 
                 EmptyPanelAdmin epa = new EmptyPanelAdmin();
 
-               // if(status == ILogin.LoginStatus.PRIMARY_LOGGED){
-                BottomPanel.add(epa.getPanel(),i);//}
+                if(status == ILogin.LoginStatus.PRIMARY_LOGGED || status == ILogin.LoginStatus.ADMIN_LOGGED) {
+                    BottomPanel.add(epa.getPanel(), i);
+
+                }else{
+
+                    JPanel panel = epa.getPanel();
+                    panel.remove(epa.getButton());
+
+                    BottomPanel.add(epa.getPanel(), i);
+
+
+                }
+
+
             }
             else if(i == 3){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin();
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(this);
 
-                JPanel panel = epa.getPanel();
-                panel.remove(epa.getButton());
-
-                BottomPanel.add(epa.getPanel(),i);
+                BottomPanel.add(epa.getPanel(), i);
 
             }
-            else BottomPanel.add(new PatientMonitor(i+8),i);
+            else BottomPanel.add(new PatientMonitor(i+8,iMonitorInterface),i);
 
         }
 

@@ -6,15 +6,19 @@ import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.PatientData;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.Period;
 import java.util.Date;
 
-public class ServerPatient implements IPatient {
+public class ServerPatient extends UnicastRemoteObject implements IPatient {
 
     private IRecoveryDatabase database;
     private String patientId;
 
-    public ServerPatient(IRecoveryDatabase database, String patientId) {
+    public ServerPatient(IRecoveryDatabase database, String patientId) throws RemoteException {
+        super(ServerConfig.port);
+
         this.database = database;
         this.patientId = patientId;
     }

@@ -3,13 +3,14 @@ package it.ingsoftw.progetto.common;
 import javafx.util.Pair;
 import jdk.jfr.Timespan;
 
+import java.rmi.Remote;
 import java.time.Period;
 import java.util.Date;
 
 /**
  * Interfaccia di monitoraggio di un paziente attualmente ricoverato
  */
-public interface IPatient {
+public interface IPatient extends Remote {
 
     /**
      * Ottiene i dati anagrafici del paziente

@@ -33,7 +33,6 @@ public class AdminPanel extends JFrame{
         model.addElement("prova2");
         JList<String> list = new JList<>( model );
 
-
         //this.medList.addListSelectionListener();
 
         this.setContentPane(MainPanel);

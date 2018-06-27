@@ -1,6 +1,8 @@
 package it.ingsoftw.progetto.common;
 
-public class MonitorData {
+import java.io.Serializable;
+
+public class MonitorData implements Serializable {
 
     public MonitorData(int bpm, int sbp, int dbp, float temp) {
         this.bpm = bpm;

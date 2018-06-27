@@ -21,6 +21,11 @@ public class User {
          * L'utente e' un primario
          */
         Primary,
+        /**
+         * L'utente e' un amministratore
+         */
+        Admin,
+
 
     }
 

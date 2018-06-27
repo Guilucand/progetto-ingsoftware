@@ -3,21 +3,20 @@ package it.ingsoftw.progetto.client;
 //import com.sun.prism.paint.Color;
 
 
+import it.ingsoftw.progetto.common.IMonitor;
+import it.ingsoftw.progetto.common.IPatient;
+import it.ingsoftw.progetto.common.MonitorData;
+
 import java.awt.*;
-import java.awt.color.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Random;
+import java.rmi.RemoteException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 public class PatientMonitor extends JPanel{
@@ -29,7 +28,7 @@ public class PatientMonitor extends JPanel{
 
     public void putFrequenceParameter(int frequenceParameter) {this.frequenceParameter.setText(String.valueOf(frequenceParameter));}
 
-    public void putTempParameter(float tempParameter) {this.tempParameter.setText(String.valueOf(tempParameter));}
+    public void putTempParameter(float tempParameter) {this.temperatureParameter.setText(String.valueOf(tempParameter));}
 
     private JPanel patientPanel;
     private JLabel image;
@@ -42,7 +41,7 @@ public class PatientMonitor extends JPanel{
     private JLabel sbpParameter;
     private JLabel dbpParameter;
     private JLabel frequenceParameter;
-    private JLabel tempParameter;
+    private JLabel temperatureParameter;
     private JLabel freqLabel;
     private JLabel temperatureLabel;
     private JButton modificaButton;
@@ -79,7 +78,7 @@ public class PatientMonitor extends JPanel{
 
     //static Random r = new Random();
 
-    public PatientMonitor(int room_numer) {
+    public PatientMonitor(int room_numer, IMonitor iMonitorInterface) throws RemoteException {
 
         this.room_numer = room_numer;
         emptyRoom = new EmptyRoom();
@@ -102,6 +101,19 @@ public class PatientMonitor extends JPanel{
 
 
         this.add(emptyRoom.panel, 0);
+
+        //____PARAMETRI
+
+        IPatient Paziente = iMonitorInterface.getPatientByRoomNumber(room_numer);
+        MonitorData Data = Paziente.getCurrentMonitorData();
+
+        this.dbpParameter.setText(String.valueOf(Data.getDbp()));
+        this.sbpParameter.setText(String.valueOf(Data.getSbp()));
+        this.frequenceParameter.setText(String.valueOf(Data.getBpm()));
+        this.temperatureParameter.setText(String.valueOf(Data.getTemp()));
+
+
+        //____LISTENER
 
         modificaButton.addActionListener(e -> new EditPatient(this));
 
@@ -148,13 +160,6 @@ public class PatientMonitor extends JPanel{
     public void setSurname(String modsurname){
 
         this.cognomePaziente.setText(modsurname);
-
-    }
-
-    public void setPath(String modpath){
-
-        ImageIcon image = new ImageIcon(getClass().getResource(modpath));
-        this.image.setIcon(image);
 
     }
 

@@ -36,8 +36,10 @@ public class MainServer {
         // TEST
 
         databaseConnection = new TestDatabaseConnection();
-        databaseConnection.getUsersInterface().addUser(new User("test", "Ciao", "Ciao2", "guilucand@gmail.com", User.UserType.Medic));
+        databaseConnection.getUsersInterface().addUser(new User("test", "Cracco", "Ciao2", "guilucand@gmail.com", User.UserType.Primary));
+        databaseConnection.getUsersInterface().addUser(new User("test1", "Simo", "Ciao2", "simo@gmail.com", User.UserType.Admin));
         databaseConnection.getUsersInterface().updatePassword("test", Password.fromPassword("prova"));
+        databaseConnection.getUsersInterface().updatePassword("test1", Password.fromPassword("prova1"));
 
         IRecoveryDatabase recoveryDatabase = databaseConnection.getRecoveryInterface();
 
