@@ -35,6 +35,7 @@ public class AdminPanel extends JFrame{
 
 
         //this.medList.addListSelectionListener();
+
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
