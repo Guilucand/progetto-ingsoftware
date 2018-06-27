@@ -33,8 +33,9 @@ public class MainServer {
         IDatabaseConnection databaseConnection;
 
         // TEST
-        databaseConnection = new DatabaseConnection();
-        databaseConnection.getUsersInterface().addUser(new User("test", "Ciao", "Ciao2", "guilucand@gmail.com", User.UserType.Medic));
+        //databaseConnection = new DatabaseConnection();
+        databaseConnection = new TestDatabaseConnection();
+        databaseConnection.getUsersInterface().addUser(new User("test", "Ciao", "Ciao2", "guilucand@gmail.com", User.UserType.Primary));
         databaseConnection.getUsersInterface().updatePassword("test", Password.fromPassword("prova"));
 
 

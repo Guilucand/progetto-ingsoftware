@@ -14,9 +14,14 @@ public class User {
          */
         Medic,
         /**
-         * L'utente e' un'infermiere
+         * L'utente e' un infermiere
          */
-        Nurse
+        Nurse,
+        /**
+         * L'utente e' un primario
+         */
+        Primary,
+
     }
 
     public User(String id, String name, String surname, String email, UserType userType) {

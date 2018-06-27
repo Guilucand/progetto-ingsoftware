@@ -26,6 +26,9 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
                 return LoginStatus.MEDIC_LOGGED;
             case Nurse:
                 return LoginStatus.NURSE_LOGGED;
+
+            case Primary:
+                return LoginStatus.PRIMARY_LOGGED;
         }
         return LoginStatus.NOTLOGGED;
     }

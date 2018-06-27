@@ -22,6 +22,8 @@ public class MonitorGUI extends JFrame{
         this.MainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),""+username,TitledBorder.TOP,TitledBorder.CENTER));
         ((javax.swing.border.TitledBorder) this.MainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
 
+        this.MainPanel.setOpaque(true);
+        this.MainPanel.setBackground(new Color(255,255,255));
 
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,6 +36,14 @@ public class MonitorGUI extends JFrame{
         MidPanel = new JPanel(new GridLayout(1,4));
         BottomPanel = new JPanel(new GridLayout(1,4));
 
+        this.TopPanel.setOpaque(true);
+        this.MidPanel.setOpaque(true);
+        this.BottomPanel.setOpaque(true);
+
+        this.TopPanel.setBackground(new Color(255,255,255));
+        this.MidPanel.setBackground(new Color(255,255,255));
+        this.BottomPanel.setBackground(new Color(255,255,255));
+
         c.add("0",TopPanel);
         c.add("1",MidPanel);
         c.add("2",BottomPanel);
@@ -45,7 +55,9 @@ public class MonitorGUI extends JFrame{
             if(i == 0){
 
                 EmptyPanelAdmin epa = new EmptyPanelAdmin();
-                BottomPanel.add(epa.getPanel(),i);
+
+               // if(status == ILogin.LoginStatus.PRIMARY_LOGGED){
+                BottomPanel.add(epa.getPanel(),i);//}
             }
             else if(i == 3){
 

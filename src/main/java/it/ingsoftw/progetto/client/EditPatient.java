@@ -81,6 +81,15 @@ public class EditPatient extends JFrame{
         if(!nomePaziente.getText().equals("")){EditPat.setName(nomePaziente.getText());i++;}
         if(!cognomePaziente.getText().equals("")){EditPat.setSurname(cognomePaziente.getText());i++;}
 
+        /*PROVA SET PARAMETER
+
+        EditPat.putDbpParameter(12);
+        EditPat.putFrequenceParameter(56);
+        EditPat.putSbpParameter(30);
+        float j = 3.345345f;
+        EditPat.putTempParameter(j);
+        */
+
         if(i == 0){JOptionPane.showMessageDialog(null,"Nessun cambiamento fatto");}
 
         else{
