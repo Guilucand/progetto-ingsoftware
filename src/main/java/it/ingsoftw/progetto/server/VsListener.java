@@ -10,6 +10,8 @@ import java.util.Set;
 import it.ingsoftw.progetto.common.AlarmLevel;
 import it.ingsoftw.progetto.common.IVSConnection;
 import it.ingsoftw.progetto.common.IVSListener;
+import it.ingsoftw.progetto.common.MonitorData;
+import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 
 public class VsListener extends UnicastRemoteObject implements IVSListener {
 
@@ -17,17 +19,28 @@ public class VsListener extends UnicastRemoteObject implements IVSListener {
     int alarmsId = 0;
 
     Map<String, IVSConnection> connectedMonitors;
+    IRecoveryDatabase database;
 
 
-    protected VsListener() throws RemoteException {
+    protected VsListener(IRecoveryDatabase database) throws RemoteException {
         super(ServerConfig.port);
+        this.database = database;
         connectedMonitors = new HashMap<>();
     }
 
     @Override
-    public boolean connectVS(String id, IVSConnection connection) {
+    public boolean connectVS(String id, IVSConnection connection) throws RemoteException {
         System.out.println("Connected vital signs monitor with id " + id);
         connectedMonitors.put(id, connection);
+
+        MonitorData data = new MonitorData(
+                connection.getBpm(),
+                connection.getSbp(),
+                connection.getDbp(),
+                connection.getTemp()
+        );
+
+        database.updateVsMonitor(id, data);
         return true;
     }
 

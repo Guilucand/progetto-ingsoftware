@@ -9,6 +9,7 @@ import it.ingsoftw.progetto.common.User;
 import it.ingsoftw.progetto.common.utils.Password;
 import it.ingsoftw.progetto.server.database.DatabaseConnection;
 import it.ingsoftw.progetto.server.database.IDatabaseConnection;
+import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 import test.database.TestDatabaseConnection;
 
 public class MainServer {
@@ -33,16 +34,27 @@ public class MainServer {
         IDatabaseConnection databaseConnection;
 
         // TEST
-        databaseConnection = new DatabaseConnection();
-        databaseConnection.getUsersInterface().addUser(new User("test", "Ciao", "Ciao2", "guilucand@gmail.com", User.UserType.Medic));
+
+        databaseConnection = new TestDatabaseConnection();
+        databaseConnection.getUsersInterface().addUser(new User("test", "Cracco", "Ciao2", "guilucand@gmail.com", User.UserType.Primary));
+        databaseConnection.getUsersInterface().addUser(new User("test1", "Simo", "Ciao2", "simo@gmail.com", User.UserType.Admin));
         databaseConnection.getUsersInterface().updatePassword("test", Password.fromPassword("prova"));
+        databaseConnection.getUsersInterface().updatePassword("test1", Password.fromPassword("prova1"));
+
+        IRecoveryDatabase recoveryDatabase = databaseConnection.getRecoveryInterface();
+
+        for (int i = 0; i < 10; i++)
+            recoveryDatabase.setRoomMachineId(String.valueOf(i+1), String.valueOf(i+1));
+
+        recoveryDatabase.addRecovery("Luigi", "1");
+
 
         // Registrazione delle interfacce iniziali di comunicazione con client e macchine di monitoraggio
         try {
             serverRegistry = LocateRegistry.createRegistry(ServerConfig.port);
 
             clientListener = new ClientListener(databaseConnection);
-            vsListener = new VsListener();
+            vsListener = new VsListener(databaseConnection.getRecoveryInterface());
 
             serverRegistry.rebind("auth", clientListener);
             serverRegistry.rebind("vsauth", vsListener);

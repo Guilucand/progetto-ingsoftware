@@ -3,13 +3,8 @@ package it.ingsoftw.progetto.client;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 
-import it.ingsoftw.progetto.common.Drug;
-import it.ingsoftw.progetto.common.IClientListener;
-import it.ingsoftw.progetto.common.IClientRmiFactory;
-import it.ingsoftw.progetto.common.ILogin;
+import it.ingsoftw.progetto.common.*;
 import it.ingsoftw.progetto.server.ServerConfig;
-
-import javax.swing.*;
 
 public class MainClient {
 
@@ -23,10 +18,10 @@ public class MainClient {
 
         try {
             // Connessione al server
-            IClientRmiFactory serverConnection = connectToServer();
+            serverFactory = connectToServer();
 
             // Ottenimento dell'interfaccia di login
-            ILogin loginInterface = serverConnection.getLoginInterface();
+            ILogin loginInterface = serverFactory.getLoginInterface();
 
             // Avvio della GUI di login
             new ClientGUI(loginInterface, (status, username) -> {
@@ -38,7 +33,7 @@ public class MainClient {
                         break;
 
                     default:
-                        logged(status,username);
+                        Logged(status,username);
                         break;
                 }
             });
@@ -66,6 +61,7 @@ public class MainClient {
      * @throws RemoteException
      */
     public static IClientRmiFactory connectToServer() throws RemoteException {
+
         IClientListener connection;
         String url = "//" + ServerConfig.hostname + ":" + ServerConfig.port + "/auth";
 
@@ -85,9 +81,11 @@ public class MainClient {
 
     }
 
-    private static void logged(ILogin.LoginStatus status, String username) {
+    private static void Logged(ILogin.LoginStatus status, String username) throws RemoteException {
 
-        new MonitorGUI(status,username);
+        IMonitor iMonitorInterface = serverFactory.getMonitorInterface();
+
+        new MonitorGUI(status,username,iMonitorInterface);
 
     }
 }

@@ -33,7 +33,7 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
     @Override
     public IMonitor getMonitorInterface() throws RemoteException {
         if (monitorInterface == null) {
-//            monitorInterface = new ServerMonitor(usersDatabase);
+            monitorInterface = new ServerMonitor(databaseConnection.getRecoveryInterface());
         }
         return monitorInterface;
     }

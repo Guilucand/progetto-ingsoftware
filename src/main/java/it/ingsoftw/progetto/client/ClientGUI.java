@@ -5,6 +5,8 @@ import it.ingsoftw.progetto.common.utils.Password;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Dimension;
@@ -131,7 +133,6 @@ public class ClientGUI extends JFrame{
                 if (e.getKeyCode() == KeyEvent.VK_F3) RapidAccess();
             }
         });
-
     }
 
 
@@ -178,7 +179,7 @@ public class ClientGUI extends JFrame{
 
         if(loginStatus == ILogin.LoginStatus.NOTLOGGED) {
 
-            JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI (qui)");
+            JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI");
             CheckAccess();
         }
 
@@ -212,7 +213,7 @@ public class ClientGUI extends JFrame{
 
         if(loginStatus == ILogin.LoginStatus.NOTLOGGED) {
 
-            JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI (qui)");
+            JOptionPane.showMessageDialog(null, "USERNAME O PASSWORD ERRATI");
             CheckAccess();
         }
 

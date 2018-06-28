@@ -31,13 +31,16 @@ public class EditPatient extends JFrame{
 
         super("Edit-Patient");
 
+
+
+        this.setContentPane(MainPanel);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        this.pack();
+
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
 
-        this.setContentPane(MainPanel);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        this.pack();
         this.setVisible(true);
 
 
@@ -77,6 +80,15 @@ public class EditPatient extends JFrame{
 
         if(!nomePaziente.getText().equals("")){EditPat.setName(nomePaziente.getText());i++;}
         if(!cognomePaziente.getText().equals("")){EditPat.setSurname(cognomePaziente.getText());i++;}
+
+        /*PROVA SET PARAMETER
+
+        EditPat.putDbpParameter(12);
+        EditPat.putFrequenceParameter(56);
+        EditPat.putSbpParameter(30);
+        float j = 3.345345f;
+        EditPat.putTempParameter(j);
+        */
 
         if(i == 0){JOptionPane.showMessageDialog(null,"Nessun cambiamento fatto");}
 
