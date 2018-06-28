@@ -7,6 +7,7 @@
     </constraints>
     <properties>
       <background color="-1"/>
+      <foreground color="-1"/>
     </properties>
     <border type="line" title="nomeutente" title-justification="2" title-position="2">
       <font name="Droid Serif" size="14" style="2"/>

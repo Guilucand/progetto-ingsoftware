@@ -1,5 +1,7 @@
 package it.ingsoftw.progetto.client;
 
+import it.ingsoftw.progetto.common.ILogin;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -11,8 +13,14 @@ public class EmptyPanelAdmin extends JPanel{
     private JButton openAdminPanel;
     private JPanel MainPanel;
     private JButton logOutButton;
+    MonitorGUI Monitor;
+    ILogin.LoginStatus status;
 
-    public EmptyPanelAdmin( MonitorGUI mgui){
+
+    public EmptyPanelAdmin(MonitorGUI mgui , ILogin.LoginStatus status){
+
+        this.Monitor=mgui;
+        this.status=status;
 
         Dimension preferredDimension = new Dimension(400, 200);
 
@@ -35,7 +43,9 @@ public class EmptyPanelAdmin extends JPanel{
     }
 
 
-    public EmptyPanelAdmin(){
+    public EmptyPanelAdmin(ILogin.LoginStatus status){
+
+        this.status=status;
 
         Dimension preferredDimension = new Dimension(400, 200);
 
@@ -43,7 +53,7 @@ public class EmptyPanelAdmin extends JPanel{
 
         MainPanel.remove(logOutButton);
 
-        openAdminPanel.addActionListener(e -> new AdminPanel());
+        openAdminPanel.addActionListener(e -> new AdminPanel(status));
 
 
     }
