@@ -9,6 +9,7 @@ import it.ingsoftw.progetto.server.database.IUsersDatabase;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ServerUsersAdmin extends UnicastRemoteObject implements IAdmin {
@@ -28,41 +29,56 @@ public class ServerUsersAdmin extends UnicastRemoteObject implements IAdmin {
     }
 
     @Override
-    public boolean addUser(User newUser) {
+    public boolean addUser(User newUser) throws RemoteException {
         if (!hasPermission()) return false;
 
+        Password tempPassword = Password.fromPassword(newUser.getName());
 
-        if (database.addUser(newUser)) {
-//            String tempPassword = new RandomString(12).nextString();
-            String tempPassword = newUser.getName();
-            database.updatePassword(newUser.getId(), Password.fromPassword(tempPassword));
-            return true;
+        try {
+            return database.addUser(newUser, tempPassword);
+        } catch (SQLException e) {
+            throw new RemoteException(e.getMessage());
         }
-        return false;
     }
 
     @Override
-    public boolean deleteUser(EditableUser userToDelete) {
+    public boolean deleteUser(EditableUser userToDelete) throws RemoteException {
         if (!hasPermission()) return false;
 
-        return database.removeUser(userToDelete);
+        try {
+            return database.removeUser(userToDelete);
+        } catch (SQLException e) {
+            throw new RemoteException((e.getMessage()));
+        }
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<User> getUsers() throws RemoteException {
         if (!hasPermission()) return null;
 
-        return database.getUserList();
+        try {
+            return database.getUserList();
+        } catch (SQLException e) {
+            throw new RemoteException(e.getMessage());
+        }
     }
 
     @Override
-    public EditableUser getEditableUser(String id) {
-        return database.getEditableUser(id);
+    public EditableUser getEditableUser(String id) throws RemoteException {
+        try {
+            return database.getEditableUser(id);
+        } catch (SQLException e) {
+            throw new RemoteException(e.getMessage());
+        }
     }
 
     @Override
-    public void commitUserChanges(EditableUser editedUser) {
-        database.updateUser(editedUser);
+    public void commitUserChanges(EditableUser editedUser) throws RemoteException {
+        try {
+            database.updateUser(editedUser);
+        } catch (SQLException e) {
+            throw new RemoteException(e.getMessage());
+        }
     }
 
     private ClientStatus status;
