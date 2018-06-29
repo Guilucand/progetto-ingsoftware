@@ -197,8 +197,8 @@ public class ClientGUI extends JFrame{
 
     public void RapidAccess(){
 
-        username = "Primario";
-        password = "prova";
+        username = "user";
+        password = "pass";
 
         try {
             loginStatus = loginInterface.doLogin(username, Password.fromPassword(password));

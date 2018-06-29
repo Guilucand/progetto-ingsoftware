@@ -1,12 +1,12 @@
 package it.ingsoftw.progetto.client;
 
+import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.IAdmin;
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.User;
+import org.w3c.dom.stylesheets.MediaList;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.rmi.RemoteException;
@@ -54,6 +54,8 @@ public class AdminPanel extends JFrame{
     private IAdmin adminInterface;
     private JPopupMenu popupMenu;
     private int removeline;
+    private User ModUser;
+    private User DeleteUser;
 
     public AdminPanel(ILogin.LoginStatus status, IAdmin adminInterface) throws RemoteException {
 
@@ -70,12 +72,12 @@ public class AdminPanel extends JFrame{
 
 
         this.popupMenu = new JPopupMenu();
-        AddPopup();
+        addPopup();
 
 
         //HO BISOGNO DELLA LISTA DEGLI UTENTI NEL DB
 
-        InitList();
+        initList();
 
         Dimension prefdim = new Dimension(200,700);
         RightPanel.setPreferredSize(prefdim);
@@ -123,7 +125,7 @@ public class AdminPanel extends JFrame{
                 JList theList = (JList) e.getSource();
                 super.mouseClicked(e);
 
-                ClearPanel(false);
+                clearPanel(false);
 
                 if(e.getClickCount() == 2){
 
@@ -131,16 +133,17 @@ public class AdminPanel extends JFrame{
 
                     if (index >= 0) {
 
+                        ModUser = medListDB.get(index);
 
                         System.out.println("Double-clicked on: " + medListDB.get(index).getName());
 
                         aggiungiButton.setVisible(false);
                         editButton.setVisible(true);
 
-                        idTextField.setText(medListDB.get(index).getId());
-                        nameTextField.setText(medListDB.get(index).getName());
-                        surnameTextField.setText(medListDB.get(index).getSurname());
-                        mailTextField.setText(medListDB.get(index).getEmail());
+                        idTextField.setText(ModUser.getId());
+                        nameTextField.setText(ModUser.getName());
+                        surnameTextField.setText(ModUser.getSurname());
+                        mailTextField.setText(ModUser.getEmail());
 
                         if(medListDB.get(index).getUserType() == User.UserType.Admin)adminCheckBox.setSelected(true);
                         else adminCheckBox.setSelected(false);
@@ -158,10 +161,10 @@ public class AdminPanel extends JFrame{
 
                 }else if(e.getButton() == MouseEvent.BUTTON3){
 
-                    System.out.println("premuto il tasto destro ");
-
-
                     medList.setSelectedIndex(medList.locationToIndex(e.getPoint()));
+
+                    int index = theList.locationToIndex(e.getPoint());
+                    DeleteUser = medListDB.get(index);
 
                     removeline = medList.getSelectedIndex();
 
@@ -174,7 +177,6 @@ public class AdminPanel extends JFrame{
                         }
 
                     }
-                    //medList.setSelectedIndex(medList.locationToIndex(e.getPoint()));
 
                 }
 
@@ -190,7 +192,7 @@ public class AdminPanel extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 JList theList = (JList) e.getSource();
                 super.mouseClicked(e);
-                ClearPanel(false);
+                clearPanel(false);
                 if(e.getClickCount() == 2){
 
                     int index = theList.locationToIndex(e.getPoint());
@@ -269,7 +271,7 @@ public class AdminPanel extends JFrame{
                 super.keyPressed(e);
                 if(e.getKeyCode() == KeyEvent.VK_ENTER) {
                     try {
-                        AddUser();
+                        addUser();
                     } catch (RemoteException e1) {
                         e1.printStackTrace();
                     }
@@ -282,7 +284,7 @@ public class AdminPanel extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                 try {
-                    AddUser();
+                    addUser();
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
@@ -293,9 +295,11 @@ public class AdminPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                System.out.println("salvo cambiamento");
-                String idUtente = idTextField.getText();
-                EditUser(idUtente);
+                try {
+                    editUser(ModUser);
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
@@ -305,7 +309,7 @@ public class AdminPanel extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
 
-                ClearPanel(true);
+                clearPanel(true);
                 nameTextField.requestFocusInWindow();
 
 
@@ -327,10 +331,19 @@ public class AdminPanel extends JFrame{
             }
         });
 
+        typeBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if(typeBox.getSelectedIndex() == 1) adminCheckBox.setVisible(false);
+                else if (typeBox.getSelectedIndex() == 0) adminCheckBox.setVisible(true);
+
+            }
+        });
     }
 
 
-    private void AddPopup(){
+    private void addPopup(){
 
         JMenuItem delete = new JMenuItem("Rimuovi");
 
@@ -340,7 +353,16 @@ public class AdminPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                listaMedici.removeElementAt(removeline);
+                try {
+                    removeUser();
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
+                try {
+                    initList();
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
@@ -348,18 +370,17 @@ public class AdminPanel extends JFrame{
     }
 
 
-    private void medListMouseClicked(MouseEvent e){
-
-
-
-    }
-
-    private void InitList() throws RemoteException {
+    private void initList() throws RemoteException {
 
         allUsers = adminInterface.getUsers();
 
+        this.listaMedici.removeAllElements();
+        this.listaInfermieri.removeAllElements();
+
         medListDB = new ArrayList<>();
         nurseListDB = new ArrayList<>();
+
+       // this.nurseList.
 
         for(int i = 0; i<allUsers.size(); i++){
 
@@ -370,11 +391,11 @@ public class AdminPanel extends JFrame{
         }
 
         for (int i = 0; i < medListDB.size(); i++) {
-            listaMedici.add(i, ""+medListDB.get(i).getId());
+            listaMedici.add(i, ""+medListDB.get(i));
         }
 
         for (int i = 0; i<nurseListDB.size(); i++){
-            listaInfermieri.add(i,""+nurseListDB.get(i).getId());
+            listaInfermieri.add(i,""+nurseListDB.get(i));
         }
 
     }
@@ -385,9 +406,34 @@ public class AdminPanel extends JFrame{
      * Metodo per aggiungere utenti (personale) al database
      *
      */
-    private void AddUser() throws RemoteException {
+    private void addUser() throws RemoteException {
 
-        //CONTROLLI
+        if(checkParameters()) {
+
+            User.UserType ut = User.UserType.Nurse;
+
+            if(adminCheckBox.isSelected()){ut = User.UserType.Admin;}
+            else if(typeBox.getSelectedIndex() == 0){ut = User.UserType.Medic;}
+            else if(typeBox.getSelectedIndex() == 1){ut = User.UserType.Nurse;}
+
+
+            User newUser = new User(idTextField.getText(),nameTextField.getText(),surnameTextField.getText(),mailTextField.getText(),ut);
+            if(adminInterface.addUser(newUser) == false){
+
+                JOptionPane.showMessageDialog(null,"Non è stato possiile aggiungere l'utente poichè è già nel Database");
+                return;
+            }
+
+            JOptionPane.showMessageDialog(null,"utente \""+idTextField.getText()+"\" aggiunto");
+            clearPanel(true);
+            initList();
+
+        }
+
+    }
+
+
+    private boolean checkParameters(){
 
         boolean b = true;
 
@@ -427,8 +473,38 @@ public class AdminPanel extends JFrame{
             surnameTextField.requestFocusInWindow();
         }else{errorAddLabel2.setText("");surnameTextField.setBackground(Color.WHITE);}
 
+        return b;
 
-        if(b) {
+
+    }
+
+    private void removeUser() throws RemoteException {
+
+        EditableUser delUser = adminInterface.getEditableUser(DeleteUser.getId());
+
+        if(!adminInterface.deleteUser(delUser)){
+
+            JOptionPane.showMessageDialog(null,"Non è stato possiile rimuovere l'utente");
+            return;
+
+        }
+
+
+
+    }
+
+
+    private void editUser(User ModUser) throws RemoteException {
+
+
+        if(checkParameters()) {
+
+            EditableUser EditUser = adminInterface.getEditableUser(ModUser.getId());
+
+            EditUser.setId(idTextField.getText());
+            EditUser.setName(nameTextField.getText());
+            EditUser.setSurname(surnameTextField.getText());
+            EditUser.setEmail(mailTextField.getText());
 
             User.UserType ut = User.UserType.Nurse;
 
@@ -436,29 +512,22 @@ public class AdminPanel extends JFrame{
             else if(typeBox.getSelectedIndex() == 0){ut = User.UserType.Medic;}
             else if(typeBox.getSelectedIndex() == 1){ut = User.UserType.Nurse;}
 
+            EditUser.setUserType(ut);
 
-            User newUser = new User(idTextField.getText(),nameTextField.getText(),surnameTextField.getText(),mailTextField.getText(),ut);
-            if(adminInterface.addUser(newUser) == false){
+            if(!adminInterface.commitUserChanges(EditUser)){
 
-                JOptionPane.showMessageDialog(null,"Non è stato possiile aggiungere l'utente ");
+                JOptionPane.showMessageDialog(null,"Non è stato possiile modificare l'utente");
                 return;
+
             }
 
-            JOptionPane.showMessageDialog(null,"utente \""+idTextField.getText()+"\" aggiunto");
-            ClearPanel(true);
-            InitList();
+            initList();
 
         }
 
     }
 
-    private void EditUser(String idUtente){
-
-
-
-    }
-
-    private void ClearPanel(boolean completo){
+    private void clearPanel(boolean completo){
 
 
         this.errorAddLabel.setText("");

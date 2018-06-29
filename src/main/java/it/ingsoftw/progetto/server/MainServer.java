@@ -51,7 +51,6 @@ public class MainServer {
         IRecoveryDatabase recoveryDatabase = databaseConnection.getRecoveryInterface();
 
 
-
         for (int i = 0; i < 10; i++)
             recoveryDatabase.setRoomMachineId(String.valueOf(i+1), String.valueOf(i+1));
 
