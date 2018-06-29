@@ -3,6 +3,8 @@ package it.ingsoftw.progetto.server;
 import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.IAdmin;
 import it.ingsoftw.progetto.common.User;
+import it.ingsoftw.progetto.common.utils.Password;
+import it.ingsoftw.progetto.common.utils.RandomString;
 import it.ingsoftw.progetto.server.database.IUsersDatabase;
 
 import java.rmi.RemoteException;
@@ -29,7 +31,14 @@ public class ServerUsersAdmin extends UnicastRemoteObject implements IAdmin {
     public boolean addUser(User newUser) {
         if (!hasPermission()) return false;
 
-        return database.addUser(newUser);
+
+        if (database.addUser(newUser)) {
+//            String tempPassword = new RandomString(12).nextString();
+            String tempPassword = newUser.getName();
+            database.updatePassword(newUser.getId(), Password.fromPassword(tempPassword));
+            return true;
+        }
+        return false;
     }
 
     @Override
