@@ -7,8 +7,11 @@ package it.ingsoftw.progetto.common;
  */
 public class EditableUser extends User {
 
-    public EditableUser(String id, String name, String surname, String email, UserType userType) {
-        super(id, name, surname, email, userType);
+    private String reference;
+
+    public EditableUser(User user, String reference) {
+        super(user.id, user.name, user.surname, user.email, user.userType);
+        this.reference = reference;
     }
 
     /**
@@ -49,5 +52,9 @@ public class EditableUser extends User {
      */
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public String getInternalReference() {
+        return reference;
     }
 }

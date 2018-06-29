@@ -21,4 +21,11 @@ public interface IClientRmiFactory extends Remote {
      * @throws RemoteException
      */
     IMonitor getMonitorInterface() throws RemoteException;
+
+    /**
+     * Ottiene un'interfaccia per l'amministrazione degli utenti
+     * @return l'amministrazione degli utenti
+     * @throws RemoteException
+     */
+    IAdmin getAdminInterface() throws RemoteException;
 }

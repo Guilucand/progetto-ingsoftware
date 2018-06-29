@@ -5,6 +5,7 @@ import it.ingsoftw.progetto.common.User;
 import it.ingsoftw.progetto.common.utils.Password;
 
 import java.sql.Connection;
+import java.util.List;
 
 class UsersDatabase implements IUsersDatabase {
 
@@ -36,6 +37,11 @@ class UsersDatabase implements IUsersDatabase {
 
     @Override
     public User getUserFromEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public List<User> getUserList() {
         return null;
     }
 

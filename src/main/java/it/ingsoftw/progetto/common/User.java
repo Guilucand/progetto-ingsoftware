@@ -37,6 +37,15 @@ public class User {
         this.userType = userType;
     }
 
+    public User(User other) {
+        this.id = other.id;
+        this.name = other.name;
+        this.surname = other.surname;
+        this.email = other.email;
+        this.userType = other.userType;
+    }
+
+
     public String getId() {
         return id;
     }

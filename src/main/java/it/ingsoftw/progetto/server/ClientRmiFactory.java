@@ -3,6 +3,7 @@ package it.ingsoftw.progetto.server;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import it.ingsoftw.progetto.common.IAdmin;
 import it.ingsoftw.progetto.common.IClientRmiFactory;
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.IMonitor;
@@ -14,7 +15,9 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
 
     ILogin loginInterface;
     IMonitor monitorInterface;
+    IAdmin adminInterface;
     IDatabaseConnection databaseConnection;
+    ClientStatus status;
 
 
     protected ClientRmiFactory(IDatabaseConnection databaseConnection) throws RemoteException {
@@ -25,7 +28,7 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
     @Override
     public ILogin getLoginInterface() throws RemoteException{
         if (loginInterface == null) {
-            loginInterface = new ServerLogin(databaseConnection.getUsersInterface());
+            loginInterface = new ServerLogin(status, databaseConnection.getUsersInterface());
         }
         return loginInterface;
     }
@@ -33,8 +36,16 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
     @Override
     public IMonitor getMonitorInterface() throws RemoteException {
         if (monitorInterface == null) {
-            monitorInterface = new ServerMonitor(databaseConnection.getRecoveryInterface());
+            monitorInterface = new ServerMonitor(status, databaseConnection.getRecoveryInterface());
         }
         return monitorInterface;
+    }
+
+    @Override
+    public IAdmin getAdminInterface() throws RemoteException {
+        if (adminInterface == null) {
+//            adminInterface = new
+        }
+        return adminInterface;
     }
 }

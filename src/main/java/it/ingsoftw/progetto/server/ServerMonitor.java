@@ -9,10 +9,12 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class ServerMonitor extends UnicastRemoteObject implements IMonitor {
 
+    private ClientStatus status;
     private IRecoveryDatabase recoveryDatabase;
 
-    public ServerMonitor(IRecoveryDatabase recoveryDatabase) throws RemoteException {
+    public ServerMonitor(ClientStatus status, IRecoveryDatabase recoveryDatabase) throws RemoteException {
         super(ServerConfig.port);
+        this.status = status;
 
         this.recoveryDatabase = recoveryDatabase;
     }
@@ -24,6 +26,6 @@ public class ServerMonitor extends UnicastRemoteObject implements IMonitor {
 
     @Override
     public IPatient getPatientByRoomNumber(int roomNumber) throws RemoteException{
-        return new ServerPatient(recoveryDatabase, "1");
+        return new ServerPatient(status, recoveryDatabase, "1");
     }
 }

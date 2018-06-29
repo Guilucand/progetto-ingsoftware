@@ -12,16 +12,17 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class ServerLogin extends UnicastRemoteObject implements ILogin {
 
-    public ServerLogin(IUsersDatabase usersDbConnection) throws RemoteException {
+    public ServerLogin(ClientStatus status, IUsersDatabase database) throws RemoteException {
         super(ServerConfig.port);
-        this.usersDbConnection = usersDbConnection;
+        this.status = status;
+        this.database = database;
     }
 
     private LoginStatus getLoginStatus() {
-        if (userLogged == null)
+        if (status.getLoggedUser() == null)
             return LoginStatus.NOTLOGGED;
 
-        switch (userLogged.getUserType()) {
+        switch (status.getLoggedUser().getUserType()) {
             case Medic:
                 return LoginStatus.MEDIC_LOGGED;
             case Nurse:
@@ -37,12 +38,12 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
     @Override
     public LoginStatus doLogin(String userId, Password password) {
 
-        boolean loginSuccessful = usersDbConnection.authenticateUser(userId, password);
+        boolean loginSuccessful = database.authenticateUser(userId, password);
 
         if (!loginSuccessful)
             return LoginStatus.NOTLOGGED;
 
-        userLogged = usersDbConnection.getUser(userId);
+        status.setLoggedUser(database.getUser(userId));
 
         System.out.println("Login with id: " + userId);
 
@@ -56,20 +57,20 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
 
     @Override
     public boolean doLogout() {
-        userLogged = null;
+        status.setLoggedUser(null);
         return true;
     }
 
     @Override
     public boolean passwordForgotten(String email) {
 
-        User user = usersDbConnection.getUserFromEmail(email);
+        User user = database.getUserFromEmail(email);
 
         if (user == null) return false;
 
 
         String tempPassword = new RandomString(12).nextString();
-        usersDbConnection.updatePassword(user.getId(), Password.fromPassword(tempPassword));
+        database.updatePassword(user.getId(), Password.fromPassword(tempPassword));
         EmailSender.sendForgotPasswordMail(email, tempPassword);
         return true;
     }
@@ -79,6 +80,6 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
         return false;
     }
 
-    private User userLogged;
-    private IUsersDatabase usersDbConnection;
+    private ClientStatus status;
+    private IUsersDatabase database;
 }

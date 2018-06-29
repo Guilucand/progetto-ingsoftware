@@ -13,11 +13,13 @@ import java.util.Date;
 
 public class ServerPatient extends UnicastRemoteObject implements IPatient {
 
+    private ClientStatus status;
     private IRecoveryDatabase database;
     private String patientId;
 
-    public ServerPatient(IRecoveryDatabase database, String patientId) throws RemoteException {
+    public ServerPatient(ClientStatus status, IRecoveryDatabase database, String patientId) throws RemoteException {
         super(ServerConfig.port);
+        this.status = status;
 
         this.database = database;
         this.patientId = patientId;

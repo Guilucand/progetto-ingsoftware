@@ -4,6 +4,8 @@ import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.User;
 import it.ingsoftw.progetto.common.utils.Password;
 
+import java.util.List;
+
 /**
  * Interfaccia di accesso e modifica degli utenti salvati sul database
  */
@@ -37,6 +39,12 @@ public interface IUsersDatabase {
      */
     User getUserFromEmail(String email);
 
+    /**
+     * Ritorna la lista di tutti gli utenti
+     * del sistema
+     * @return la lista degli utenti
+     */
+    List<User> getUserList();
 
 
     /**

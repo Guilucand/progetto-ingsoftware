@@ -1,7 +1,9 @@
 package test.database;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.User;
@@ -51,14 +53,20 @@ public class TestUsersDatabase implements IUsersDatabase {
     }
 
     @Override
+    public List<User> getUserList() {
+        return new ArrayList<>(users);
+    }
+
+    @Override
     public EditableUser getEditableUser(String id) {
-        return null;
-//        return new EditableUser(id, , )
+        return new EditableUser(getUser(id), id);
     }
 
     @Override
     public void updateUser(EditableUser updatedUser) {
 
+        users.remove(getUser(updatedUser.getInternalReference()));
+        users.add(new User(updatedUser));
     }
 
     @Override
