@@ -197,7 +197,7 @@ public class ClientGUI extends JFrame{
 
     public void RapidAccess(){
 
-        username = "test";
+        username = "Primario";
         password = "prova";
 
         try {

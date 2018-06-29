@@ -50,7 +50,7 @@ public class ServerUsersAdmin extends UnicastRemoteObject implements IAdmin {
 
     @Override
     public List<User> getUsers() {
-        if (!hasPermission()) return null;
+        //if (!hasPermission()) return null;
 
         return database.getUserList();
     }
