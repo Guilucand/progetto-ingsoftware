@@ -64,10 +64,11 @@ public class TestUsersDatabase implements IUsersDatabase {
     }
 
     @Override
-    public void updateUser(EditableUser updatedUser) {
+    public boolean updateUser(EditableUser updatedUser) {
 
         users.remove(getUser(updatedUser.getInternalReference()));
         users.add(new User(updatedUser));
+        return true;
     }
 
     @Override

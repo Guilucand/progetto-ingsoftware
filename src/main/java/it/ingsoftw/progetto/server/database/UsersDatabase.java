@@ -4,9 +4,7 @@ import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.User;
 import it.ingsoftw.progetto.common.utils.Password;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +44,6 @@ class UsersDatabase implements IUsersDatabase {
         addUser.setString(4, user.getSurname());
         addUser.setString(5, user.getEmail());
         addUser.setString(6, user.getUserType().toString());
-
-        String test = user.getUserType().toString();
 
         try {
             return addUser.executeUpdate() > 0;
@@ -148,13 +144,58 @@ class UsersDatabase implements IUsersDatabase {
     }
 
     @Override
-    public void updateUser(EditableUser updatedUser) throws SQLException {
+    public boolean updateUser(EditableUser updatedUser) throws SQLException {
+        String sql =
+                "UPDATE users SET (username, name, surname, email, usertype)" +
+                "= (?, ?, ?, ?, ?, CAST (? AS privilege) ) " +
+                "WHERE id = ?";
 
+        PreparedStatement addUser = connection.prepareStatement(sql);
+        addUser.setString(1, updatedUser.getId());
+        addUser.setString(2, updatedUser.getName());
+        addUser.setString(3, updatedUser.getSurname());
+        addUser.setString(4, updatedUser.getEmail());
+        addUser.setString(5, updatedUser.getUserType().toString());
+
+        // Imposto la chiave primaria dello user prima della modifica
+        addUser.setString(6, updatedUser.getInternalReference());
+
+        try {
+            return addUser.executeUpdate() > 0;
+        }
+        catch (SQLException e) {
+            String s = e.getSQLState();
+
+            // Violazione di vincoli di integrita'
+            if (Integer.parseInt(s)/1000 == 23) {
+                return false;
+            }
+            throw e;
+        }
     }
 
     @Override
     public boolean updatePassword(String id, Password newPassword) throws SQLException {
-        return false;
+        String sql =
+                "UPDATE users SET password = ?" +
+                        "WHERE id = ?";
+
+        PreparedStatement changePassword = connection.prepareStatement(sql);
+        changePassword.setString(1, newPassword.getPasswordHash());
+        changePassword.setString(2, id);
+
+        try {
+            return changePassword.executeUpdate() > 0;
+        }
+        catch (SQLException e) {
+            String s = e.getSQLState();
+
+            // Violazione di vincoli di integrita'
+            if (Integer.parseInt(s)/1000 == 23) {
+                return false;
+            }
+            throw e;
+        }
     }
 
     @Override

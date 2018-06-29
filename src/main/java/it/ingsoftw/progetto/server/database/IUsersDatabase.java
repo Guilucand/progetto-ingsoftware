@@ -59,7 +59,7 @@ public interface IUsersDatabase {
      * Aggiorna i dati di un utente, modificati tramite la classe di modifica
      * @param updatedUser la classe di modifica
      */
-    void updateUser(EditableUser updatedUser) throws SQLException;
+    boolean updateUser(EditableUser updatedUser) throws SQLException;
 
     /**
      * Aggiorna la password
