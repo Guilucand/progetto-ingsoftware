@@ -186,18 +186,22 @@ public class AdminPanel extends JFrame{
         });
 
 
-
         nurseList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JList theList = (JList) e.getSource();
                 super.mouseClicked(e);
                 clearPanel(false);
+                int index;
+
                 if(e.getClickCount() == 2){
 
-                    int index = theList.locationToIndex(e.getPoint());
+                    System.out.println("premo tasto sinistrox2 mouse in lista infermieri");
+                    index = theList.locationToIndex(e.getPoint());
 
                     if (index >= 0) {
+
+                        ModUser = nurseListDB.get(index);
 
                         System.out.println("Double-clicked on: " + nurseListDB.get(index).getName());
 
@@ -219,6 +223,26 @@ public class AdminPanel extends JFrame{
 
                         EditPanel.repaint();
                         EditPanel.revalidate();
+
+                    }
+
+                }else if(e.getButton() == MouseEvent.BUTTON3){
+
+                    System.out.println("premo tasto destro mouse in lista infermieri");
+                    nurseList.setSelectedIndex(nurseList.locationToIndex(e.getPoint()));
+                    index = theList.locationToIndex(e.getPoint());
+
+                    DeleteUser = nurseListDB.get(index);
+
+                    removeline = nurseList.getSelectedIndex();
+
+                    if(SwingUtilities.isRightMouseButton(e) && nurseList.locationToIndex(e.getPoint()) == removeline){
+
+                        if(! nurseList.isSelectionEmpty()){
+
+                            popupMenu.show(nurseList,e.getX(),e.getY());
+
+                        }
 
                     }
 
@@ -296,7 +320,7 @@ public class AdminPanel extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                 try {
-                    editUser(ModUser);
+                    editUser();
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
@@ -346,26 +370,39 @@ public class AdminPanel extends JFrame{
     private void addPopup(){
 
         JMenuItem delete = new JMenuItem("Rimuovi");
+        JMenuItem modifica = new JMenuItem("modifica");
 
         popupMenu.add(delete);
+        //popupMenu.add(modifica);
 
-        delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        delete.addActionListener(e -> {
 
-                try {
-                    removeUser();
-                } catch (RemoteException e1) {
-                    e1.printStackTrace();
-                }
-                try {
-                    initList();
-                } catch (RemoteException e1) {
-                    e1.printStackTrace();
-                }
+            try {
+                removeUser();
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+            try {
+                initList();
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
             }
         });
+/*
+        modifica.addActionListener(e -> {
 
+            try {
+                editUser();
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+            try {
+                initList();
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+        });
+*/
 
     }
 
@@ -485,8 +522,11 @@ public class AdminPanel extends JFrame{
         if(!adminInterface.deleteUser(delUser)){
 
             JOptionPane.showMessageDialog(null,"Non è stato possiile rimuovere l'utente");
-            return;
 
+
+        }else{
+
+            JOptionPane.showMessageDialog(null,"L'utente è stato rimosso correttamente");
         }
 
 
@@ -494,7 +534,7 @@ public class AdminPanel extends JFrame{
     }
 
 
-    private void editUser(User ModUser) throws RemoteException {
+    private void editUser() throws RemoteException {
 
 
         if(checkParameters()) {
@@ -519,9 +559,10 @@ public class AdminPanel extends JFrame{
                 JOptionPane.showMessageDialog(null,"Non è stato possiile modificare l'utente");
                 return;
 
-            }
+            }else JOptionPane.showMessageDialog(null,"Le modifiche sono state Applicate");
 
             initList();
+            clearPanel(true);
 
         }
 
