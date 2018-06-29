@@ -94,7 +94,7 @@ public class PatientMonitor extends JPanel{
 
         emptyRoom.assignButton.setBackground(new java.awt.Color(54,193,112));
 
-        Dimension preferredDimension = new Dimension(400, 200);
+        Dimension preferredDimension = new Dimension(325, 200);
 
         emptyRoom.panel.setPreferredSize(preferredDimension);
         patientPanel.setPreferredSize(preferredDimension);
