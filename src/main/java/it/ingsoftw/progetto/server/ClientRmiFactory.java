@@ -23,6 +23,7 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
     protected ClientRmiFactory(IDatabaseConnection databaseConnection) throws RemoteException {
         super(ServerConfig.port);
         this.databaseConnection = databaseConnection;
+        this.status = new ClientStatus();
     }
 
     @Override
@@ -44,7 +45,7 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
     @Override
     public IAdmin getAdminInterface() throws RemoteException {
         if (adminInterface == null) {
-//            adminInterface = new
+            adminInterface = new ServerUsersAdmin(status, databaseConnection.getUsersInterface());
         }
         return adminInterface;
     }

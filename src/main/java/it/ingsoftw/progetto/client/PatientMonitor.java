@@ -105,13 +105,14 @@ public class PatientMonitor extends JPanel{
         //____PARAMETRI
 
         IPatient Paziente = iMonitorInterface.getPatientByRoomNumber(room_numer);
-        MonitorData Data = Paziente.getCurrentMonitorData();
+        MonitorData data = Paziente.getCurrentMonitorData();
 
-        this.dbpParameter.setText(String.valueOf(Data.getDbp()));
-        this.sbpParameter.setText(String.valueOf(Data.getSbp()));
-        this.frequenceParameter.setText(String.valueOf(Data.getBpm()));
-        this.temperatureParameter.setText(String.valueOf(Data.getTemp()));
-
+        if (data != null) {
+            this.dbpParameter.setText(String.valueOf(data.getDbp()));
+            this.sbpParameter.setText(String.valueOf(data.getSbp()));
+            this.frequenceParameter.setText(String.valueOf(data.getBpm()));
+            this.temperatureParameter.setText(String.valueOf(data.getTemp()));
+        }
 
         //____LISTENER
 
