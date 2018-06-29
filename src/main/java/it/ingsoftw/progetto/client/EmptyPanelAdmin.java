@@ -1,5 +1,6 @@
 package it.ingsoftw.progetto.client;
 
+import it.ingsoftw.progetto.common.IAdmin;
 import it.ingsoftw.progetto.common.ILogin;
 
 import javax.swing.*;
@@ -7,20 +8,22 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class EmptyPanelAdmin extends JPanel{
 
     private JButton openAdminPanel;
     private JPanel MainPanel;
     private JButton logOutButton;
-    MonitorGUI Monitor;
-    ILogin.LoginStatus status;
+    private MonitorGUI Monitor;
+    private ILogin.LoginStatus status;
+    private IAdmin adminInterface;
 
-
-    public EmptyPanelAdmin(MonitorGUI mgui , ILogin.LoginStatus status){
+    public EmptyPanelAdmin(MonitorGUI mgui , ILogin.LoginStatus status , IAdmin adminInterface){
 
         this.Monitor=mgui;
         this.status=status;
+        this.adminInterface = adminInterface;
 
         Dimension preferredDimension = new Dimension(400, 200);
 
@@ -43,9 +46,10 @@ public class EmptyPanelAdmin extends JPanel{
     }
 
 
-    public EmptyPanelAdmin(ILogin.LoginStatus status){
+    public EmptyPanelAdmin(ILogin.LoginStatus status,IAdmin adminInterface){
 
         this.status=status;
+        this.adminInterface = adminInterface;
 
         Dimension preferredDimension = new Dimension(400, 200);
 
@@ -53,7 +57,13 @@ public class EmptyPanelAdmin extends JPanel{
 
         MainPanel.remove(logOutButton);
 
-        openAdminPanel.addActionListener(e -> new AdminPanel(status));
+        openAdminPanel.addActionListener(e -> {
+            try {
+                new AdminPanel(status,adminInterface);
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+        });
 
 
     }

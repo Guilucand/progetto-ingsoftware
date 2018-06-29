@@ -12,18 +12,18 @@ public class MainClient {
 
     static IClientRmiFactory serverFactory;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RemoteException {
 
         System.setProperty("sun.java2d.uiScale","1");
 
-        new AdminPanel(ILogin.LoginStatus.PRIMARY_LOGGED);
-/*
         try {
             // Connessione al server
             serverFactory = connectToServer();
 
             // Ottenimento dell'interfaccia di login
             ILogin loginInterface = serverFactory.getLoginInterface();
+
+            //new AdminPanel(ILogin.LoginStatus.PRIMARY_LOGGED,serverFactory.getAdminInterface());
 
             // Avvio della GUI di login
             new ClientGUI(loginInterface, (status, username) -> {
@@ -49,9 +49,9 @@ public class MainClient {
         DrugsQuery q = new DrugsQuery();
         Drug[] d = q.queryDatabase("Tachip", DrugsQuery.QueryType.ActivePrinciple, true);
 
-        /*for (Drug dr : d) {
+        for (Drug dr : d) {
             System.out.println(dr.drugDescription + " " + dr.company);
-        }*/
+        }
 
 
     }
@@ -85,9 +85,7 @@ public class MainClient {
 
     private static void Logged(ILogin.LoginStatus status, String username) throws RemoteException {
 
-        IMonitor iMonitorInterface = serverFactory.getMonitorInterface();
-
-        new MonitorGUI(status,username,iMonitorInterface);
+        new MonitorGUI(status,username,serverFactory);
 
     }
 }

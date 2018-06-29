@@ -53,6 +53,7 @@ public class ServerUsersAdmin extends UnicastRemoteObject implements IAdmin {
     }
 
     @Override
+
     public List<User> getUsers() throws RemoteException {
         if (!hasPermission()) return null;
 

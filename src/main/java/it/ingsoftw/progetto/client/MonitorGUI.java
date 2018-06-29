@@ -1,5 +1,7 @@
 package it.ingsoftw.progetto.client;
 
+import it.ingsoftw.progetto.common.IAdmin;
+import it.ingsoftw.progetto.common.IClientRmiFactory;
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.IMonitor;
 
@@ -18,15 +20,20 @@ public class MonitorGUI extends JFrame{
     private JPanel BottomPanel;
     private ILogin.LoginStatus status;
     private String username;
+    private IClientRmiFactory serverFactory;
     private IMonitor iMonitorInterface;
+    private IAdmin adminInterface;
 
-    public MonitorGUI(ILogin.LoginStatus status, String username, IMonitor iMonitorInterface) throws RemoteException {
+    public MonitorGUI(ILogin.LoginStatus status, String username, IClientRmiFactory serverFactory) throws RemoteException {
 
         super("Monitor");
 
         this.status = status;
         this.username = username;
-        this.iMonitorInterface=iMonitorInterface;
+
+        this.serverFactory = serverFactory;
+        this.iMonitorInterface=serverFactory.getMonitorInterface();
+        this.adminInterface = serverFactory.getAdminInterface();
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -74,7 +81,7 @@ public class MonitorGUI extends JFrame{
             MidPanel.add(new PatientMonitor(i+5, this.iMonitorInterface),i);
             if(i == 0){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin(status);
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(status,adminInterface);
 
                 if(this.status == ILogin.LoginStatus.PRIMARY_LOGGED || this.status == ILogin.LoginStatus.ADMIN_LOGGED) {
                     BottomPanel.add(epa.getPanel(), i);
@@ -93,7 +100,7 @@ public class MonitorGUI extends JFrame{
             }
             else if(i == 3){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin(this,status);
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(this,status,adminInterface);
 
                 BottomPanel.add(epa.getPanel(), i);
 

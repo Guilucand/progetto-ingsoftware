@@ -47,6 +47,7 @@ public class MainServer {
         catch (Exception e) {
             e.printStackTrace();
         }
+
         IRecoveryDatabase recoveryDatabase = databaseConnection.getRecoveryInterface();
 
 
