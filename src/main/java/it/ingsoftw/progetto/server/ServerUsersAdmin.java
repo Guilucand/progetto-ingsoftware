@@ -4,7 +4,6 @@ import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.IAdmin;
 import it.ingsoftw.progetto.common.User;
 import it.ingsoftw.progetto.common.utils.Password;
-import it.ingsoftw.progetto.common.utils.RandomString;
 import it.ingsoftw.progetto.server.database.IUsersDatabase;
 
 import java.rmi.RemoteException;
@@ -74,9 +73,9 @@ public class ServerUsersAdmin extends UnicastRemoteObject implements IAdmin {
     }
 
     @Override
-    public void commitUserChanges(EditableUser editedUser) throws RemoteException {
+    public boolean commitUserChanges(EditableUser editedUser) throws RemoteException {
         try {
-            database.updateUser(editedUser);
+            return database.updateUser(editedUser);
         } catch (SQLException e) {
             throw new RemoteException(e.getMessage());
         }

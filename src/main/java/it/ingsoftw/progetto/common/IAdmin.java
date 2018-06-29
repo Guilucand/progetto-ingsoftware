@@ -45,5 +45,5 @@ public interface IAdmin extends Remote {
      * Salva le modifiche apportate ad un utente
      * @param editedUser utente modificato
      */
-    void commitUserChanges(EditableUser editedUser) throws RemoteException;
+    boolean commitUserChanges(EditableUser editedUser) throws RemoteException;
 }
