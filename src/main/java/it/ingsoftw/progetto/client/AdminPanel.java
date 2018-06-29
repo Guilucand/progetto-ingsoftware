@@ -13,9 +13,7 @@ import java.util.List;
 public class AdminPanel extends JFrame{
 
     private JPanel MainPanel;
-    private JList nurseList;
     private JList medList;
-    private JLabel listnamenurse;
     private JLabel listnamemed;
     private JTextField nameTextField;
     private JTextField idTextField;
@@ -35,9 +33,14 @@ public class AdminPanel extends JFrame{
     private JPanel LeftPanel;
     private JButton editButton;
     private JLabel typeLabel;
+    private JPanel ListPanel1;
+    private JList nurseList;
+    private JScrollPane ListPanel2;
     private ILogin.LoginStatus status;
     private DefaultListModel listaMedici;
+    private DefaultListModel listaInfermieri;
     private List<User> medListDB;
+    private List<User> nurseListDB;
 
 
 
@@ -50,6 +53,9 @@ public class AdminPanel extends JFrame{
         this.listaMedici = new DefaultListModel();
         this.medList.setModel(listaMedici);
 
+        this.listaInfermieri = new DefaultListModel<>();
+        this.nurseList.setModel(listaInfermieri);
+
 
         //HO BISOGNO DELLA LISTA DEGLI UTENTI NEL DB
 
@@ -58,16 +64,34 @@ public class AdminPanel extends JFrame{
         medListDB.add(new User("Med01","pippo","baudo","pippobaudo@gmail.com",User.UserType.Medic));
         medListDB.add(new User("Med02","pippo2","baudo2","pippobaudo2@gmail.com",User.UserType.Admin));
 
+        this.nurseListDB = new ArrayList<>();
+
+        nurseListDB.add(new User("Inf01","pippo3","baudo3","pippobaudo3@gmail.com",User.UserType.Nurse));
+
+
 
         for (int i = 0; i < medListDB.size(); i++) {
             listaMedici.add(i, ""+medListDB.get(i).getId());
+        }
 
+        for (int i = 0; i<nurseListDB.size(); i++){
+            listaInfermieri.add(i,""+nurseListDB.get(i).getId());
         }
 
 
+        Dimension prefdim = new Dimension(200,700);
+        RightPanel.setPreferredSize(prefdim);
+
+        DefaultListCellRenderer renderer =  (DefaultListCellRenderer)medList.getCellRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+
+        LeftPanel.setPreferredSize(prefdim);
+
+        renderer =  (DefaultListCellRenderer)nurseList.getCellRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
 
         this.setContentPane(MainPanel);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Dimension preferredDimension = new Dimension(1000, 700);
         this.MainPanel.setPreferredSize(preferredDimension);
@@ -94,8 +118,6 @@ public class AdminPanel extends JFrame{
         this.setVisible(true);
 
 
-        medList.addComponentListener(new ComponentAdapter() {
-        });
         medList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -125,12 +147,59 @@ public class AdminPanel extends JFrame{
                         if(medListDB.get(index).getUserType() == User.UserType.Medic)typeBox.setSelectedIndex(0);
                         else if (medListDB.get(index).getUserType() == User.UserType.Nurse)typeBox.setSelectedIndex(1);
 
+                        CenterPanel.repaint();
+                        CenterPanel.revalidate();
+
+                        EditPanel.repaint();
+                        EditPanel.revalidate();
 
                     }
 
                 }
             }
         });
+
+
+        nurseList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JList theList = (JList) e.getSource();
+                super.mouseClicked(e);
+                if(e.getClickCount() == 2){
+
+                    int index = theList.locationToIndex(e.getPoint());
+
+                    if (index >= 0) {
+
+                        System.out.println("Double-clicked on: " + nurseListDB.get(index).getName());
+
+                        EditPanel.remove(aggiungiButton);
+                        EditPanel.add(editButton);
+
+                        idTextField.setText(nurseListDB.get(index).getId());
+                        nameTextField.setText(nurseListDB.get(index).getName());
+                        surnameTextField.setText(nurseListDB.get(index).getSurname());
+                        mailTextField.setText(nurseListDB.get(index).getEmail());
+
+                        CenterPanel.remove(adminCheckBox);
+
+                        if(nurseListDB.get(index).getUserType() == User.UserType.Medic)typeBox.setSelectedIndex(0);
+                        else if (nurseListDB.get(index).getUserType() == User.UserType.Nurse)typeBox.setSelectedIndex(1);
+
+                        CenterPanel.repaint();
+                        CenterPanel.revalidate();
+
+                        EditPanel.repaint();
+                        EditPanel.revalidate();
+
+                    }
+
+                }
+            }
+        });
+
+
+
         nameTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -188,9 +257,11 @@ public class AdminPanel extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //
-                System.out.println("salvo cambaiemnto");
+                System.out.println("salvo cambiamento");
             }
         });
+
+
     }
 
 

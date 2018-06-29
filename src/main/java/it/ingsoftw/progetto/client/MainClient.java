@@ -16,6 +16,8 @@ public class MainClient {
 
         System.setProperty("sun.java2d.uiScale","1");
 
+        new AdminPanel(ILogin.LoginStatus.PRIMARY_LOGGED);
+/*
         try {
             // Connessione al server
             serverFactory = connectToServer();
