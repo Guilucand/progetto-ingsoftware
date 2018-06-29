@@ -57,12 +57,12 @@ public class ServerUsersAdmin extends UnicastRemoteObject implements IAdmin {
 
     @Override
     public EditableUser getEditableUser(String id) {
-        return null;
+        return database.getEditableUser(id);
     }
 
     @Override
-    public boolean commitUserChanges(EditableUser editedUser) {
-        return false;
+    public void commitUserChanges(EditableUser editedUser) {
+        database.updateUser(editedUser);
     }
 
     private ClientStatus status;
