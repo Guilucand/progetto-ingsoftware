@@ -21,8 +21,9 @@ import javax.swing.border.TitledBorder;
 
 public class PatientMonitor extends JPanel{
 
-    public void putSbpParameter(int sbpParameter) {this.sbpParameter.setText(String.valueOf(sbpParameter));}
+    private final CardLayout cardLayout;
 
+    public void putSbpParameter(int sbpParameter) {this.sbpParameter.setText(String.valueOf(sbpParameter));}
 
     public void putDbpParameter(int dbpParameter) {this.dbpParameter.setText(String.valueOf(dbpParameter));}
 
@@ -46,9 +47,14 @@ public class PatientMonitor extends JPanel{
     private JLabel temperatureLabel;
     private JButton modificaButton;
     private JLabel alarmLabel;
-    private int room_numer;
+    private int roomNumber;
+    private IPatient patient;
     private EmptyRoom emptyRoom;
 
+    private JPanel mainPanel;
+
+    final static String EMPTYROOM = "emptyRoomPanel";
+    final static String PATIENTROOM = "fullRoomPanel";
 
     public class EmptyRoom {
 
@@ -56,18 +62,18 @@ public class PatientMonitor extends JPanel{
         public JButton assignButton;
 
         public EmptyRoom() {
-            assignButton.addActionListener(e -> AddPatient());
+            assignButton.addActionListener(e -> addPatient());
         }
     }
 
-    private void AddPatient() {
+    private void addPatient() {
 
-        this.remove(0);
-        this.add(patientPanel);
+        cardLayout.show(mainPanel, PATIENTROOM);
+
 
         patientPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        patientPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),"Stanza "+room_numer,TitledBorder.TOP,TitledBorder.CENTER));
+        patientPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),"Stanza "+ roomNumber,TitledBorder.TOP,TitledBorder.CENTER));
         ((javax.swing.border.TitledBorder) patientPanel.getBorder()).setTitleFont(new Font("Arial", Font.BOLD, 16));
 
         this.revalidate();
@@ -75,37 +81,41 @@ public class PatientMonitor extends JPanel{
 
     }
 
+    public PatientMonitor(int roomNumber, IPatient patient) throws RemoteException {
 
-    //static Random r = new Random();
+        this.roomNumber = roomNumber;
+        this.patient = patient;
 
-    public PatientMonitor(int room_numer, IMonitor iMonitorInterface) throws RemoteException {
+        this.mainPanel = new JPanel(cardLayout = new CardLayout());
 
-        this.room_numer = room_numer;
+
         emptyRoom = new EmptyRoom();
+        {
 
-        emptyRoom.panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        emptyRoom.panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),"Stanza "+room_numer,TitledBorder.TOP,TitledBorder.CENTER));
-        ((javax.swing.border.TitledBorder) emptyRoom.panel.getBorder()).setTitleFont(new Font("Arial", Font.BOLD, 16));
+            emptyRoom.panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            emptyRoom.panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black), "Stanza " + roomNumber, TitledBorder.TOP, TitledBorder.CENTER));
+            ((javax.swing.border.TitledBorder) emptyRoom.panel.getBorder()).setTitleFont(new Font("Arial", Font.BOLD, 16));
 
-        emptyRoom.panel.setBackground(new java.awt.Color(255,255,255));
-
-
-        SetImage("./img/aggiungi1.png",emptyRoom.assignButton);
-
-        emptyRoom.assignButton.setBackground(new java.awt.Color(54,193,112));
-
-        Dimension preferredDimension = new Dimension(325, 200);
-
-        emptyRoom.panel.setPreferredSize(preferredDimension);
-        patientPanel.setPreferredSize(preferredDimension);
+            emptyRoom.panel.setBackground(new java.awt.Color(255, 255, 255));
 
 
-        this.add(emptyRoom.panel, 0);
+            // Impostazione pulsante aggiunta paziente
+            setImage("./img/aggiungi1.png", emptyRoom.assignButton);
+            emptyRoom.assignButton.setBackground(new java.awt.Color(54, 193, 112));
+        }
+//        Dimension preferredDimension = new Dimension(325, 200);
+//
+//        emptyRoom.panel.setPreferredSize(preferredDimension);
+//        patientPanel.setPreferredSize(preferredDimension);
+
+
+        this.mainPanel.add(patientPanel, PATIENTROOM);
+        this.mainPanel.add(emptyRoom.panel, EMPTYROOM);
+        this.add(mainPanel, 0);
 
         //____PARAMETRI
 
-        IPatient Paziente = iMonitorInterface.getPatientByRoomNumber(room_numer);
-        MonitorData data = Paziente.getCurrentMonitorData();
+        MonitorData data = patient.getCurrentMonitorData();
 
         if (data != null) {
             this.dbpParameter.setText(String.valueOf(data.getDbp()));
@@ -128,9 +138,12 @@ public class PatientMonitor extends JPanel{
                 }
             }
         });
+
+        // Mostra una stanza vuota
+        cardLayout.show( mainPanel, EMPTYROOM);
     }
 
-    private void SetImage(String pathimg, JButton assignButton) {
+    private void setImage(String pathimg, JButton assignButton) {
 
         InputStream imgStream = PatientMonitor.class.getResourceAsStream(pathimg);
 
@@ -146,23 +159,14 @@ public class PatientMonitor extends JPanel{
 
         ImageIcon icon = new ImageIcon(myImg);
 
-
         assignButton.setIcon(icon);
-
     }
 
-
     public void setName(String modname){
-
         this.nomePaziente.setText(modname);
-
     }
 
     public void setSurname(String modsurname){
-
         this.cognomePaziente.setText(modsurname);
-
     }
-
-
 }

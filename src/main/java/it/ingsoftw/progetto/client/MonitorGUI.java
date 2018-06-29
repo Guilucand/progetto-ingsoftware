@@ -57,8 +57,6 @@ public class MonitorGUI extends JFrame{
 
         });
 
-
-
         this.MainPanel.setOpaque(true);
         this.MainPanel.setBackground(Color.WHITE);
 
@@ -77,8 +75,8 @@ public class MonitorGUI extends JFrame{
 
         for(int i = 0; i<4; i++){
 
-            TopPanel.add(new PatientMonitor(i+1, this.iMonitorInterface ),i);
-            MidPanel.add(new PatientMonitor(i+5, this.iMonitorInterface),i);
+            TopPanel.add(new PatientMonitor(i+1, iMonitorInterface.getPatientByRoomNumber(i+1) ),i);
+            MidPanel.add(new PatientMonitor(i+5, iMonitorInterface.getPatientByRoomNumber(i+5)),i);
             if(i == 0){
 
                 EmptyPanelAdmin epa = new EmptyPanelAdmin(status,adminInterface);
@@ -105,7 +103,7 @@ public class MonitorGUI extends JFrame{
                 BottomPanel.add(epa.getPanel(), i);
 
             }
-            else BottomPanel.add(new PatientMonitor(i+8,this.iMonitorInterface),i);
+            else BottomPanel.add(new PatientMonitor(i+8,this.iMonitorInterface.getPatientByRoomNumber(i+8)),i);
 
         }
 
