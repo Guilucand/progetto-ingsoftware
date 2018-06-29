@@ -1,7 +1,9 @@
 package it.ingsoftw.progetto.client;
 
+import com.googlecode.lanterna.gui2.GridLayout;
 import javafx.scene.chart.XYChart;
 import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
 
@@ -23,7 +25,9 @@ public class Storico extends  JFrame{
     private JLabel val2;
     private JLabel val3;
     private JScrollPane ScrollPane;
-    private JScrollPane scrollpanel1;
+    private JPanel panelGraph;
+    //private JScrollPane scrollpanel1;
+    private XChartPanel chartPanel;
 
 
     public Storico() {
@@ -43,9 +47,9 @@ public class Storico extends  JFrame{
         this.ScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.ScrollPane.setBounds(50, 30, 300, 50);
 
-        this.scrollpanel1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.scrollpanel1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        this.scrollpanel1.setBounds(50, 30, 300, 50);
+        //this.scrollpanel1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        //this.scrollpanel1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        //this.scrollpanel1.setBounds(50, 30, 300, 50);
 
         org.knowm.xchart.XYChart chartSBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("SBP").width(300).height(100).build();
         org.knowm.xchart.XYChart chartDBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("DBP").width(300).height(100).build();
@@ -74,7 +78,7 @@ public class Storico extends  JFrame{
 
         double[] yData = new double[] { 2.0, 1.0, 0.0 };
         XYSeries serieProva = chartSBP.addSeries("SBP", yData);
-        new SwingWrapper(chartSBP).displayChart();
+        panelGraph.add(chartPanel, GridLayout.createHorizontallyFilledLayoutData(2));
 
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
