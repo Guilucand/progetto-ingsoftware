@@ -34,6 +34,6 @@ public class TestRecoveryDatabase implements IRecoveryDatabase {
 
     @Override
     public MonitorData getCurrentVsData(String recoveryId) {
-        return data.get(roomMachineMapping.get(recovery.get(recoveryId).getValue()));
+            return data.get(roomMachineMapping.get(recovery.get(recoveryId).getValue()));
     }
 }

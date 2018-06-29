@@ -1,5 +1,6 @@
 package it.ingsoftw.progetto.server.database;
 
+import test.database.TestDatabaseConnection;
 import test.database.TestRecoveryDatabase;
 
 import java.rmi.RemoteException;
@@ -47,6 +48,8 @@ public class DatabaseConnection implements IDatabaseConnection {
         return usersDatabase;
     }
 
+    private TestDatabaseConnection tmp = new TestDatabaseConnection();
+
     @Override
     public IPatientsDatabase getPatientsInterface() {
         return null;
@@ -54,6 +57,6 @@ public class DatabaseConnection implements IDatabaseConnection {
 
     @Override
     public IRecoveryDatabase getRecoveryInterface() {
-        return new TestRecoveryDatabase();
+        return tmp.getRecoveryInterface();
     }
 }

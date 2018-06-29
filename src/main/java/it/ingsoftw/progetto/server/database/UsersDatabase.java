@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 class UsersDatabase implements IUsersDatabase {
 
@@ -39,7 +40,7 @@ class UsersDatabase implements IUsersDatabase {
                 "VALUES (?, ?, ?, ?, ?, CAST (? AS privilege) );";
 
         PreparedStatement addUser = connection.prepareStatement(sql);
-        addUser.setString(1, user.getName());
+        addUser.setString(1, user.getId());
         addUser.setString(2, tempPassword.getPasswordHash());
         addUser.setString(3, user.getName());
         addUser.setString(4, user.getSurname());
@@ -92,7 +93,7 @@ class UsersDatabase implements IUsersDatabase {
     @Override
     public User getUser(String id) throws SQLException {
         String sql =
-                "SELECT username, name, surname, email, usertype FROM users" +
+                "SELECT username, name, surname, email, usertype FROM users " +
                         "WHERE " +
                         "username = ?" +
                         ";";
@@ -158,6 +159,18 @@ class UsersDatabase implements IUsersDatabase {
 
     @Override
     public boolean authenticateUser(String id, Password password) throws SQLException {
-        return false;
+        String sql =
+                "SELECT password FROM users " +
+                        "WHERE " +
+                        "username = ?" +
+                        ";";
+
+        PreparedStatement queryUser = connection.prepareStatement(sql);
+        queryUser.setString(1, id);
+        ResultSet result = queryUser.executeQuery();
+
+        if (!result.next()) return false;
+
+        return Objects.equals(Password.fromHash(result.getString(1)), password);
     }
 }
