@@ -1,9 +1,11 @@
 package it.ingsoftw.progetto.common;
 
+import java.io.Serializable;
+
 /**
  * Classe che rappresenta un utente del programma
  */
-public class User {
+public class User implements Serializable {
 
     /**
      * La tipologia di utente
