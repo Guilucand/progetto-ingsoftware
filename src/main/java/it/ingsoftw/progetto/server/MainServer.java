@@ -35,16 +35,22 @@ public class MainServer {
 
         // TEST
 
-        databaseConnection = new TestDatabaseConnection();
-        databaseConnection.getUsersInterface().addUser(new User("Primario", "Cracco", "Ciao2", "guilucand@gmail.com", User.UserType.Primary));
-        databaseConnection.getUsersInterface().addUser(new User("Med01", "Simo", "Ciao2", "simo@gmail.com", User.UserType.Admin));
-        databaseConnection.getUsersInterface().addUser(new User("Inf01", "Ale", "Ciao3", "ale@gmail.com", User.UserType.Nurse));
-
-        databaseConnection.getUsersInterface().updatePassword("Primario", Password.fromPassword("prova"));
-        databaseConnection.getUsersInterface().updatePassword("Med01", Password.fromPassword("prova1"));
-        databaseConnection.getUsersInterface().updatePassword("Inf01", Password.fromPassword("prova2"));
+        databaseConnection = new DatabaseConnection();
+        try {
+            databaseConnection.getUsersInterface().addUser(
+                    new User("user", "Cracco", "Ciao2", "guilucand@gmail.com", User.UserType.Primary),
+                    Password.fromPassword("pass"));
+            databaseConnection.getUsersInterface().addUser(
+                    new User("test", "Simo", "Ciao2", "simo@gmail.com", User.UserType.Admin),
+                    Password.fromPassword("prova"));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         IRecoveryDatabase recoveryDatabase = databaseConnection.getRecoveryInterface();
+
+
 
         for (int i = 0; i < 10; i++)
             recoveryDatabase.setRoomMachineId(String.valueOf(i+1), String.valueOf(i+1));

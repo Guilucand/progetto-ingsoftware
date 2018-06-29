@@ -1,0 +1,13 @@
+sudo apt install postgresql postgresql-contrib
+
+sudo -u postgres createuser ingsoft
+sudo -u postgres createdb ingsoft
+
+sudo -u postgres psql
+ALTER USER ingsoft WITH PASSWORD 'ingsoft';
+\quit
+
+
+
+// Per accedere al database e controllare tabelle (non necessario)
+sudo psql -U ingsoft -h localhost

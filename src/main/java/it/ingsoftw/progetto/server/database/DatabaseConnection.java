@@ -1,12 +1,17 @@
 package it.ingsoftw.progetto.server.database;
 
+import test.database.TestRecoveryDatabase;
+
+import java.rmi.RemoteException;
 import java.sql.*;
 import java.util.Properties;
 
 
 
 public class DatabaseConnection implements IDatabaseConnection {
+
     private Connection connection;
+    private UsersDatabase usersDatabase;
 
     private static final String DATABASE_HOST = "localhost";
 
@@ -31,8 +36,15 @@ public class DatabaseConnection implements IDatabaseConnection {
     }
 
     @Override
-    public IUsersDatabase getUsersInterface() {
-        return null;
+    public IUsersDatabase getUsersInterface() throws RemoteException {
+        if (usersDatabase == null) {
+            try {
+                usersDatabase = new UsersDatabase(connection);
+            } catch (SQLException e) {
+                throw new RemoteException(e.getMessage());
+            }
+        }
+        return usersDatabase;
     }
 
     @Override
@@ -42,6 +54,6 @@ public class DatabaseConnection implements IDatabaseConnection {
 
     @Override
     public IRecoveryDatabase getRecoveryInterface() {
-        return null;
+        return new TestRecoveryDatabase();
     }
 }

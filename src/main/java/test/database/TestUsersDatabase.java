@@ -21,11 +21,12 @@ public class TestUsersDatabase implements IUsersDatabase {
     }
 
     @Override
-    public boolean addUser(User user) {
+    public boolean addUser(User user, Password tempPassword) {
         if (getUser(user.getId()) != null)
             return false;
 
         users.add(user);
+        updatePassword(user.getId(), tempPassword);
         return true;
     }
 

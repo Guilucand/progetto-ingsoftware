@@ -4,6 +4,7 @@ import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.User;
 import it.ingsoftw.progetto.common.utils.Password;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -16,35 +17,35 @@ public interface IUsersDatabase {
      * @param user il nuovo utente
      * @return true se aggiunto correttamente
      */
-    boolean addUser(User user);
+    boolean addUser(User user, Password tempPassword) throws SQLException;
 
     /**
      * Rimuove un utente
      * @param user l'utente da rimuovere
      * @return true se rimosso con successo
      */
-    boolean removeUser(User user);
+    boolean removeUser(User user) throws SQLException;
 
     /**
      * Ritorna un utente in base all'id
      * @param id l'id
      * @return l'utente associato o null se non esiste
      */
-    User getUser(String id);
+    User getUser(String id) throws SQLException;
 
     /**
      * Ritorna un utente in base all'indirizzo email
      * @param email
      * @return l'utente associato o null se non esiste
      */
-    User getUserFromEmail(String email);
+    User getUserFromEmail(String email) throws SQLException;
 
     /**
      * Ritorna la lista di tutti gli utenti
      * del sistema
      * @return la lista degli utenti
      */
-    List<User> getUserList();
+    List<User> getUserList() throws SQLException;
 
 
     /**
@@ -52,13 +53,13 @@ public interface IUsersDatabase {
      * @param id l'id dell'utente
      * @return la classe o null se non esiste
      */
-    EditableUser getEditableUser(String id);
+    EditableUser getEditableUser(String id) throws SQLException;
 
     /**
      * Aggiorna i dati di un utente, modificati tramite la classe di modifica
      * @param updatedUser la classe di modifica
      */
-    void updateUser(EditableUser updatedUser);
+    void updateUser(EditableUser updatedUser) throws SQLException;
 
     /**
      * Aggiorna la password
@@ -66,7 +67,7 @@ public interface IUsersDatabase {
      * @param newPassword la nuova password
      * @return true se cambiata con successo
      */
-    boolean updatePassword(String id, Password newPassword);
+    boolean updatePassword(String id, Password newPassword) throws SQLException;
 
     /**
      * Autentica un utente
@@ -74,5 +75,5 @@ public interface IUsersDatabase {
      * @param password la password offuscata
      * @return true se l'utente e' autenticato
      */
-    boolean authenticateUser(String id, Password password);
+    boolean authenticateUser(String id, Password password) throws SQLException;
 }

@@ -8,6 +8,7 @@ import it.ingsoftw.progetto.server.database.IUsersDatabase;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 
 
 public class ServerLogin extends UnicastRemoteObject implements ILogin {
@@ -36,18 +37,23 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
     }
 
     @Override
-    public LoginStatus doLogin(String userId, Password password) {
+    public LoginStatus doLogin(String userId, Password password) throws RemoteException {
 
-        boolean loginSuccessful = database.authenticateUser(userId, password);
+        try {
+            boolean loginSuccessful = database.authenticateUser(userId, password);
 
-        if (!loginSuccessful)
-            return LoginStatus.NOTLOGGED;
+            if (!loginSuccessful)
+                return LoginStatus.NOTLOGGED;
 
-        status.setLoggedUser(database.getUser(userId));
+            status.setLoggedUser(database.getUser(userId));
 
-        System.out.println("Login with id: " + userId);
+            System.out.println("Login with id: " + userId);
 
-        return getLoginStatus();
+            return getLoginStatus();
+        }
+        catch (SQLException ex) {
+            throw new RemoteException(ex.getMessage());
+        }
     }
 
     @Override
@@ -62,17 +68,21 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
     }
 
     @Override
-    public boolean passwordForgotten(String email) {
+    public boolean passwordForgotten(String email) throws RemoteException {
 
-        User user = database.getUserFromEmail(email);
+        try {
+            User user = database.getUserFromEmail(email);
 
-        if (user == null) return false;
+            if (user == null) return false;
 
-
-        String tempPassword = new RandomString(12).nextString();
-        database.updatePassword(user.getId(), Password.fromPassword(tempPassword));
-        EmailSender.sendForgotPasswordMail(email, tempPassword);
-        return true;
+            String tempPassword = new RandomString(12).nextString();
+            database.updatePassword(user.getId(), Password.fromPassword(tempPassword));
+            EmailSender.sendForgotPasswordMail(email, tempPassword);
+            return true;
+        }
+        catch (SQLException ex) {
+            throw new RemoteException(ex.getMessage());
+        }
     }
 
     @Override
