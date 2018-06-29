@@ -44,8 +44,8 @@ public class MainServer {
                     new User("test", "Simo", "Ciao2", "simo@gmail.com", User.UserType.Admin),
                     Password.fromPassword("prova"));
         }
-        catch (Exception ignored) {
-
+        catch (Exception e) {
+            e.printStackTrace();
         }
         IRecoveryDatabase recoveryDatabase = databaseConnection.getRecoveryInterface();
 

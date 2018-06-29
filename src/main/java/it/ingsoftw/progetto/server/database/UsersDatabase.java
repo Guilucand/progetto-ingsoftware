@@ -36,7 +36,7 @@ class UsersDatabase implements IUsersDatabase {
     public boolean addUser(User user, Password tempPassword) throws SQLException{
         String sql =
                 "INSERT into users (username, password, name, surname, email, usertype)" +
-                "VALUES (?, ?, ?, ?, ?, ?);";
+                "VALUES (?, ?, ?, ?, ?, CAST (? AS privilege) );";
 
         PreparedStatement addUser = connection.prepareStatement(sql);
         addUser.setString(1, user.getName());
@@ -48,7 +48,18 @@ class UsersDatabase implements IUsersDatabase {
 
         String test = user.getUserType().toString();
 
-        return addUser.executeUpdate() > 0;
+        try {
+            return addUser.executeUpdate() > 0;
+        }
+        catch (SQLException e) {
+            String s = e.getSQLState();
+
+            // Violazione di vincoli di integrita'
+            if (Integer.parseInt(s)/1000 == 23) {
+                return false;
+            }
+            throw e;
+        }
     }
 
     @Override
