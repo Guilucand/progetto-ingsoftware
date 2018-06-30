@@ -63,7 +63,8 @@ public class VsMain {
 
 
             gui.addWindowAndWait(window);
-            terminal.close();
+//            terminal.close();
+            System.exit(0);
         }
         catch(IOException e) {
             e.printStackTrace();
