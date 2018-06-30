@@ -13,6 +13,8 @@ public class DatabaseConnection implements IDatabaseConnection {
 
     private Connection connection;
     private UsersDatabase usersDatabase;
+    private PatientsDatabase patientsDatabase;
+
 
     private static final String DATABASE_HOST = "localhost";
 
@@ -39,11 +41,7 @@ public class DatabaseConnection implements IDatabaseConnection {
     @Override
     public IUsersDatabase getUsersInterface() throws RemoteException {
         if (usersDatabase == null) {
-            try {
-                usersDatabase = new UsersDatabase(connection);
-            } catch (SQLException e) {
-                throw new RemoteException(e.getMessage());
-            }
+            usersDatabase = new UsersDatabase(connection);
         }
         return usersDatabase;
     }
@@ -52,7 +50,10 @@ public class DatabaseConnection implements IDatabaseConnection {
 
     @Override
     public IPatientsDatabase getPatientsInterface() {
-        return null;
+        if (patientsDatabase == null) {
+            patientsDatabase = new PatientsDatabase(connection);
+        }
+        return patientsDatabase;
     }
 
     @Override
