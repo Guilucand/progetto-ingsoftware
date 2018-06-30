@@ -4,7 +4,6 @@ import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.IAdmin;
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.User;
-import org.w3c.dom.stylesheets.MediaList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,6 +44,12 @@ public class AdminPanel extends JFrame{
     private JLabel errorAddLabel3;
     private JButton removeNurseButton;
     private JButton removeMedicButton;
+    private JCheckBox medlistmostraIDCheckBox;
+    private JCheckBox medlistmostraCognomiCheckBox;
+    private JCheckBox medlistmostraNomiCheckBox;
+    private JCheckBox nurselistmostraNomiCheckBox;
+    private JCheckBox nurselistmostraCognomiCheckBox;
+    private JCheckBox nurselistmostraIDCheckBox;
     private ILogin.LoginStatus status;
     private DefaultListModel listaMedici;
     private DefaultListModel listaInfermieri;
@@ -64,7 +69,7 @@ public class AdminPanel extends JFrame{
         this.status = status;
         this.adminInterface=adminInterface;
 
-        this.listaMedici = new DefaultListModel();
+        this.listaMedici = new DefaultListModel<>();
         this.medList.setModel(listaMedici);
 
         this.listaInfermieri = new DefaultListModel<>();
@@ -73,6 +78,12 @@ public class AdminPanel extends JFrame{
 
         this.popupMenu = new JPopupMenu();
         addPopup();
+
+        this.medlistmostraIDCheckBox.setSelected(true);
+        this.nurselistmostraIDCheckBox.setSelected(true);
+
+        medList.setCellRenderer(new UserRendererMed());
+        nurseList.setCellRenderer(new UserRendererNurse());
 
 
         //HO BISOGNO DELLA LISTA DEGLI UTENTI NEL DB
@@ -109,14 +120,12 @@ public class AdminPanel extends JFrame{
         }
 
 
-
         this.pack();
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
 
         this.setVisible(true);
-
 
         medList.addMouseListener(new MouseAdapter() {
             @Override
@@ -165,7 +174,7 @@ public class AdminPanel extends JFrame{
 
                     int index = theList.locationToIndex(e.getPoint());
                     DeleteUser = medListDB.get(index);
-
+                    ModUser = nurseListDB.get(index);
                     removeline = medList.getSelectedIndex();
 
                     if(SwingUtilities.isRightMouseButton(e) && medList.locationToIndex(e.getPoint()) == removeline){
@@ -203,7 +212,7 @@ public class AdminPanel extends JFrame{
 
                         ModUser = nurseListDB.get(index);
 
-                        System.out.println("Double-clicked on: " + nurseListDB.get(index).getName());
+                        //System.out.println("Double-clicked on: " + nurseListDB.get(index).getName());
 
                         aggiungiButton.setVisible(false);
                         editButton.setVisible(true);
@@ -213,7 +222,6 @@ public class AdminPanel extends JFrame{
                         surnameTextField.setText(nurseListDB.get(index).getSurname());
                         mailTextField.setText(nurseListDB.get(index).getEmail());
 
-                        CenterPanel.remove(adminCheckBox);
 
                         if(nurseListDB.get(index).getUserType() == User.UserType.Medic)typeBox.setSelectedIndex(0);
                         else if (nurseListDB.get(index).getUserType() == User.UserType.Nurse)typeBox.setSelectedIndex(1);
@@ -233,8 +241,8 @@ public class AdminPanel extends JFrame{
                     index = theList.locationToIndex(e.getPoint());
 
                     DeleteUser = nurseListDB.get(index);
-
                     removeline = nurseList.getSelectedIndex();
+                    ModUser = nurseListDB.get(index);
 
                     if(SwingUtilities.isRightMouseButton(e) && nurseList.locationToIndex(e.getPoint()) == removeline){
 
@@ -355,14 +363,86 @@ public class AdminPanel extends JFrame{
             }
         });
 
-        typeBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        typeBox.addActionListener(e -> {
 
-                if(typeBox.getSelectedIndex() == 1) adminCheckBox.setVisible(false);
-                else if (typeBox.getSelectedIndex() == 0) adminCheckBox.setVisible(true);
+            if(typeBox.getSelectedIndex() == 1) {adminCheckBox.setVisible(false);adminCheckBox.setSelected(false);}
+            else if (typeBox.getSelectedIndex() == 0) adminCheckBox.setVisible(true);
+
+        });
+        removeMedicButton.addActionListener(e -> {
+
+            if (!medList.isSelectionEmpty()) {
+
+                int index = medList.getSelectedIndex();
+                DeleteUser = medListDB.get(index);
+                try {
+                    removeUser();
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
+            }else{
+
+                JOptionPane.showMessageDialog(null,"Nessun medico selezionato");
 
             }
+
+        });
+        removeNurseButton.addActionListener(e -> {
+
+            if (!nurseList.isSelectionEmpty()) {
+                int index = nurseList.getSelectedIndex();
+                DeleteUser = nurseListDB.get(index);
+                try {
+                    removeUser();
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
+            }else{
+
+                JOptionPane.showMessageDialog(null,"Nessun infermiere selezionato");
+
+            }
+        });
+
+        medlistmostraNomiCheckBox.addActionListener(e -> {
+
+            medList.invalidate();
+            medList.repaint();
+            medList.revalidate();
+
+        });
+        medlistmostraCognomiCheckBox.addActionListener(e -> {
+
+            medList.invalidate();
+            medList.repaint();
+            medList.revalidate();
+
+        });
+        medlistmostraIDCheckBox.addActionListener(e -> {
+
+            medList.invalidate();
+            medList.repaint();
+            medList.revalidate();
+
+        });
+        nurselistmostraNomiCheckBox.addActionListener(e -> {
+
+            nurseList.invalidate();
+            nurseList.repaint();
+            nurseList.revalidate();
+
+        });
+        nurselistmostraCognomiCheckBox.addActionListener(e -> {
+
+            nurseList.invalidate();
+            nurseList.repaint();
+            nurseList.revalidate();
+        });
+        nurselistmostraIDCheckBox.addActionListener(e -> {
+
+            nurseList.invalidate();
+            nurseList.repaint();
+            nurseList.revalidate();
         });
     }
 
@@ -373,7 +453,7 @@ public class AdminPanel extends JFrame{
         JMenuItem modifica = new JMenuItem("modifica");
 
         popupMenu.add(delete);
-        //popupMenu.add(modifica);
+        popupMenu.add(modifica);
 
         delete.addActionListener(e -> {
 
@@ -388,21 +468,35 @@ public class AdminPanel extends JFrame{
                 e1.printStackTrace();
             }
         });
-/*
+
         modifica.addActionListener(e -> {
 
-            try {
-                editUser();
-            } catch (RemoteException e1) {
-                e1.printStackTrace();
-            }
+
+            aggiungiButton.setVisible(false);
+            editButton.setVisible(true);
+
+            idTextField.setText(ModUser.getId());
+            nameTextField.setText(ModUser.getName());
+            surnameTextField.setText(ModUser.getSurname());
+            mailTextField.setText(ModUser.getEmail());
+
+
+            if(ModUser.getUserType() == User.UserType.Medic)typeBox.setSelectedIndex(0);
+            else if (ModUser.getUserType() == User.UserType.Nurse)typeBox.setSelectedIndex(1);
+
+            CenterPanel.repaint();
+            CenterPanel.revalidate();
+
+            EditPanel.repaint();
+            EditPanel.revalidate();
+
             try {
                 initList();
             } catch (RemoteException e1) {
                 e1.printStackTrace();
             }
         });
-*/
+
 
     }
 
@@ -417,7 +511,6 @@ public class AdminPanel extends JFrame{
         medListDB = new ArrayList<>();
         nurseListDB = new ArrayList<>();
 
-       // this.nurseList.
 
         for(int i = 0; i<allUsers.size(); i++){
 
@@ -428,11 +521,11 @@ public class AdminPanel extends JFrame{
         }
 
         for (int i = 0; i < medListDB.size(); i++) {
-            listaMedici.add(i, ""+medListDB.get(i));
+            listaMedici.add(i, medListDB.get(i));
         }
 
         for (int i = 0; i<nurseListDB.size(); i++){
-            listaInfermieri.add(i,""+nurseListDB.get(i));
+            listaInfermieri.add(i,nurseListDB.get(i));
         }
 
     }
@@ -519,16 +612,19 @@ public class AdminPanel extends JFrame{
 
         EditableUser delUser = adminInterface.getEditableUser(DeleteUser.getId());
 
-        if(!adminInterface.deleteUser(delUser)){
+        if(JOptionPane.showConfirmDialog(null,"Confermi la rimozione dell'utente ?"+delUser.getId())==0) {
+            if (!adminInterface.deleteUser(delUser)) {
 
-            JOptionPane.showMessageDialog(null,"Non è stato possiile rimuovere l'utente");
+                JOptionPane.showMessageDialog(null, "Non è stato possiile rimuovere l'utente");
 
 
-        }else{
+            } else {
 
-            JOptionPane.showMessageDialog(null,"L'utente è stato rimosso correttamente");
+                JOptionPane.showMessageDialog(null, "L'utente è stato rimosso correttamente");
+                initList();
+
+            }
         }
-
 
 
     }
@@ -559,7 +655,11 @@ public class AdminPanel extends JFrame{
                 JOptionPane.showMessageDialog(null,"Non è stato possiile modificare l'utente");
                 return;
 
-            }else JOptionPane.showMessageDialog(null,"Le modifiche sono state Applicate");
+            }else {
+                JOptionPane.showMessageDialog(null, "Le modifiche sono state Applicate");
+
+
+            }
 
             initList();
             clearPanel(true);
@@ -598,6 +698,53 @@ public class AdminPanel extends JFrame{
 
             this.adminCheckBox.setSelected(false);
             this.typeBox.setSelectedIndex(0);
+        }
+
+    }
+
+    public class UserRendererMed extends DefaultListCellRenderer {
+
+
+        public Component getListCellRendererComponent(
+                JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+        {
+
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+            User user = (User)value;
+
+            String stringout = "";
+
+            if(medlistmostraNomiCheckBox.isSelected()){stringout = user.getName();}
+            if(medlistmostraCognomiCheckBox.isSelected()){stringout = stringout+" "+user.getSurname();}
+            if(medlistmostraIDCheckBox.isSelected()){stringout = stringout+" "+user.getId();}
+
+            setText(stringout);
+
+            return this;
+        }
+
+    }
+    public class UserRendererNurse extends DefaultListCellRenderer {
+
+
+        public Component getListCellRendererComponent(
+                JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+        {
+
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+            User user = (User)value;
+
+            String stringout = "";
+
+            if(nurselistmostraNomiCheckBox.isSelected()){stringout = user.getName();}
+            if(nurselistmostraNomiCheckBox.isSelected()){stringout = stringout+" "+user.getSurname();}
+            if(nurselistmostraNomiCheckBox.isSelected()){stringout = stringout+" "+user.getId();}
+
+            setText(stringout);
+
+            return this;
         }
 
     }
