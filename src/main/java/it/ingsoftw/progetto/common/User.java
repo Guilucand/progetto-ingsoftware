@@ -68,7 +68,7 @@ public class User implements Serializable {
         return userType;
     }
 
-    public String toString() {return this.id;}
+    public String toString() {return ""+this.name+" "+this.surname;}
 
 
     protected String id;
