@@ -1,5 +1,7 @@
 package it.ingsoftw.progetto.client;
 
+import org.jdatepicker.JDatePicker;
+
 import javax.swing.*;
 
 public class AddPatient {
@@ -9,4 +11,7 @@ public class AddPatient {
     private JTextField locationTextField;
     private JTextField surnameTextField;
     private JTextField dateTextField;
+
+
+
 }
