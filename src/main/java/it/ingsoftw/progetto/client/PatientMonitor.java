@@ -157,9 +157,9 @@ public class PatientMonitor extends JPanel{
 
                 int count = 0;
 
-                if(alarmData.getLevel() == AlarmLevel.Level1) {count = 180; setImage("./img/alertPatientGreen.png",alarmLabel);}
-                else if (alarmData.getLevel() == AlarmLevel.Level2) {count = 120; setImage("./img/alertPatientOrange.png",alarmLabel);}
-                else if (alarmData.getLevel() == AlarmLevel.Level3) {count = 60; setImage("./img/alertPatientRed.png",alarmLabel);}
+                if(alarmData.getLevel() == AlarmLevel.Level1) count = 180;
+                else if (alarmData.getLevel() == AlarmLevel.Level2) count = 120;
+                else if (alarmData.getLevel() == AlarmLevel.Level3) count = 60;
 
                 TimeClass tc = new TimeClass(count);
 
@@ -193,6 +193,26 @@ public class PatientMonitor extends JPanel{
                 }
 
                 alarmList.put(alarmData,t);
+
+                Set<AlarmData> keyset = alarmList.keySet();
+
+                boolean lvl1 = false;
+                boolean lvl2 = false;
+                boolean lvl3 = false;
+
+                for(AlarmData ad : keyset){
+
+                    if (ad.getLevel() == AlarmLevel.Level1){lvl1 = true;}
+                    else if (ad.getLevel() == AlarmLevel.Level2){lvl2 = true;}
+                    else if (ad.getLevel() == AlarmLevel.Level3){lvl3 = true;}
+
+
+                }
+
+                if(lvl3) setImage("./img/alertPatientRed.png",alarmLabel);
+                else if(lvl2) setImage("./img/alertPatientOrange.png",alarmLabel);
+                else if(lvl1) setImage("./img/alertPatientGreen.png",alarmLabel);
+
             }
 
             @Override
@@ -243,9 +263,18 @@ public class PatientMonitor extends JPanel{
                 super.mouseEntered(e);
 
                 System.out.println("mouse entrato");
-                addPopup();
 
-                pop.show();
+                addPopup();
+                pop.show(alarmLabel,1,1);
+
+            }
+        });
+        alarmLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+
+                pop.setVisible(false);
 
             }
         });
@@ -256,10 +285,11 @@ public class PatientMonitor extends JPanel{
 
         Set<IAlarmCallback.AlarmData> keyset = alarmList.keySet();
 
-
+        pop.removeAll();
 
         for(IAlarmCallback.AlarmData ad : keyset){
 
+            System.out.println("aggiungo "+ad.getLevel()+" a pop" );
             JLabel elemento = new JLabel(""+ad.getLevel());
             pop.add(elemento);
 
@@ -275,20 +305,51 @@ public class PatientMonitor extends JPanel{
 
         public TimeClass(int counter){
 
+            this.counter = counter;
+
+        }
+
+        public int getCounter(){
+
+            return this.counter;
+
         }
 
         @Override
         public void actionPerformed(ActionEvent tc) {
 
             counter--;
-            if(counter > 0){
 
-                timerLabel.setText(""+counter);
+            int mincounter;
+
+            Set<IAlarmCallback.AlarmData> keyset = alarmList.keySet();
+
+            IAlarmCallback.AlarmData ad_min = null;
+
+            for(IAlarmCallback.AlarmData ad : keyset){
+
+                if(ad_min == null){ad_min = ad;}
+                else if(ad.getStartTime().getTime() < ad_min.getStartTime().getTime()){ad_min = ad;}
+
+            }
+
+
+            ActionListener al[] = alarmList.get(ad_min).getActionListeners();
+
+            TimeClass tc1 = (TimeClass)al[0];
+
+            mincounter = tc1.getCounter();
+
+
+            if(mincounter > 0){
+
+                timerLabel.setText(""+mincounter);
                 timerLabel.setForeground(Color.BLUE);
 
             }else{
 
-                timerLabel.setText(""+counter);
+
+                timerLabel.setText(""+mincounter);
                 timerLabel.setForeground(Color.RED);
 
             }
