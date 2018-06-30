@@ -26,8 +26,7 @@ public class Storico extends  JFrame{
     private JLabel val3;
     private JScrollPane ScrollPane;
     private JPanel panelGraph;
-    //private JScrollPane scrollpanel1;
-    private XChartPanel chartPanel;
+    private JScrollPane scrollpanel1;
 
 
     public Storico() {
@@ -47,9 +46,9 @@ public class Storico extends  JFrame{
         this.ScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.ScrollPane.setBounds(50, 30, 300, 50);
 
-        //this.scrollpanel1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        //this.scrollpanel1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        //this.scrollpanel1.setBounds(50, 30, 300, 50);
+        this.scrollpanel1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.scrollpanel1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.scrollpanel1.setBounds(50, 30, 300, 50);
 
         org.knowm.xchart.XYChart chartSBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("SBP").width(300).height(100).build();
         org.knowm.xchart.XYChart chartDBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("DBP").width(300).height(100).build();
@@ -76,9 +75,11 @@ public class Storico extends  JFrame{
         chartTemperature.getStyler().setXAxisMin((double) 0);
         chartTemperature.getStyler().setXAxisMax((double) 5);
 
-        double[] yData = new double[] { 2.0, 1.0, 0.0 };
+        double[] yData = new double[] { 70.0, 75.0, 73.0 , 80.0 , 90.0 };
         XYSeries serieProva = chartSBP.addSeries("SBP", yData);
-        panelGraph.add(chartPanel, GridLayout.createHorizontallyFilledLayoutData(2));
+        JPanel pnlChart = new XChartPanel(chartSBP);
+        this.scrollpanel1.add(pnlChart);
+        scrollpanel1.validate();
 
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
