@@ -5,6 +5,7 @@ import jdk.jfr.Timespan;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.Period;
 import java.util.Date;
 
@@ -31,4 +32,13 @@ public interface IPatient extends Remote {
      */
     Pair<Date, MonitorData>[] getMonitorHistory(Period period) throws RemoteException;
 
+
+    /**
+     * Imposta un callback per la ricezione
+     * degli allarmi
+     * @param callback la funzione da chiamare
+     *                 per ogni allarme ricevuto
+     * @throws RemoteException
+     */
+    void setAlarmCallback(IAlarmCallback callback) throws RemoteException;
 }

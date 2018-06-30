@@ -23,6 +23,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import it.ingsoftw.progetto.common.AlarmLevel;
+import it.ingsoftw.progetto.common.MonitorData;
 import javafx.util.Pair;
 
 /**
@@ -71,6 +72,7 @@ public class VsGui {
     };
 
     List<Integer> alarms = new ArrayList<>();
+    private Function<MonitorData, MonitorData> monitorDataFunction;
 
     @SuppressWarnings("unchecked")
     public VsGui(String name) {
@@ -136,7 +138,23 @@ public class VsGui {
     public void startPulses() {
         ExecutorService executorService = Executors.newFixedThreadPool(2);
         executorService.execute(this::heartUpdater);
-        executorService.execute(this::alarmUpdater);
+        executorService.execute(this::alarmAndVsDataUpdater);
+    }
+
+    MonitorData lastData = new MonitorData(60, 115, 75, 36.5f);
+
+    public void setUpdateFunction(Function<MonitorData, MonitorData> updateFunction) {
+
+        this.monitorDataFunction = updateFunction;
+    }
+
+    private void updateValues() {
+        if (monitorDataFunction != null)
+            lastData = monitorDataFunction.apply(lastData);
+        setBPM(lastData.getBpm());
+        setDbp(lastData.getDbp());
+        setSbp(lastData.getSbp());
+        setTemp(lastData.getTemp());
     }
 
     public void simulateAlarm(String desc, AlarmLevel level) {
@@ -169,9 +187,10 @@ public class VsGui {
         }
     }
 
-    void alarmUpdater() {
+    void alarmAndVsDataUpdater() {
 
         boolean alarmShown = false;
+        boolean toUpdate = true;
 
         Theme defaultTheme = alarmStopButton.getTheme();
         Theme alarmTheme = new SimpleTheme(TextColor.ANSI.WHITE, TextColor.ANSI.YELLOW, SGR.BOLD);
@@ -186,6 +205,11 @@ public class VsGui {
 
             alarmStopButton.setTheme(alarmShown ? alarmTheme : defaultTheme);
             alarmStopButton.invalidate();
+
+            if (toUpdate)
+                updateValues();
+
+            toUpdate = !toUpdate;
 
             try {
                 Thread.sleep(500);
@@ -225,7 +249,7 @@ public class VsGui {
     }
 
     public void setTemp(float temp) {
-        this.currentTemp = temp;
+        this.currentTemp = (int)(temp * 10) / 10.0f;
         tempText.setText("T " + currentTemp + "°C");
     }
 
