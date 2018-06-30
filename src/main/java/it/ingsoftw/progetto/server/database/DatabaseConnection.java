@@ -14,6 +14,7 @@ public class DatabaseConnection implements IDatabaseConnection {
     private Connection connection;
     private UsersDatabase usersDatabase;
     private PatientsDatabase patientsDatabase;
+    private DrugsDatabase drugsDatabase;
 
 
     private static final String DATABASE_HOST = "localhost";
@@ -59,5 +60,12 @@ public class DatabaseConnection implements IDatabaseConnection {
     @Override
     public IRecoveryDatabase getRecoveryInterface() {
         return tmp.getRecoveryInterface();
+    }
+
+    @Override
+    public IDrugsDatabase getDrugsDatabase() {
+        if (drugsDatabase == null)
+            drugsDatabase = new DrugsDatabase(connection);
+        return drugsDatabase;
     }
 }

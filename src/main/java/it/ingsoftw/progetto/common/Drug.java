@@ -1,32 +1,28 @@
 package it.ingsoftw.progetto.common;
 
+import java.io.Serializable;
+
 /**
  * Classe che descrive un farmaco
  */
-public class Drug {
+public class Drug implements Serializable {
 
     /**
      * Construttore
      * @param company l'azienda produttrice
-     * @param drugDescription il nome commerciale del farmaco
+     * @param commercialName il nome commerciale del farmaco
      * @param packageDescription la descrizione della confezione
-     * @param drugCode codice del farmaco
-     * @param packageCode codice della confezione
      * @param atcCode codice atc
-     * @param atcDescription principi attivi
+     * @param activePrinciple principi attivi
      * @param aic codice aic
-     * @param packageKey chiave della confezione
      */
-    public Drug(String company, String drugDescription, String packageDescription, String drugCode, String packageCode, String atcCode, String atcDescription, String aic, String packageKey) {
+    public Drug(String company, String commercialName, String packageDescription, String atcCode, String activePrinciple, String aic) {
         this.company = company;
-        this.drugDescription = drugDescription;
+        this.commercialName = commercialName;
         this.packageDescription = packageDescription;
-        this.drugCode = drugCode;
-        this.packageCode = packageCode;
         this.atcCode = atcCode;
-        this.atcDescription = atcDescription;
+        this.activePrinciple = activePrinciple;
         this.aic = aic;
-        this.packageKey = packageKey;
     }
 
     /**
@@ -37,19 +33,12 @@ public class Drug {
     /**
      * Il nome commerciale del farmaco
      */
-    public final String drugDescription;
+    public final String commercialName;
 
     /**
      * La descrizione della confezione
      */
     public final String packageDescription;
-
-    public final String drugCode;
-
-    /**
-     * Il codice del farmaco
-     */
-    public final String packageCode;
 
     /**
      * Il codice atc
@@ -59,16 +48,10 @@ public class Drug {
     /**
      * I principi attivi
      */
-    public final String atcDescription;
+    public final String activePrinciple;
 
     /**
      * Il codice aic
      */
     public final String aic;
-
-    /**
-     * La chiave della confezione
-     */
-    public final String packageKey;
-
 }

@@ -14,6 +14,15 @@ public class MainClient {
 
     public static void main(String[] args) throws RemoteException {
 
+        // TEST
+        DrugsQuery q = new DrugsQuery();
+        Drug[] d = q.queryDatabase("Va", DrugsQuery.QueryType.Drug, true);
+
+        for (Drug dr : d) {
+            System.out.println(dr.commercialName + " -> " + dr.company + " : " + dr.activePrinciple);
+        }
+
+
         System.setProperty("sun.java2d.uiScale","1");
 
         try {
@@ -56,16 +65,6 @@ public class MainClient {
         catch (RemoteException e) {
             System.out.println("Connessione con il server persa: " + e.getMessage());
         }
-
-        // TEST
-        DrugsQuery q = new DrugsQuery();
-        Drug[] d = q.queryDatabase("Tachip", DrugsQuery.QueryType.ActivePrinciple, true);
-
-        for (Drug dr : d) {
-            System.out.println(dr.drugDescription + " " + dr.company);
-        }
-
-
     }
 
     /**
@@ -98,6 +97,5 @@ public class MainClient {
     private static void Logged(ILogin.LoginStatus status, String username) throws RemoteException {
 
         new MonitorGUI(status,username,serverFactory);
-
     }
 }

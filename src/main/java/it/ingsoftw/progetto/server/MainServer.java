@@ -3,7 +3,10 @@ package it.ingsoftw.progetto.server;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.Date;
+import java.sql.SQLException;
 
+import it.ingsoftw.progetto.client.DrugsQuery;
+import it.ingsoftw.progetto.common.Drug;
 import it.ingsoftw.progetto.common.IClientListener;
 import it.ingsoftw.progetto.common.IVSListener;
 import it.ingsoftw.progetto.common.PatientData;
@@ -40,6 +43,20 @@ public class MainServer {
 
         IRecoveryDatabase recoveryDatabase = databaseConnection.getRecoveryInterface();
         IPatientsDatabase patientsDatabase = databaseConnection.getPatientsInterface();
+
+        DrugsQuery q = new DrugsQuery();
+        Drug[] d = q.queryDatabase("Va", DrugsQuery.QueryType.Drug, true);
+
+        for (Drug dr : d) {
+            System.out.println(dr.commercialName + " -> " + dr.company + " : " + dr.activePrinciple);
+            try {
+                databaseConnection.getDrugsDatabase().deleteDrug(dr);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
 
 
         // TEST
