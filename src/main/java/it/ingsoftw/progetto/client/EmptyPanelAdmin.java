@@ -82,7 +82,7 @@ public class EmptyPanelAdmin extends JPanel{
 
     public void Chiudi(MonitorGUI mgui){
 
-        mgui.dispose();
+        System.exit(0);
 
     }
 

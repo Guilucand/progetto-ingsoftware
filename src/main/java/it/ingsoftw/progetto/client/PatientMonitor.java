@@ -3,22 +3,23 @@ package it.ingsoftw.progetto.client;
 //import com.sun.prism.paint.Color;
 
 
-import it.ingsoftw.progetto.common.AlarmCallback;
-import it.ingsoftw.progetto.common.IMonitor;
-import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
-import it.ingsoftw.progetto.common.IPatient;
-import it.ingsoftw.progetto.common.MonitorData;
-import it.ingsoftw.progetto.common.MonitorDataUpdatedCallback;
+import it.ingsoftw.progetto.common.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
@@ -50,11 +51,15 @@ public class PatientMonitor extends JPanel{
     private JLabel temperatureLabel;
     private JButton modificaButton;
     private JLabel alarmLabel;
+    private JLabel timerLabel;
     private int roomNumber;
     private IPatient patient;
     private EmptyRoom emptyRoom;
-
+    private IAlarmCallback.AlarmData alarmData;
+    private HashMap<IAlarmCallback.AlarmData,Timer> alarmList;
+    private JPopupMenu pop;
     private JPanel mainPanel;
+    private Thread sound;
 
     final static String EMPTYROOM = "emptyRoomPanel";
     final static String PATIENTROOM = "fullRoomPanel";
@@ -89,7 +94,11 @@ public class PatientMonitor extends JPanel{
         this.roomNumber = roomNumber;
         this.patient = patient;
 
+        this.alarmList = new HashMap<>();
+
         this.mainPanel = new JPanel(cardLayout = new CardLayout());
+
+        this.pop = new JPopupMenu();
 
 
         emptyRoom = new EmptyRoom();
@@ -116,10 +125,12 @@ public class PatientMonitor extends JPanel{
         this.mainPanel.add(emptyRoom.panel, EMPTYROOM);
         this.add(mainPanel, 0);
 
-        //____PARAMETRI
+        //____PARAMETRI VITALI IN DIRETTA
 
         MonitorData data = patient.getCurrentMonitorData();
 
+
+        // classe di observer
         IMonitorDataUpdatedCallback updatedCallback = new MonitorDataUpdatedCallback() {
             @Override
             public void monitorDataChanged(MonitorData data) {
@@ -135,17 +146,79 @@ public class PatientMonitor extends JPanel{
         updatedCallback.monitorDataChanged(data);
         patient.setMonitorDataUpdatedCallback(updatedCallback);
 
+
+        //OBSERVER
+
         patient.setAlarmCallback(new AlarmCallback() {
             @Override
             public void startAlarm(AlarmData alarmData) throws RemoteException {
+
                 System.out.println("Alarm started!");
+
+                int count = 0;
+
+                if(alarmData.getLevel() == AlarmLevel.Level1) {count = 180; setImage("./img/alertPatientGreen.png",alarmLabel);}
+                else if (alarmData.getLevel() == AlarmLevel.Level2) {count = 120; setImage("./img/alertPatientOrange.png",alarmLabel);}
+                else if (alarmData.getLevel() == AlarmLevel.Level3) {count = 60; setImage("./img/alertPatientRed.png",alarmLabel);}
+
+                TimeClass tc = new TimeClass(count);
+
+                Timer t = new Timer(1000,tc);
+
+                t.start();
+
+                if(alarmList.isEmpty()){
+
+                    sound = new Thread(new Runnable(){
+
+                        public void run(){
+                            SoundUtils alarmtone = new SoundUtils();
+                            try {
+
+                                while(alarmList.size() > 0) {
+
+                                    alarmtone.tone(500, 500);
+                                    alarmtone.tone(1000, 500);
+                                    alarmtone.tone(0, 500);
+
+                                }
+                            } catch (LineUnavailableException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+
+                    });
+
+                    sound.start();
+                }
+
+                alarmList.put(alarmData,t);
             }
 
             @Override
             public void stopAlarm(int alarmId) throws RemoteException {
-                System.out.println("Alarm stopped!");
+
+
+                Set<AlarmData> keyset = alarmList.keySet();
+
+                for(AlarmData ad : keyset){
+
+                    if (ad.getAlarmId() == alarmId ) {
+
+                        alarmList.get(ad).stop();
+                        alarmList.remove(ad);
+
+                    }
+
+                }
+
+                setImage("./img/alarmPaper.png",alarmLabel);
+                timerLabel.setText("");
+                timerLabel.setForeground(Color.black);
+
             }
         });
+
         //____LISTENER
 
         modificaButton.addActionListener(e -> new EditPatient(this));
@@ -163,9 +236,67 @@ public class PatientMonitor extends JPanel{
 
         // Mostra una stanza vuota
         cardLayout.show( mainPanel, EMPTYROOM);
+
+        alarmLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+
+                System.out.println("mouse entrato");
+                addPopup();
+
+                pop.show();
+
+            }
+        });
     }
 
-    private void setImage(String pathimg, JButton assignButton) {
+
+    private void addPopup(){
+
+        Set<IAlarmCallback.AlarmData> keyset = alarmList.keySet();
+
+
+
+        for(IAlarmCallback.AlarmData ad : keyset){
+
+            JLabel elemento = new JLabel(""+ad.getLevel());
+            pop.add(elemento);
+
+        }
+
+
+
+    }
+
+    public class TimeClass implements ActionListener {
+
+        int counter;
+
+        public TimeClass(int counter){
+
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent tc) {
+
+            counter--;
+            if(counter > 0){
+
+                timerLabel.setText(""+counter);
+                timerLabel.setForeground(Color.BLUE);
+
+            }else{
+
+                timerLabel.setText(""+counter);
+                timerLabel.setForeground(Color.RED);
+
+            }
+
+        }
+    }
+
+    private void setImage(String pathimg, Object componente) {
 
         InputStream imgStream = PatientMonitor.class.getResourceAsStream(pathimg);
 
@@ -181,7 +312,8 @@ public class PatientMonitor extends JPanel{
 
         ImageIcon icon = new ImageIcon(myImg);
 
-        assignButton.setIcon(icon);
+        if(componente instanceof JLabel)((JLabel)componente).setIcon(icon);
+        if(componente instanceof JButton)((JButton)componente).setIcon(icon);
     }
 
     public void setName(String modname){

@@ -41,7 +41,7 @@ public class MonitorGUI extends JFrame{
         ((javax.swing.border.TitledBorder) this.MainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
 
         this.setContentPane(MainPanel);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.addWindowListener(new java.awt.event.WindowAdapter(){
 
@@ -108,20 +108,6 @@ public class MonitorGUI extends JFrame{
         }
 
 
-        /*if(status == ILogin.LoginStatus.MEDIC_LOGGED){
-
-            JPanel AdminPanel = new JPanel(new GridLayout());
-
-            AdminPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            Dimension preferredDimension = new Dimension(400, 200);
-
-            AdminPanel.setPreferredSize(preferredDimension);
-            AdminPanel.add(new JButton("Apri pannello amministrativo"),0);
-
-            BottomPanel.add(AdminPanel,0);
-
-        }*/
-
         this.pack();
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
         this.setVisible(true);
@@ -131,7 +117,7 @@ public class MonitorGUI extends JFrame{
 
     private void Chiudi() {
 
-        this.dispose();
+        System.exit(0);
 
     }
 
