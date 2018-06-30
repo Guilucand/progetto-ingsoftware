@@ -13,7 +13,7 @@
         <properties/>
         <border type="line"/>
         <children>
-          <grid id="1d1d2" binding="ListPanel1" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="1d1d2" binding="ListPanel1" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -28,7 +28,7 @@
             <children>
               <component id="12522" class="javax.swing.JLabel" binding="listnamemed">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <foreground color="-5736386"/>
@@ -37,7 +37,7 @@
               </component>
               <scrollpane id="a831">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="empty"/>
@@ -50,6 +50,30 @@
                   </component>
                 </children>
               </scrollpane>
+              <component id="efb85" class="javax.swing.JCheckBox" binding="medlistmostraIDCheckBox">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="mostra ID"/>
+                </properties>
+              </component>
+              <component id="7baf7" class="javax.swing.JCheckBox" binding="medlistmostraCognomiCheckBox">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="mostra cognomi"/>
+                </properties>
+              </component>
+              <component id="c358c" class="javax.swing.JCheckBox" binding="medlistmostraNomiCheckBox">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="mostra nomi"/>
+                </properties>
+              </component>
             </children>
           </grid>
           <component id="c0644" class="javax.swing.JButton" binding="removeMedicButton">
@@ -78,7 +102,7 @@
               <text value="Chiudi"/>
             </properties>
           </component>
-          <grid id="594c4" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="594c4" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -102,7 +126,7 @@
               </component>
               <scrollpane id="dce14" binding="ListPanel2">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="empty"/>
@@ -115,6 +139,30 @@
                   </component>
                 </children>
               </scrollpane>
+              <component id="75113" class="javax.swing.JCheckBox" binding="nurselistmostraIDCheckBox">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="mostra ID"/>
+                </properties>
+              </component>
+              <component id="a690e" class="javax.swing.JCheckBox" binding="nurselistmostraCognomiCheckBox">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="mostra cognomi"/>
+                </properties>
+              </component>
+              <component id="3ae8a" class="javax.swing.JCheckBox" binding="nurselistmostraNomiCheckBox">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="mostra nomi"/>
+                </properties>
+              </component>
             </children>
           </grid>
           <component id="100dd" class="javax.swing.JButton" binding="removeNurseButton">
