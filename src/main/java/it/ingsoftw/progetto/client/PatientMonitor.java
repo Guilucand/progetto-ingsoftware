@@ -60,6 +60,7 @@ public class PatientMonitor extends JPanel{
     private JPopupMenu pop;
     private JPanel mainPanel;
     private Thread sound;
+    private IMonitor iMonitor;
 
     final static String EMPTYROOM = "emptyRoomPanel";
     final static String PATIENTROOM = "fullRoomPanel";
@@ -70,7 +71,7 @@ public class PatientMonitor extends JPanel{
         public JButton assignButton;
 
         public EmptyRoom() {
-            assignButton.addActionListener(e -> addPatient());
+            assignButton.addActionListener(e -> new AddPatient(patient));
         }
     }
 
@@ -89,10 +90,12 @@ public class PatientMonitor extends JPanel{
 
     }
 
-    public PatientMonitor(int roomNumber, IPatient patient) throws RemoteException {
+    public PatientMonitor(int roomNumber, IMonitor iMonitor) throws RemoteException {
 
         this.roomNumber = roomNumber;
         this.patient = patient;
+
+        this.iMonitor = iMonitor;
 
         this.alarmList = new HashMap<>();
 
