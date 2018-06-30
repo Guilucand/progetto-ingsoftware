@@ -62,6 +62,7 @@ public class AdminPanel extends JFrame{
     private User ModUser;
     private User DeleteUser;
 
+
     public AdminPanel(ILogin.LoginStatus status, IAdmin adminInterface) throws RemoteException {
 
         super("Admin-Panel");
@@ -85,9 +86,7 @@ public class AdminPanel extends JFrame{
         medList.setCellRenderer(new UserRendererMed());
         nurseList.setCellRenderer(new UserRendererNurse());
 
-
-        //HO BISOGNO DELLA LISTA DEGLI UTENTI NEL DB
-
+        //INIZIALIZZO LE LISTE
         initList();
 
         Dimension prefdim = new Dimension(200,700);
@@ -205,7 +204,6 @@ public class AdminPanel extends JFrame{
 
                 if(e.getClickCount() == 2){
 
-                    System.out.println("premo tasto sinistrox2 mouse in lista infermieri");
                     index = theList.locationToIndex(e.getPoint());
 
                     if (index >= 0) {
@@ -734,15 +732,16 @@ public class AdminPanel extends JFrame{
 
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-            User user = (User)value;
+            User utente = (User)value;
 
-            String stringout = "";
+            String stringa = "";
 
-            if(nurselistmostraNomiCheckBox.isSelected()){stringout = user.getName();}
-            if(nurselistmostraNomiCheckBox.isSelected()){stringout = stringout+" "+user.getSurname();}
-            if(nurselistmostraNomiCheckBox.isSelected()){stringout = stringout+" "+user.getId();}
+            if(nurselistmostraNomiCheckBox.isSelected()){stringa = utente.getName();}
+            if(nurselistmostraCognomiCheckBox.isSelected()){stringa = stringa +" "+utente.getSurname();}
+            if(nurselistmostraIDCheckBox.isSelected()){stringa = stringa +" "+ utente.getId();}
 
-            setText(stringout);
+
+            setText(stringa);
 
             return this;
         }
