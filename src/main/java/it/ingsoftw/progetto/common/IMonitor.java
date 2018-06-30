@@ -15,9 +15,9 @@ public interface IMonitor extends Remote {
 //    IPatient[] getHospitalizedPatients();
 
     /**
-     * Ritorna il paziente corrispondente al numero di stanza
+     * Ritorna una stanza a partire dal suo numero
      * @param roomNumber il numero di stanza
-     * @return il paziente o null se la stanza non esiste o e' vuota
+     * @return la stanza o null se la stanza non esiste
      */
-    IPatient getPatientByRoomNumber(int roomNumber) throws RemoteException;
+    IRoom getRoomByNumber(int roomNumber) throws RemoteException;
 }

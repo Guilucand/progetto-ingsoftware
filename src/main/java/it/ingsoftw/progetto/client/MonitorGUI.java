@@ -75,8 +75,8 @@ public class MonitorGUI extends JFrame{
 
         for(int i = 0; i<4; i++){
 
-            TopPanel.add(new PatientMonitor(i+1, iMonitorInterface),i);
-            MidPanel.add(new PatientMonitor(i+5, iMonitorInterface),i);
+            TopPanel.add(new PatientMonitor(i+1, iMonitorInterface.getRoomByNumber(i+1)),i);
+            MidPanel.add(new PatientMonitor(i+5, iMonitorInterface.getRoomByNumber(i+5)),i);
             if(i == 0){
 
                 EmptyPanelAdmin epa = new EmptyPanelAdmin(status,adminInterface);
@@ -103,7 +103,7 @@ public class MonitorGUI extends JFrame{
                 BottomPanel.add(epa.getPanel(), i);
 
             }
-            else BottomPanel.add(new PatientMonitor(i+8,iMonitorInterface),i);
+            else BottomPanel.add(new PatientMonitor(i+8,iMonitorInterface.getRoomByNumber(i+8)),i);
 
         }
 
@@ -111,8 +111,6 @@ public class MonitorGUI extends JFrame{
         this.pack();
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
         this.setVisible(true);
-
-
     }
 
     private void Chiudi() {

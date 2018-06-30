@@ -2,6 +2,7 @@ package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.IMonitor;
 import it.ingsoftw.progetto.common.IPatient;
+import it.ingsoftw.progetto.common.IRecoveryCreator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,12 +18,10 @@ public class AddPatient extends JFrame{
     private JTextField dateTextField;
     private JButton aggiungiRicoveroButton;
     private JPanel panelDate;
-    IMonitor iMonitor;
+    private IRecoveryCreator recoveryCreator;
 
-    public AddPatient(IMonitor iMonitor) {
-
-
-        this.iMonitor = iMonitor;
+    public AddPatient(IRecoveryCreator recoveryCreator) {
+        this.recoveryCreator = recoveryCreator;
 
 
         /*JDateComponentFactory jdcf = new JDateComponentFactory();
@@ -40,7 +39,7 @@ public class AddPatient extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                //iMonitor.
+                //recoveryCreator.
 
             }
         });

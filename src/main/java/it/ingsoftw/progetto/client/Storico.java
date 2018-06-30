@@ -1,8 +1,5 @@
 package it.ingsoftw.progetto.client;
 
-import com.googlecode.lanterna.gui2.GridLayout;
-import javafx.scene.chart.XYChart;
-import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
@@ -10,12 +7,10 @@ import org.knowm.xchart.XYSeries;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 
 public class Storico extends  JFrame{
-    private JPanel MainPanel;
-    private JPanel StoricPanel;
+    private JPanel mainPanel;
+    private JPanel storicPanel;
     private JLabel immagine1;
     private JLabel sbp;
     private JLabel temperatura;
@@ -24,7 +19,7 @@ public class Storico extends  JFrame{
     private JLabel val1;
     private JLabel val2;
     private JLabel val3;
-    private JScrollPane ScrollPane;
+    private JScrollPane scrollPanel;
     private JPanel panelGraph;
     private JScrollPane scrollpanel1;
 
@@ -35,16 +30,19 @@ public class Storico extends  JFrame{
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
-        this.MainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),"nome",TitledBorder.TOP,TitledBorder.CENTER));
-        ((javax.swing.border.TitledBorder) this.MainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
+        mainPanel.setLayout(new BorderLayout());
+
+
+        this.mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),"nome",TitledBorder.TOP,TitledBorder.CENTER));
+        ((javax.swing.border.TitledBorder) this.mainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
 
         Dimension preferredDimension = new Dimension(600, 800);
-        MainPanel.setPreferredSize(preferredDimension);
+        mainPanel.setPreferredSize(preferredDimension);
 
 
-        this.ScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.ScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        this.ScrollPane.setBounds(50, 30, 300, 50);
+        this.scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.scrollPanel.setBounds(50, 30, 300, 50);
 
         this.scrollpanel1 = new JScrollPane();
         this.scrollpanel1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -78,11 +76,13 @@ public class Storico extends  JFrame{
 
         double[] yData = new double[] { 70.0, 75.0, 73.0 , 80.0 , 90.0 };
         XYSeries serieProva = chartSBP.addSeries("SBP", yData);
-        JPanel pnlChart = new XChartPanel(chartSBP);
+        JPanel pnlChart = new XChartPanel<>(chartSBP);
         this.scrollpanel1.add(pnlChart);
         scrollpanel1.validate();
 
-        this.setContentPane(MainPanel);
+        this.mainPanel.add(pnlChart);
+
+        this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         this.pack();

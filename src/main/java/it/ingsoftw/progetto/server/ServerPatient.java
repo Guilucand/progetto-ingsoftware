@@ -65,4 +65,9 @@ public class ServerPatient extends UnicastRemoteObject implements IPatient {
     public void addDrugPrescription() {
 
     }
+
+    @Override
+    public void addDrugAdministration() throws RemoteException {
+
+    }
 }

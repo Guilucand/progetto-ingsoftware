@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -60,7 +59,7 @@ public class PatientMonitor extends JPanel{
     private JPopupMenu pop;
     private JPanel mainPanel;
     private Thread sound;
-    private IMonitor iMonitor;
+    private IRoom room;
 
     final static String EMPTYROOM = "emptyRoomPanel";
     final static String PATIENTROOM = "fullRoomPanel";
@@ -71,62 +70,17 @@ public class PatientMonitor extends JPanel{
         public JButton assignButton;
 
         public EmptyRoom() {
-            assignButton.addActionListener(e -> new AddPatient(iMonitor));
+            assignButton.addActionListener(e -> {
+                try {
+                    new AddPatient(room.addRecovery());
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
+            });
         }
     }
 
-    private void addPatient() {
-
-        cardLayout.show(mainPanel, PATIENTROOM);
-
-
-        patientPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        patientPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),"Stanza "+ roomNumber,TitledBorder.TOP,TitledBorder.CENTER));
-        ((javax.swing.border.TitledBorder) patientPanel.getBorder()).setTitleFont(new Font("Arial", Font.BOLD, 16));
-
-        this.revalidate();
-        this.repaint();
-
-    }
-
-    public PatientMonitor(int roomNumber, IMonitor iMonitor) throws RemoteException {
-
-        this.roomNumber = roomNumber;
-        this.patient = patient;
-
-        this.iMonitor = iMonitor;
-
-        this.alarmList = new HashMap<>();
-
-        this.mainPanel = new JPanel(cardLayout = new CardLayout());
-
-        this.pop = new JPopupMenu();
-
-
-        emptyRoom = new EmptyRoom();
-        {
-
-            emptyRoom.panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            emptyRoom.panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black), "Stanza " + roomNumber, TitledBorder.TOP, TitledBorder.CENTER));
-            ((javax.swing.border.TitledBorder) emptyRoom.panel.getBorder()).setTitleFont(new Font("Arial", Font.BOLD, 16));
-
-            emptyRoom.panel.setBackground(new java.awt.Color(255, 255, 255));
-
-
-            // Impostazione pulsante aggiunta paziente
-            setImage("./img/aggiungi1.png", emptyRoom.assignButton);
-            emptyRoom.assignButton.setBackground(new java.awt.Color(54, 193, 112));
-        }
-//        Dimension preferredDimension = new Dimension(325, 200);
-//
-//        emptyRoom.panel.setPreferredSize(preferredDimension);
-//        patientPanel.setPreferredSize(preferredDimension);
-
-
-        this.mainPanel.add(patientPanel, PATIENTROOM);
-        this.mainPanel.add(emptyRoom.panel, EMPTYROOM);
-        this.add(mainPanel, 0);
+    private void setupPatient() throws RemoteException {
 
         //____PARAMETRI VITALI IN DIRETTA
 
@@ -242,6 +196,61 @@ public class PatientMonitor extends JPanel{
             }
         });
 
+
+        cardLayout.show(mainPanel, PATIENTROOM);
+
+
+        patientPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        patientPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),"Stanza "+ roomNumber,TitledBorder.TOP,TitledBorder.CENTER));
+        ((javax.swing.border.TitledBorder) patientPanel.getBorder()).setTitleFont(new Font("Arial", Font.BOLD, 16));
+
+        this.revalidate();
+        this.repaint();
+    }
+
+    public PatientMonitor(int roomNumber, IRoom room) throws RemoteException {
+
+        this.roomNumber = roomNumber;
+
+        if (room.hasPatient())
+            this.patient = room.getCurrentPatient();
+        else
+            this.patient = null;
+
+        this.room = room;
+
+        this.alarmList = new HashMap<>();
+
+        this.mainPanel = new JPanel(cardLayout = new CardLayout());
+
+        this.pop = new JPopupMenu();
+
+
+        emptyRoom = new EmptyRoom();
+        {
+
+            emptyRoom.panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            emptyRoom.panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black), "Stanza " + roomNumber, TitledBorder.TOP, TitledBorder.CENTER));
+            ((javax.swing.border.TitledBorder) emptyRoom.panel.getBorder()).setTitleFont(new Font("Arial", Font.BOLD, 16));
+
+            emptyRoom.panel.setBackground(new java.awt.Color(255, 255, 255));
+
+
+            // Impostazione pulsante aggiunta paziente
+            setImage("./img/aggiungi1.png", emptyRoom.assignButton);
+            emptyRoom.assignButton.setBackground(new java.awt.Color(54, 193, 112));
+        }
+//        Dimension preferredDimension = new Dimension(325, 200);
+//
+//        emptyRoom.panel.setPreferredSize(preferredDimension);
+//        patientPanel.setPreferredSize(preferredDimension);
+
+
+        this.mainPanel.add(patientPanel, PATIENTROOM);
+        this.mainPanel.add(emptyRoom.panel, EMPTYROOM);
+        this.add(mainPanel, 0);
+
         //____LISTENER
 
         modificaButton.addActionListener(e -> new EditPatient(this));
@@ -257,8 +266,11 @@ public class PatientMonitor extends JPanel{
             }
         });
 
-        // Mostra una stanza vuota
-        cardLayout.show( mainPanel, EMPTYROOM);
+        // Mostra la stanza vuota o il paziente a seconda dello stato
+        if (patient == null)
+            cardLayout.show( mainPanel, EMPTYROOM);
+        else
+            setupPatient();
 
         alarmLabel.addMouseListener(new MouseAdapter() {
             @Override

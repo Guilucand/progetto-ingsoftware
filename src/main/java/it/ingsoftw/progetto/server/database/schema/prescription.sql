@@ -1,5 +1,5 @@
 
 
-CREATE TABLE IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS prescription (
 
 )

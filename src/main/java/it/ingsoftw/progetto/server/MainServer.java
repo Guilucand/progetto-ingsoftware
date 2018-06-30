@@ -81,7 +81,7 @@ public class MainServer {
         }
 
 
-        for (int i = 1; i <= 10; i++)
+        for (int i = 1; i <= 10; i+= 2)
             recoveryDatabase.addRecovery("PATIENT" + String.valueOf(i), String.valueOf(i));
 //            recoveryDatabase.setRoomMachineId(String.valueOf(i+1), String.valueOf(i+1));
 

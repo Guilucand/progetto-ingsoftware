@@ -3,7 +3,9 @@ package it.ingsoftw.progetto.client;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 
-import it.ingsoftw.progetto.common.*;
+import it.ingsoftw.progetto.common.IClientListener;
+import it.ingsoftw.progetto.common.IClientRmiFactory;
+import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.server.ServerConfig;
 
 public class MainClient {
@@ -11,6 +13,7 @@ public class MainClient {
     private static ILogin.LoginStatus loginstatus = ILogin.LoginStatus.NOTLOGGED;
 
     static IClientRmiFactory serverFactory;
+
 
     public static void main(String[] args) throws RemoteException {
 
