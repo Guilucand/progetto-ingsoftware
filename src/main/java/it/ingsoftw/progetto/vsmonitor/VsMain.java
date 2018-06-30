@@ -31,8 +31,8 @@ public class VsMain {
 
 
         VsInstance[] instances = new VsInstance[INSTANCES_COUNT];
-        for (int i = 0; i < INSTANCES_COUNT; i++) {
-            instances[i] = new VsInstance(String.valueOf(i));
+        for (int i = 1; i <= INSTANCES_COUNT; i++) {
+            instances[i-1] = new VsInstance(String.valueOf(i));
         }
 
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();

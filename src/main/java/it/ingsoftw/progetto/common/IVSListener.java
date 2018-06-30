@@ -35,4 +35,13 @@ public interface IVSListener extends Remote {
      * @throws RemoteException
      */
     boolean stopAlarm(String id, int alarmId) throws RemoteException;
+
+    /**
+     * Notifica un cambiamento nei parametri del monitor
+     * @param id l'id del monitor
+     * @param monitorData i dati aggiornati
+     * @return
+     * @throws RemoteException
+     */
+    void notifyMonitorUpdate(String id, MonitorData monitorData) throws RemoteException;
 }

@@ -15,6 +15,7 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.ActionListDialogBuilder;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -23,6 +24,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import it.ingsoftw.progetto.common.AlarmLevel;
+import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.MonitorData;
 import javafx.util.Pair;
 
@@ -46,6 +48,8 @@ public class VsGui {
     int currentSbp;
     int currentDbp;
     float currentTemp;
+
+    boolean hasChanged;
 
     WindowBasedTextGUI mainWindow;
 
@@ -73,6 +77,7 @@ public class VsGui {
 
     List<Integer> alarms = new ArrayList<>();
     private Function<MonitorData, MonitorData> monitorDataFunction;
+    private IMonitorDataUpdatedCallback monitorDataUpdatedCallback;
 
     @SuppressWarnings("unchecked")
     public VsGui(String name) {
@@ -172,6 +177,21 @@ public class VsGui {
         alarms.clear();
     }
 
+    public void setMonitorDataChangedCallback(IMonitorDataUpdatedCallback callback) {
+        monitorDataUpdatedCallback = callback;
+        if (monitorDataUpdatedCallback != null) {
+            try {
+                monitorDataUpdatedCallback.monitorDataChanged(new MonitorData(
+                        currentBpm,
+                        currentSbp,
+                        currentDbp,
+                        currentTemp));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     void heartUpdater() {
         boolean hearthShown = false;
 
@@ -206,8 +226,23 @@ public class VsGui {
             alarmStopButton.setTheme(alarmShown ? alarmTheme : defaultTheme);
             alarmStopButton.invalidate();
 
-            if (toUpdate)
+            if (toUpdate) {
                 updateValues();
+                if (hasChanged) {
+                    hasChanged = false;
+                    if (monitorDataUpdatedCallback != null) {
+                        try {
+                            monitorDataUpdatedCallback.monitorDataChanged(new MonitorData(
+                                    currentBpm,
+                                    currentSbp,
+                                    currentDbp,
+                                    currentTemp));
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
 
             toUpdate = !toUpdate;
 
@@ -219,7 +254,10 @@ public class VsGui {
     }
 
     void setBPM(int bpm) {
-        currentBpm = bpm;
+        if (currentBpm != bpm) {
+            currentBpm = bpm;
+            hasChanged = true;
+        }
     }
 
     int getBpm() {
@@ -231,8 +269,11 @@ public class VsGui {
     }
 
     public void setSbp(int sbp) {
-        this.currentSbp = sbp;
-        sbpText.setText("▲ " + currentSbp);
+        if (currentSbp != sbp) {
+            currentSbp = sbp;
+            sbpText.setText("▲ " + currentSbp);
+            hasChanged = true;
+        }
     }
 
     public int getDbp() {
@@ -240,8 +281,11 @@ public class VsGui {
     }
 
     public void setDbp(int dbp) {
-        this.currentDbp = dbp;
-        dbpText.setText("▼ " + currentDbp);
+        if (currentDbp != dbp) {
+            currentDbp = dbp;
+            dbpText.setText("▼ " + currentDbp);
+            hasChanged = true;
+        }
     }
 
     public float getTemp() {
@@ -249,8 +293,12 @@ public class VsGui {
     }
 
     public void setTemp(float temp) {
-        this.currentTemp = (int)(temp * 10) / 10.0f;
-        tempText.setText("T " + currentTemp + "°C");
+        float newTemp = (int)(temp * 10) / 10.0f;
+        if (newTemp != currentTemp) {
+            currentTemp = newTemp;
+            tempText.setText("T " + currentTemp + "°C");
+            hasChanged = true;
+        }
     }
 
     public void setAlarmCallback(BiFunction<String, AlarmLevel, Integer> callback) {

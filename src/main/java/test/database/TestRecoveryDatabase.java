@@ -1,6 +1,7 @@
 package test.database;
 
 import it.ingsoftw.progetto.common.IAlarmCallback;
+import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import javafx.util.Pair;
 import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
@@ -20,7 +21,8 @@ public class TestRecoveryDatabase implements IRecoveryDatabase {
     Map<String, Pair<String, String>> recovery = new HashMap<>();
 
 
-    Map<String, List<IAlarmCallback>> callbacks = new HashMap<>();
+    Map<String, List<IAlarmCallback>> alarmCallbacks = new HashMap<>();
+    Map<String, List<IMonitorDataUpdatedCallback>> dataCallbacks = new HashMap<>();
 
     @Override
     public void setRoomMachineId(String roomId, String machineId) {
@@ -35,8 +37,18 @@ public class TestRecoveryDatabase implements IRecoveryDatabase {
         return recoveryId;
     }
 
-    public void updateVsMonitor(String machineId, MonitorData data) {
+    public void updateMonitorData(String machineId, MonitorData data) {
         this.data.put(machineId, data);
+        List<IMonitorDataUpdatedCallback> callbacksList = dataCallbacks.get(mapMachineToRecovery(machineId));
+        if (callbacksList == null)
+            return;
+
+        for (IMonitorDataUpdatedCallback callback : callbacksList) {
+            try {
+                callback.monitorDataChanged(data);
+            } catch (RemoteException e) {
+            }
+        }
     }
 
     @Override
@@ -46,19 +58,31 @@ public class TestRecoveryDatabase implements IRecoveryDatabase {
 
     @Override
     public void addAlarmHook(String recoveryId, IAlarmCallback callback) {
-        if (!callbacks.containsKey(recoveryId))
-            callbacks.put(recoveryId, new ArrayList<>());
-        callbacks.get(recoveryId).add(callback);
+        if (!alarmCallbacks.containsKey(recoveryId))
+            alarmCallbacks.put(recoveryId, new ArrayList<>());
+        alarmCallbacks.get(recoveryId).add(callback);
     }
 
     @Override
     public void removeAlarmHook(String recoveryId, IAlarmCallback callback) {
-        callbacks.get(recoveryId).remove(callback);
+        alarmCallbacks.get(recoveryId).remove(callback);
+    }
+
+    @Override
+    public void addMonitorDataUpdatedCallbackHook(String recoveryId, IMonitorDataUpdatedCallback callback) {
+        if (!dataCallbacks.containsKey(recoveryId))
+            dataCallbacks.put(recoveryId, new ArrayList<>());
+        dataCallbacks.get(recoveryId).add(callback);
+    }
+
+    @Override
+    public void removeMonitorDataUpdatedCallbackHook(String recoveryId, IMonitorDataUpdatedCallback callback) {
+        dataCallbacks.get(recoveryId).remove(callback);
     }
 
     @Override
     public boolean startAlarm(String machineId, IAlarmCallback.AlarmData data) {
-        List<IAlarmCallback> callbacksList = callbacks.get(mapMachineToRecovery(machineId));
+        List<IAlarmCallback> callbacksList = alarmCallbacks.get(mapMachineToRecovery(machineId));
         if (callbacksList == null)
             return false;
 
@@ -76,7 +100,7 @@ public class TestRecoveryDatabase implements IRecoveryDatabase {
 
     @Override
     public boolean stopAlarm(String machineId, int alarmId) {
-        List<IAlarmCallback> callbacksList = callbacks.get(mapMachineToRecovery(machineId));
+        List<IAlarmCallback> callbacksList = alarmCallbacks.get(mapMachineToRecovery(machineId));
         if (callbacksList == null)
             return false;
 

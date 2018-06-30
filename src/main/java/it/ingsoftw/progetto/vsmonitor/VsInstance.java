@@ -86,5 +86,12 @@ public class VsInstance {
         GUI.setConnectionCallback((newStatus)-> {
             throw new UnsupportedOperationException(); // Da implementare
         });
+
+        GUI.setMonitorDataChangedCallback((data)->{
+            try {
+                serverListener.notifyMonitorUpdate(ID, data);
+            } catch (RemoteException e) {
+                GUI.setConnectionStatus(false);
+            }        });
     }
 }

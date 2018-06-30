@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="RunAll" type="CompoundRunConfigurationType" factoryName="Compound Run Configuration">
+    <toRun type="Application" name="Client" />
+    <toRun type="Application" name="Server" />
+    <toRun type="Application" name="VsMonitor" />
+    <method />
+  </configuration>
+</component>

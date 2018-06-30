@@ -18,7 +18,19 @@ public class MainClient {
 
         try {
             // Connessione al server
-            serverFactory = connectToServer();
+            for (int i = 0; i < 200; i++) {
+                try {
+                    serverFactory = connectToServer();
+                } catch (RemoteException e) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e1) {
+                        continue;
+                    }
+                    continue;
+                }
+                break;
+            }
 
             // Ottenimento dell'interfaccia di login
             ILogin loginInterface = serverFactory.getLoginInterface();

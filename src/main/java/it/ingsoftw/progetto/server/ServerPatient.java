@@ -6,6 +6,7 @@ import java.time.Period;
 import java.util.Date;
 
 import it.ingsoftw.progetto.common.IAlarmCallback;
+import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.IPatient;
 import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.PatientData;
@@ -18,6 +19,7 @@ public class ServerPatient extends UnicastRemoteObject implements IPatient {
     private IRecoveryDatabase database;
     private String recoveryId;
     private IAlarmCallback alarmCallback;
+    private IMonitorDataUpdatedCallback monitorDataUpdatedCallback;
 
     public ServerPatient(ClientStatus status, IRecoveryDatabase database, String recoveryId) throws RemoteException {
         super(ServerConfig.port);
@@ -38,6 +40,12 @@ public class ServerPatient extends UnicastRemoteObject implements IPatient {
     }
 
     @Override
+    public void setMonitorDataUpdatedCallback(IMonitorDataUpdatedCallback callback) {
+        monitorDataUpdatedCallback = callback;
+        database.addMonitorDataUpdatedCallbackHook(recoveryId, callback);
+    }
+
+    @Override
     public Pair<Date, MonitorData>[] getMonitorHistory(Period period) {
         Pair<Date, MonitorData>[] data = new Pair[1];
         data[0] = new Pair<>(new Date(), getCurrentMonitorData());
@@ -46,6 +54,9 @@ public class ServerPatient extends UnicastRemoteObject implements IPatient {
 
     @Override
     public void setAlarmCallback(IAlarmCallback callback) throws RemoteException {
+        if (alarmCallback != null)
+            database.removeAlarmHook(recoveryId, alarmCallback);
+
         alarmCallback = callback;
         database.addAlarmHook(recoveryId, alarmCallback);
     }

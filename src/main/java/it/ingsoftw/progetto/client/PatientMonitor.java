@@ -3,9 +3,12 @@ package it.ingsoftw.progetto.client;
 //import com.sun.prism.paint.Color;
 
 
+import it.ingsoftw.progetto.common.AlarmCallback;
 import it.ingsoftw.progetto.common.IMonitor;
+import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.IPatient;
 import it.ingsoftw.progetto.common.MonitorData;
+import it.ingsoftw.progetto.common.MonitorDataUpdatedCallback;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -117,13 +120,32 @@ public class PatientMonitor extends JPanel{
 
         MonitorData data = patient.getCurrentMonitorData();
 
-        if (data != null) {
-            this.dbpParameter.setText(String.valueOf(data.getDbp()));
-            this.sbpParameter.setText(String.valueOf(data.getSbp()));
-            this.frequenceParameter.setText(String.valueOf(data.getBpm()));
-            this.temperatureParameter.setText(String.valueOf(data.getTemp()));
-        }
+        IMonitorDataUpdatedCallback updatedCallback = new MonitorDataUpdatedCallback() {
+            @Override
+            public void monitorDataChanged(MonitorData data) {
+                if (data != null) {
+                    dbpParameter.setText(String.valueOf(data.getDbp()));
+                    sbpParameter.setText(String.valueOf(data.getSbp()));
+                    frequenceParameter.setText(String.valueOf(data.getBpm()));
+                    temperatureParameter.setText(String.valueOf(data.getTemp()));
+                }
+            }
+        };
 
+        updatedCallback.monitorDataChanged(data);
+        patient.setMonitorDataUpdatedCallback(updatedCallback);
+
+        patient.setAlarmCallback(new AlarmCallback() {
+            @Override
+            public void startAlarm(AlarmData alarmData) throws RemoteException {
+                System.out.println("Alarm started!");
+            }
+
+            @Override
+            public void stopAlarm(int alarmId) throws RemoteException {
+                System.out.println("Alarm stopped!");
+            }
+        });
         //____LISTENER
 
         modificaButton.addActionListener(e -> new EditPatient(this));

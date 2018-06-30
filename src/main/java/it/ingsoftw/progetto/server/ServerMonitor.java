@@ -26,6 +26,6 @@ public class ServerMonitor extends UnicastRemoteObject implements IMonitor {
 
     @Override
     public IPatient getPatientByRoomNumber(int roomNumber) throws RemoteException{
-        return new ServerPatient(status, recoveryDatabase, "1");
+        return new ServerPatient(status, recoveryDatabase, recoveryDatabase.mapRoomToRecovery(String.valueOf(roomNumber)));
     }
 }

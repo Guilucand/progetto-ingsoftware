@@ -27,6 +27,13 @@ public interface IPatient extends Remote {
     MonitorData getCurrentMonitorData() throws RemoteException;
 
     /**
+     * Imposta un callback che viene chiamato
+     * ogni volta che i parametri vitali cambiano
+     * @param callback il callback da chiamare
+     */
+    void setMonitorDataUpdatedCallback(IMonitorDataUpdatedCallback callback) throws RemoteException;
+
+    /**
      * Ottiene lo storico dei dati del paziente
      * @return storico dei dati
      */

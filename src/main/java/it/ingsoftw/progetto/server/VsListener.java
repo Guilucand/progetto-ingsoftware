@@ -34,15 +34,6 @@ public class VsListener extends UnicastRemoteObject implements IVSListener {
     public boolean connectVS(String id, IVSConnection connection) throws RemoteException {
         System.out.println("Connected vital signs monitor with id " + id);
         connectedMonitors.put(id, connection);
-
-        MonitorData data = new MonitorData(
-                connection.getBpm(),
-                connection.getSbp(),
-                connection.getDbp(),
-                connection.getTemp()
-        );
-
-        database.updateVsMonitor(id, data);
         return true;
     }
 
@@ -55,6 +46,11 @@ public class VsListener extends UnicastRemoteObject implements IVSListener {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void notifyMonitorUpdate(String id, MonitorData monitorData) throws RemoteException {
+        database.updateMonitorData(id, monitorData);
     }
 
     @Override

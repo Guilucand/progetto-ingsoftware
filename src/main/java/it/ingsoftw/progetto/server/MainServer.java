@@ -50,11 +50,9 @@ public class MainServer {
 
         IRecoveryDatabase recoveryDatabase = databaseConnection.getRecoveryInterface();
 
-
-        for (int i = 0; i < 10; i++)
-            recoveryDatabase.setRoomMachineId(String.valueOf(i+1), String.valueOf(i+1));
-
-        recoveryDatabase.addRecovery("Luigi", "1");
+        for (int i = 1; i <= 10; i++)
+            recoveryDatabase.addRecovery("PATIENT" + String.valueOf(i), String.valueOf(i));
+//            recoveryDatabase.setRoomMachineId(String.valueOf(i+1), String.valueOf(i+1));
 
 
         // Registrazione delle interfacce iniziali di comunicazione con client e macchine di monitoraggio

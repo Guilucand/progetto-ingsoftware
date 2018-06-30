@@ -1,6 +1,7 @@
 package it.ingsoftw.progetto.server.database;
 
 import it.ingsoftw.progetto.common.IAlarmCallback;
+import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.MonitorData;
 
 public interface IRecoveryDatabase {
@@ -9,12 +10,14 @@ public interface IRecoveryDatabase {
 
     String addRecovery(String patientId, String roomId);
 
-    void updateVsMonitor(String machineId, MonitorData data);
+    void updateMonitorData(String machineId, MonitorData data);
 
     MonitorData getCurrentVsData(String recoveryId);
     void addAlarmHook(String recoveryId, IAlarmCallback callback);
-
     void removeAlarmHook(String recoveryId, IAlarmCallback callback);
+
+    void addMonitorDataUpdatedCallbackHook(String recoveryId, IMonitorDataUpdatedCallback callback);
+    void removeMonitorDataUpdatedCallbackHook(String recoveryId, IMonitorDataUpdatedCallback callback);
 
     boolean startAlarm(String machineId, IAlarmCallback.AlarmData data);
     boolean stopAlarm(String machineId, int alarmId);
