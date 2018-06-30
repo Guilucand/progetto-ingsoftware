@@ -10,26 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.xml.crypto.Data;
+
 class UsersDatabase implements IUsersDatabase {
 
     Connection connection;
 
-    public UsersDatabase(Connection connection) throws SQLException {
+    public UsersDatabase(Connection connection) {
         this.connection = connection;
-        createDatabase();
+        DatabaseUtils.createDatabaseFromSchema(connection, "schema/users.sql");
     }
-
-    private void createDatabase() throws SQLException {
-
-        String schema = "";
-        try {
-            schema = new String(getClass().getResourceAsStream("schema/users.sql").readAllBytes());
-        } catch (IOException ignored) {
-        }
-        Statement dbCreateStatement = connection.createStatement();
-        dbCreateStatement.executeUpdate(schema);
-    }
-
 
     @Override
     public boolean addUser(User user, Password tempPassword) throws SQLException{

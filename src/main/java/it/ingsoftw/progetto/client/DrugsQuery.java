@@ -110,12 +110,13 @@ public class DrugsQuery {
                         getStringFromJsonElement(drug.get("sm_field_descrizione_ditta")),
                         getStringFromJsonElement(drug.get("sm_field_descrizione_farmaco")),
                         getStringFromJsonElement(drug.get("sm_field_descrizione_confezione")),
-                        getStringFromJsonElement(drug.get("sm_field_codice_farmaco")),
-                        getStringFromJsonElement(drug.get("sm_field_codice_confezione")),
+//                        getStringFromJsonElement(drug.get("sm_field_codice_farmaco")),
+//                        getStringFromJsonElement(drug.get("sm_field_codice_confezione")),
                         getStringFromJsonElement(drug.get("sm_field_codice_atc")),
                         getStringFromJsonElement(drug.get("sm_field_descrizione_atc")),
-                        getStringFromJsonElement(drug.get("sm_field_aic")),
-                        getStringFromJsonElement(drug.get("sm_field_chiave_confezione"))));
+                        getStringFromJsonElement(drug.get("sm_field_aic"))
+//                        getStringFromJsonElement(drug.get("sm_field_chiave_confezione"))
+                ));
             }
         } catch (IOException e) {
             return null;
