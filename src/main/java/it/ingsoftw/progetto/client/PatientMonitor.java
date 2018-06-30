@@ -70,6 +70,7 @@ public class PatientMonitor extends JPanel{
         public JButton assignButton;
 
         public EmptyRoom() {
+
             assignButton.addActionListener(e -> {
                 try {
                     new AddPatient(room.addRecovery());

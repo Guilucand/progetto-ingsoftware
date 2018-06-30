@@ -15,13 +15,30 @@ public class AddPatient extends JFrame{
     private JTextField nameTextField;
     private JTextField locationTextField;
     private JTextField surnameTextField;
-    private JTextField dateTextField;
     private JButton aggiungiRicoveroButton;
     private JPanel panelDate;
     private IRecoveryCreator recoveryCreator;
+    private JPanel Panel1;
 
     public AddPatient(IRecoveryCreator recoveryCreator) {
+
+        super("Aggiunta-ricovero");
+
         this.recoveryCreator = recoveryCreator;
+
+        this.setContentPane(MainPanel);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+
+        Dimension preferredDimension = new Dimension(600, 400);
+        this.MainPanel.setPreferredSize(preferredDimension);
+
+        this.pack();
+
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
+
+        this.setVisible(true);
 
 
         /*JDateComponentFactory jdcf = new JDateComponentFactory();
@@ -40,6 +57,16 @@ public class AddPatient extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                 //recoveryCreator.
+
+                String NomePaziente = nameTextField.getText();
+                String CognomePaziente = surnameTextField.getText();
+                String CodiceFiscale = cfTextField.getText();
+                String LuogoNascita = locationTextField.getName();
+
+                System.out.println(NomePaziente+" "+CognomePaziente+" "+CodiceFiscale+" "+LuogoNascita);
+
+                //iMonitor.
+
 
             }
         });
