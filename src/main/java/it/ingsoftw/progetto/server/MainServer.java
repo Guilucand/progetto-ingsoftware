@@ -44,18 +44,18 @@ public class MainServer {
         IRecoveryDatabase recoveryDatabase = databaseConnection.getRecoveryInterface();
         IPatientsDatabase patientsDatabase = databaseConnection.getPatientsInterface();
 
-        DrugsQuery q = new DrugsQuery();
-        Drug[] d = q.queryDatabase("Va", DrugsQuery.QueryType.Drug, true);
-
-        for (Drug dr : d) {
-            System.out.println(dr.commercialName + " -> " + dr.company + " : " + dr.activePrinciple);
-            try {
-                databaseConnection.getDrugsDatabase().deleteDrug(dr);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        }
+//        DrugsQuery q = new DrugsQuery();
+//        Drug[] d = q.queryDatabase("Va", DrugsQuery.QueryType.Drug, true);
+//
+//        for (Drug dr : d) {
+//            System.out.println(dr.commercialName + " -> " + dr.company + " : " + dr.activePrinciple);
+//            try {
+//                databaseConnection.getDrugsDatabase().deleteDrug(dr);
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
 
 
 

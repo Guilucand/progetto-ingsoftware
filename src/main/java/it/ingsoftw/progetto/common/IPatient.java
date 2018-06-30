@@ -49,5 +49,5 @@ public interface IPatient extends Remote {
      */
     void setAlarmCallback(IAlarmCallback callback) throws RemoteException;
 
-    void addDrugPrescription();
+    void addDrugPrescription() throws RemoteException;
 }

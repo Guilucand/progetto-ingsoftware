@@ -60,4 +60,9 @@ public class ServerPatient extends UnicastRemoteObject implements IPatient {
         alarmCallback = callback;
         database.addAlarmHook(recoveryId, alarmCallback);
     }
+
+    @Override
+    public void addDrugPrescription() {
+
+    }
 }

@@ -46,6 +46,7 @@ public class Storico extends  JFrame{
         this.ScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.ScrollPane.setBounds(50, 30, 300, 50);
 
+        this.scrollpanel1 = new JScrollPane();
         this.scrollpanel1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.scrollpanel1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.scrollpanel1.setBounds(50, 30, 300, 50);

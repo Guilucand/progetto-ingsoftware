@@ -15,12 +15,12 @@ public class MainClient {
     public static void main(String[] args) throws RemoteException {
 
         // TEST
-        DrugsQuery q = new DrugsQuery();
-        Drug[] d = q.queryDatabase("Va", DrugsQuery.QueryType.Drug, true);
-
-        for (Drug dr : d) {
-            System.out.println(dr.commercialName + " -> " + dr.company + " : " + dr.activePrinciple);
-        }
+//        DrugsQuery q = new DrugsQuery();
+//        Drug[] d = q.queryDatabase("Va", DrugsQuery.QueryType.Drug, true);
+//
+//        for (Drug dr : d) {
+//            System.out.println(dr.commercialName + " -> " + dr.company + " : " + dr.activePrinciple);
+//        }
 
 
         System.setProperty("sun.java2d.uiScale","1");
