@@ -2,9 +2,6 @@ package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.IMonitor;
 import it.ingsoftw.progetto.common.IPatient;
-import org.jdatepicker.JDateComponentFactory;
-import org.jdatepicker.JDatePanel;
-import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,11 +34,13 @@ public class AddPatient extends JFrame{
 
 
 
+
+
         aggiungiRicoveroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-
+                //iMonitor.
 
             }
         });
