@@ -1,16 +1,16 @@
 package it.ingsoftw.progetto.server.database;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.ingsoftw.progetto.common.EditablePatientData;
-import it.ingsoftw.progetto.common.EditableUser;
 import it.ingsoftw.progetto.common.PatientData;
-import it.ingsoftw.progetto.common.User;
 
 public class PatientsDatabase implements IPatientsDatabase {
 
@@ -31,8 +31,8 @@ public class PatientsDatabase implements IPatientsDatabase {
         addPatient.setString(1, patient.getCode());
         addPatient.setString(2, patient.getName());
         addPatient.setString(3, patient.getSurname());
-        addPatient.setString(4, patient.getBirthPlace());
-        addPatient.setDate(5, patient.getBirthDate());
+        addPatient.setDate(4, Date.valueOf(patient.getBirthDate()));
+        addPatient.setString(5, patient.getBirthPlace());
 
         try {
             return addPatient.executeUpdate() > 0;
@@ -71,7 +71,7 @@ public class PatientsDatabase implements IPatientsDatabase {
                 result.getString(1),
                 result.getString(2),
                 result.getString(3),
-                result.getDate(4),
+                result.getDate(4).toLocalDate(),
                 result.getString(5));
     }
 
@@ -89,6 +89,27 @@ public class PatientsDatabase implements IPatientsDatabase {
         ResultSet result = queryUser.executeQuery();
 
         return getPatientDataFromResultSet(result);
+    }
+
+    @Override
+    public List<String> searchPatientsById(String patientId) throws SQLException {
+        String sql =
+                "SELECT code FROM patient " +
+                        "WHERE " +
+                        "code LIKE ?" +
+                        ";";
+
+        PreparedStatement queryUser = connection.prepareStatement(sql);
+        queryUser.setString(1, patientId + "%");
+        ResultSet result = queryUser.executeQuery();
+
+        List<String> patientsIds = new ArrayList<>();
+
+        while (result.next()) {
+            patientsIds.add(result.getString(1));
+        }
+
+        return patientsIds;
     }
 
     @Override
@@ -110,8 +131,8 @@ public class PatientsDatabase implements IPatientsDatabase {
         addPatient.setString(1, updatedPatientData.getCode());
         addPatient.setString(2, updatedPatientData.getName());
         addPatient.setString(3, updatedPatientData.getSurname());
-        addPatient.setString(4, updatedPatientData.getBirthPlace());
-        addPatient.setDate(5, updatedPatientData.getBirthDate());
+        addPatient.setDate(4, Date.valueOf(updatedPatientData.getBirthDate()));
+        addPatient.setString(5, updatedPatientData.getBirthPlace());
 
         // Imposto la chiave primaria del paziente prima della modifica
         addPatient.setString(6, updatedPatientData.getInternalReference());

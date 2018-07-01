@@ -8,4 +8,5 @@ public interface IDatabaseConnection {
     IRecoveryDatabase getRecoveryInterface();
     IDrugsDatabase getDrugsDatabase();
 
+    IMessageDatabase getMessageDatabase();
 }

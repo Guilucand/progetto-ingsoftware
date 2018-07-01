@@ -3,13 +3,13 @@ package it.ingsoftw.progetto.common;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public interface IAlarmCallback extends Remote {
 
     class AlarmData implements Serializable {
 
-        public AlarmData(AlarmLevel level, String description, Date startTime, int alarmId) {
+        public AlarmData(AlarmLevel level, String description, LocalDateTime startTime, int alarmId) {
             this.level = level;
             this.description = description;
             this.startTime = startTime;
@@ -24,7 +24,7 @@ public interface IAlarmCallback extends Remote {
             return description;
         }
 
-        public Date getStartTime() {
+        public LocalDateTime getStartTime() {
             return startTime;
         }
 
@@ -34,7 +34,7 @@ public interface IAlarmCallback extends Remote {
 
         AlarmLevel level;
         String description;
-        Date startTime;
+        LocalDateTime startTime;
         int alarmId;
     }
 

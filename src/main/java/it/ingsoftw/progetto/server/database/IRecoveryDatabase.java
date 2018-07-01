@@ -6,7 +6,7 @@ import it.ingsoftw.progetto.common.MonitorData;
 
 public interface IRecoveryDatabase {
 
-    void setRoomMachineId(String roomId, String machineId);
+    boolean setRoomMachineId(String roomId, String machineId);
 
     String addRecovery(String patientId, String roomId);
 

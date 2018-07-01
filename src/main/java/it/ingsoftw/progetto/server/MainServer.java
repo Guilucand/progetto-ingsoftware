@@ -2,8 +2,8 @@ package it.ingsoftw.progetto.server;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import it.ingsoftw.progetto.client.DrugsQuery;
 import it.ingsoftw.progetto.common.Drug;
@@ -73,16 +73,25 @@ public class MainServer {
                     "CRCNDR96T05A703M",
                     "Andrea",
                     "Cracco",
-                    new Date(1996, 12, 5),
+                     LocalDate.of(1996, 12, 5),
                     "Bassano del Grappa"));
+
+            for (int i = 1; i <= 10; i++) {
+                recoveryDatabase.setRoomMachineId(String.valueOf(i), String.valueOf(i));
+            }
+
+
+            for (int i = 1; i <= 10; i+= 2) {
+                patientsDatabase.addPatient(new PatientData("PATIENT"+ String.valueOf(i), "A" + i, "B" + i, LocalDate.now(), "C"+i));
+                recoveryDatabase.addRecovery("PATIENT" + String.valueOf(i), String.valueOf(i));
+            }
+
+
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
-
-        for (int i = 1; i <= 10; i+= 2)
-            recoveryDatabase.addRecovery("PATIENT" + String.valueOf(i), String.valueOf(i));
 //            recoveryDatabase.setRoomMachineId(String.valueOf(i+1), String.valueOf(i+1));
 
 

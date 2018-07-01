@@ -24,7 +24,7 @@ class UsersDatabase implements IUsersDatabase {
     @Override
     public boolean addUser(User user, Password tempPassword) throws SQLException{
         String sql =
-                "INSERT into users (username, password, name, surname, email, usertype) " +
+                "INSERT INTO users (username, password, name, surname, email, usertype) " +
                 "VALUES (?, ?, ?, ?, ?, CAST (? AS privilege) );";
 
         PreparedStatement addUser = connection.prepareStatement(sql);
@@ -138,7 +138,7 @@ class UsersDatabase implements IUsersDatabase {
         String sql =
                 "UPDATE users SET (username, name, surname, email, usertype)" +
                 "= (?, ?, ?, ?, CAST (? AS privilege) ) " +
-                "WHERE username = ?";
+                "WHERE username = ?;";
 
         PreparedStatement addUser = connection.prepareStatement(sql);
         addUser.setString(1, updatedUser.getId());

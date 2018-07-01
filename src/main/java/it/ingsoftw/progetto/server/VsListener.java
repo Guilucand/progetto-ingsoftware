@@ -2,7 +2,7 @@ package it.ingsoftw.progetto.server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -58,7 +58,7 @@ public class VsListener extends UnicastRemoteObject implements IVSListener {
         System.out.println("Alarm from monitor " + id + ": " + description + " " + level.toString());
         int alarmId = alarmsId++;
         alarms.add(alarmId);
-        database.startAlarm(id, new IAlarmCallback.AlarmData(level, description, new Date(), alarmId));
+        database.startAlarm(id, new IAlarmCallback.AlarmData(level, description, LocalDateTime.now(), alarmId));
         return alarmId;
     }
 }

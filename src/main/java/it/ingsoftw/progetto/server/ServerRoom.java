@@ -6,26 +6,35 @@ import java.rmi.server.UnicastRemoteObject;
 import it.ingsoftw.progetto.common.IPatient;
 import it.ingsoftw.progetto.common.IRecoveryCreator;
 import it.ingsoftw.progetto.common.IRoom;
-import it.ingsoftw.progetto.common.PatientData;
+import it.ingsoftw.progetto.server.database.IMessageDatabase;
+import it.ingsoftw.progetto.server.database.IPatientsDatabase;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 
 public class ServerRoom extends UnicastRemoteObject implements IRoom {
 
     private ClientStatus status;
     private IRecoveryDatabase recoveryDatabase;
+    private IPatientsDatabase patientsDatabase;
+    private IMessageDatabase messageDatabase;
     private int roomId;
     private IPatient currentPatient;
 
-    protected ServerRoom(ClientStatus status, IRecoveryDatabase recoveryDatabase, int roomId) throws RemoteException {
+    protected ServerRoom(ClientStatus status,
+                         IRecoveryDatabase recoveryDatabase,
+                         IPatientsDatabase patientsDatabase,
+                         IMessageDatabase messageDatabase,
+                         int roomId) throws RemoteException {
         super(ServerConfig.port);
         this.status = status;
         this.recoveryDatabase = recoveryDatabase;
+        this.patientsDatabase = patientsDatabase;
+        this.messageDatabase = messageDatabase;
         this.roomId = roomId;
     }
 
     @Override
     public IRecoveryCreator addRecovery() throws RemoteException {
-        return null;
+        return new ServerRecoveryCreator(status, patientsDatabase, recoveryDatabase, roomId);
     }
 
     @Override
@@ -36,7 +45,10 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
     @Override
     public IPatient getCurrentPatient() throws RemoteException {
         if (currentPatient == null)
-            currentPatient = new ServerPatient(status, recoveryDatabase, recoveryDatabase.mapRoomToRecovery(String.valueOf(roomId)));
+            currentPatient = new ServerRecovery(status,
+                    recoveryDatabase,
+                    messageDatabase,
+                    recoveryDatabase.mapRoomToRecovery(String.valueOf(roomId)));
 
         return currentPatient;
     }

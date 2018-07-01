@@ -1,11 +1,11 @@
 package it.ingsoftw.progetto.common;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class DrugPrescription implements Serializable {
 
-    public DrugPrescription(Drug drug, Date prescriptionDate,
+    public DrugPrescription(Drug drug, LocalDate prescriptionDate,
                             int durationDays, int dailyDoses,
                             String qtyPerDose, String notes,
                             User doctor) {
@@ -19,7 +19,7 @@ public class DrugPrescription implements Serializable {
     }
 
     public final Drug drug;
-    public final Date prescriptionDate;
+    public final LocalDate prescriptionDate;
     public final int durationDays;
     public final int dailyDoses;
     public final String qtyPerDose;

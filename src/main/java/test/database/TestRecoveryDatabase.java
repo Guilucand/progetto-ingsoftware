@@ -25,8 +25,9 @@ public class TestRecoveryDatabase implements IRecoveryDatabase {
     Map<String, List<IMonitorDataUpdatedCallback>> dataCallbacks = new HashMap<>();
 
     @Override
-    public void setRoomMachineId(String roomId, String machineId) {
+    public boolean setRoomMachineId(String roomId, String machineId) {
 //        roomMachineMapping.put(roomId, machineId);
+        return true;
     }
 
     @Override

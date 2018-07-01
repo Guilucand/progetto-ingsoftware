@@ -1,6 +1,5 @@
 package it.ingsoftw.progetto.common;
 
-import java.sql.Date;
 
 
 /**
