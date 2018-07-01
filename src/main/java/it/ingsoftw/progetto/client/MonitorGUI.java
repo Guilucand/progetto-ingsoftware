@@ -1,9 +1,7 @@
 package it.ingsoftw.progetto.client;
 
-import it.ingsoftw.progetto.common.IAdmin;
-import it.ingsoftw.progetto.common.IClientRmiFactory;
-import it.ingsoftw.progetto.common.ILogin;
-import it.ingsoftw.progetto.common.IMonitor;
+
+import it.ingsoftw.progetto.common.*;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

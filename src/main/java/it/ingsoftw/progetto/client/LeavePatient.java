@@ -35,7 +35,7 @@ public class LeavePatient extends JFrame{
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 
-                if ( JOptionPane.showConfirmDialog(null, "Sei sicuro di voler chiudere il programma Nonostante non isa stata ancora inviata la lettera di dimissione?") == 0){
+                if ( JOptionPane.showConfirmDialog(null, "Sei sicuro di voler chiudere il programma Nonostante non sia stata ancora inviata la lettera di dimissione?") == 0){
 
                     dispose();
 

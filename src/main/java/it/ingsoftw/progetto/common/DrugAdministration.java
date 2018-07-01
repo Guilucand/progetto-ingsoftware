@@ -1,9 +1,10 @@
 package it.ingsoftw.progetto.common;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class DrugAdministration {
+public class DrugAdministration implements Serializable {
     public DrugAdministration(int prescriptionKey,
                               LocalDateTime administrationDateTime,
                               String qty, String notes,
