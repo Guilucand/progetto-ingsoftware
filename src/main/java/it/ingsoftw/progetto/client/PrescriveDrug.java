@@ -72,6 +72,7 @@ public class PrescriveDrug extends JFrame{
 
             initTable();
 
+            listafarmaci.clear();
             for(Drug drug : drugListDB){
 
                 listafarmaci.addElement(drug);
@@ -86,7 +87,6 @@ public class PrescriveDrug extends JFrame{
             String durataPrescrizione = therapyDurationTextField.getText();
             String doseGiornalieraPrescrizione = dailyDosesTextField.getText();
             String quantitàFarmaco = quantityTextField.getSelectedText();
-
 
             System.out.println("Salvataggio prescrizione");
 
