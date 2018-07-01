@@ -211,7 +211,7 @@ public class PatientMonitor extends JPanel{
         this.repaint();
     }
 
-    public PatientMonitor(int roomNumber, IRoom room,ILogin.LoginStatus status) throws RemoteException {
+    public PatientMonitor(int roomNumber, IRoom room,ILogin.LoginStatus status,String user) throws RemoteException {
 
         this.roomNumber = roomNumber;
 
@@ -269,7 +269,11 @@ public class PatientMonitor extends JPanel{
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 if (e.getButton() == MouseEvent.BUTTON1){
-                    new Storico();
+                    try {
+                        new Storico(room,status,user);
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });

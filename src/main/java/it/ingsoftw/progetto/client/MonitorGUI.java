@@ -41,18 +41,19 @@ public class MonitorGUI extends JFrame{
         ((javax.swing.border.TitledBorder) this.MainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
 
         this.setContentPane(MainPanel);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         this.addWindowListener(new java.awt.event.WindowAdapter(){
 
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 
-                if ( JOptionPane.showConfirmDialog(null, "Sei sicuro di voler chiudere il programma?", "Really Closing?", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE) == 0){
+                if (JOptionPane.showConfirmDialog(null, "Sei sicuro di voler chiudere il programma?") == 0){
 
                     Chiudi();
 
                 }
+
             }
 
         });
@@ -75,8 +76,8 @@ public class MonitorGUI extends JFrame{
 
         for(int i = 0; i<4; i++){
 
-            TopPanel.add(new PatientMonitor(i+1, iMonitorInterface.getRoomByNumber(i+1),status),i);
-            MidPanel.add(new PatientMonitor(i+5, iMonitorInterface.getRoomByNumber(i+5),status),i);
+            TopPanel.add(new PatientMonitor(i+1, iMonitorInterface.getRoomByNumber(i+1),status,username),i);
+            MidPanel.add(new PatientMonitor(i+5, iMonitorInterface.getRoomByNumber(i+5),status,username),i);
             if(i == 0){
 
                 EmptyPanelAdmin epa = new EmptyPanelAdmin(status,adminInterface);
@@ -103,7 +104,7 @@ public class MonitorGUI extends JFrame{
                 BottomPanel.add(epa.getPanel(), i);
 
             }
-            else BottomPanel.add(new PatientMonitor(i+8,iMonitorInterface.getRoomByNumber(i+8),status),i);
+            else BottomPanel.add(new PatientMonitor(i+8,iMonitorInterface.getRoomByNumber(i+8),status,username),i);
 
         }
 
