@@ -180,6 +180,7 @@
         <properties>
           <editable value="false"/>
           <enabled value="true"/>
+          <text value=""/>
         </properties>
       </component>
       <scrollpane id="e537b" binding="scrollpaneTable">
