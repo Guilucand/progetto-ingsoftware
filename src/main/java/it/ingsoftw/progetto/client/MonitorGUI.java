@@ -80,7 +80,7 @@ public class MonitorGUI extends JFrame{
             MidPanel.add(new PatientMonitor(i+5, iMonitorInterface.getRoomByNumber(i+5),status,username),i);
             if(i == 0){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin(status,adminInterface);
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(status,adminInterface,username);
 
                 if(this.status == ILogin.LoginStatus.PRIMARY_LOGGED || this.status == ILogin.LoginStatus.ADMIN_LOGGED) {
                     BottomPanel.add(epa.getPanel(), i);
@@ -100,6 +100,7 @@ public class MonitorGUI extends JFrame{
             else if(i == 3){
 
                 EmptyPanelAdmin epa = new EmptyPanelAdmin(this,status,username,adminInterface);
+                epa.getPanel().remove(epa.getButtonreport());
 
                 BottomPanel.add(epa.getPanel(), i);
 

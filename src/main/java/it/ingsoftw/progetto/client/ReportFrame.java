@@ -42,12 +42,25 @@ public class ReportFrame extends JFrame{
 
     public ReportFrame(ILogin.LoginStatus status, String username) {
 
+        super("Pannello dei Report");
+
+        this.setContentPane(MainPanel);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         if(!(status == ILogin.LoginStatus.PRIMARY_LOGGED)) stampaReportButton.setVisible(false);
 
+        Dimension preferredDimension = new Dimension(1200, 800);
+        this.MainPanel.setPreferredSize(preferredDimension);
+
+        this.pack();
+
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
+
+        this.setVisible(true);
+
+
         //Aggiungi la lista dei ricoveri;
-
-
-
 
 
         stampaReportButton.addActionListener(new ActionListener() {

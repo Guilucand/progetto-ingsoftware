@@ -49,6 +49,7 @@ public class EmptyPanelAdmin extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                System.out.println("aperto il frame dei report");
                 new ReportFrame(status,username);
 
             }
@@ -56,7 +57,7 @@ public class EmptyPanelAdmin extends JPanel{
     }
 
 
-    public EmptyPanelAdmin(ILogin.LoginStatus status,IAdmin adminInterface){
+    public EmptyPanelAdmin(ILogin.LoginStatus status,IAdmin adminInterface, String username){
 
         this.status=status;
         this.adminInterface = adminInterface;
@@ -75,6 +76,16 @@ public class EmptyPanelAdmin extends JPanel{
             }
         });
 
+        vediReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                System.out.println("aperto il frame dei report");
+                new ReportFrame(status,username);
+
+            }
+        });
+
 
     }
 
@@ -87,6 +98,12 @@ public class EmptyPanelAdmin extends JPanel{
     public JButton getButton(){
 
         return openAdminPanel;
+
+    }
+
+    public JButton getButtonreport(){
+
+        return this.vediReportButton;
 
     }
 
