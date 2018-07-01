@@ -4,6 +4,8 @@ package it.ingsoftw.progetto.client;
 
 
 import it.ingsoftw.progetto.common.*;
+import it.ingsoftw.progetto.common.messages.MessageObject;
+import it.ingsoftw.progetto.common.messages.MessagesChangedCallback;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -74,7 +76,12 @@ public class PatientMonitor extends JPanel{
 
             assignButton.addActionListener(e -> {
                 try {
-                    new AddPatient(room.addRecovery());
+                    new AddPatient(room.addRecovery(), ()-> {
+                        if (room.hasPatient()) {
+                            patient = room.getCurrentPatient();
+                            setupPatient();
+                        }
+                    });
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
@@ -197,6 +204,19 @@ public class PatientMonitor extends JPanel{
 
             }
         });
+
+        // MESSAGES
+
+        patient.setMessagesChangedCallback(new MessagesChangedCallback() {
+            @Override
+            public void messagesChanged() throws RemoteException {
+                System.out.println("Current messages: ");
+                for (MessageObject obj : patient.getMessages()) {
+                    System.out.println(obj.getMessageType());
+                }
+            }
+        });
+
 
 
         cardLayout.show(mainPanel, PATIENTROOM);
@@ -373,7 +393,7 @@ public class PatientMonitor extends JPanel{
             for(IAlarmCallback.AlarmData ad : keyset){
 
                 if(ad_min == null){ad_min = ad;}
-                else if(ad.getStartTime().getTime() < ad_min.getStartTime().getTime()){ad_min = ad;}
+                else if(ad.getStartTime().getNano() < ad_min.getStartTime().getNano()){ad_min = ad;}
 
             }
 
