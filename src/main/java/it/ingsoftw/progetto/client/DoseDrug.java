@@ -1,14 +1,22 @@
 package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.Drug;
+import it.ingsoftw.progetto.common.DrugAdministration;
+import it.ingsoftw.progetto.common.DrugPrescription;
+import it.ingsoftw.progetto.common.IPatient;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class DoseDrug extends JFrame{
     private JPanel MainPanel;
@@ -22,10 +30,12 @@ public class DoseDrug extends JFrame{
     private Drug selectedDrug;
     private Drug[] drugListDB;
     private DefaultListModel listafarmaci;
+    private IPatient patient;
 
-    public DoseDrug() {
+    public DoseDrug(IPatient patient) {
 
         super("Somministrazione-Farmaci");
+        this.patient = patient;
 
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -52,6 +62,19 @@ public class DoseDrug extends JFrame{
         this.minuteComboBox.setModel(cbm);
 
         this.listafarmaci = new DefaultListModel<>();
+
+        List<DrugPrescription> drugPrescriptionList = new ArrayList<>();
+        try {
+            drugPrescriptionList = patient.getCurrentPrescriptions();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+
+        for (int i = 0; i < drugPrescriptionList.size(); i++) {
+            this.listafarmaci.add(i, drugPrescriptionList.get(i));
+        }
+
         this.drugsList.setModel(listafarmaci);
 
 
@@ -84,6 +107,7 @@ public class DoseDrug extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
+//                patient.addDrugAdministration(new DrugAdministration(, , , , , , ));
                 System.out.println("aggiungi somministrazione");
             }
         });

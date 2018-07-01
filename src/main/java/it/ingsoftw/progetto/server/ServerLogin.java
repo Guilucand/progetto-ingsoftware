@@ -62,6 +62,11 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
     }
 
     @Override
+    public User getLoggedUser() {
+        return status.getLoggedUser();
+    }
+
+    @Override
     public boolean doLogout() {
         status.setLoggedUser(null);
         return true;

@@ -6,7 +6,9 @@ public interface IDatabaseConnection {
     IUsersDatabase getUsersInterface() throws RemoteException;
     IPatientsDatabase getPatientsInterface();
     IRecoveryDatabase getRecoveryInterface();
-    IDrugsDatabase getDrugsDatabase();
+    IDrugsDatabase getDrugsInterface();
 
-    IMessageDatabase getMessageDatabase();
+    IMessageDatabase getMessageInterface();
+
+    IPrescriptionDatabase getPrescriptionInterface();
 }

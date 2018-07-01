@@ -55,9 +55,27 @@ public interface IPatient extends Remote {
      */
     void setAlarmCallback(IAlarmCallback callback) throws RemoteException;
 
-    void addDrugPrescription() throws RemoteException;
 
-    void addDrugAdministration() throws RemoteException;
+    /**
+     * Aggiunge una prescrizione
+     * @param prescription la prescrizione
+     * @throws RemoteException
+     */
+    void addDrugPrescription(DrugPrescription prescription) throws RemoteException;
+
+    /**
+     * Aggiunge una somministrazione
+     * @param administration la somministrazione
+     * @throws RemoteException
+     */
+    void addDrugAdministration(DrugAdministration administration) throws RemoteException;
+
+    /**
+     * Ritorna le prescrizioni correnti
+     * @return lista di prescrizioni
+     * @throws RemoteException
+     */
+    List<DrugPrescription> getCurrentPrescriptions() throws RemoteException;
 
     /**
      * Ritorna la lista dei messaggi

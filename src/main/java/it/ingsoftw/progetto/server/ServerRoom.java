@@ -8,6 +8,7 @@ import it.ingsoftw.progetto.common.IRecoveryCreator;
 import it.ingsoftw.progetto.common.IRoom;
 import it.ingsoftw.progetto.server.database.IMessageDatabase;
 import it.ingsoftw.progetto.server.database.IPatientsDatabase;
+import it.ingsoftw.progetto.server.database.IPrescriptionDatabase;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 
 public class ServerRoom extends UnicastRemoteObject implements IRoom {
@@ -16,6 +17,7 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
     private IRecoveryDatabase recoveryDatabase;
     private IPatientsDatabase patientsDatabase;
     private IMessageDatabase messageDatabase;
+    private IPrescriptionDatabase prescriptionDatabase;
     private int roomId;
     private IPatient currentPatient;
 
@@ -23,12 +25,14 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
                          IRecoveryDatabase recoveryDatabase,
                          IPatientsDatabase patientsDatabase,
                          IMessageDatabase messageDatabase,
+                         IPrescriptionDatabase prescriptionDatabase,
                          int roomId) throws RemoteException {
         super(ServerConfig.port);
         this.status = status;
         this.recoveryDatabase = recoveryDatabase;
         this.patientsDatabase = patientsDatabase;
         this.messageDatabase = messageDatabase;
+        this.prescriptionDatabase = prescriptionDatabase;
         this.roomId = roomId;
     }
 
@@ -48,6 +52,7 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
             currentPatient = new ServerRecovery(status,
                     recoveryDatabase,
                     messageDatabase,
+                    prescriptionDatabase,
                     recoveryDatabase.mapRoomToRecovery(String.valueOf(roomId)));
 
         return currentPatient;
