@@ -74,7 +74,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
         String sql =
                 "UPDATE room SET (machine) " +
-                        "= ROW(?) " +
+                        "= (?) " +
                         "WHERE number = ?;";
         try {
             PreparedStatement setRoomMachine = connection.prepareStatement(sql);
