@@ -51,6 +51,7 @@ public class PatientMonitor extends JPanel{
     private JButton modificaButton;
     private JLabel alarmLabel;
     private JLabel timerLabel;
+    private JButton prescriviButton;
     private int roomNumber;
     private IPatient patient;
     private EmptyRoom emptyRoom;
@@ -210,7 +211,7 @@ public class PatientMonitor extends JPanel{
         this.repaint();
     }
 
-    public PatientMonitor(int roomNumber, IRoom room) throws RemoteException {
+    public PatientMonitor(int roomNumber, IRoom room,ILogin.LoginStatus status) throws RemoteException {
 
         this.roomNumber = roomNumber;
 
@@ -226,6 +227,12 @@ public class PatientMonitor extends JPanel{
         this.mainPanel = new JPanel(cardLayout = new CardLayout());
 
         this.pop = new JPopupMenu();
+
+        if(status == ILogin.LoginStatus.NURSE_LOGGED) {
+
+            prescriviButton.setText("Somministra");
+
+        }
 
 
         emptyRoom = new EmptyRoom();
@@ -291,6 +298,23 @@ public class PatientMonitor extends JPanel{
                 super.mouseExited(e);
 
                 pop.setVisible(false);
+
+            }
+        });
+        prescriviButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if(status == ILogin.LoginStatus.NURSE_LOGGED){
+
+                    new DoseDrug();
+
+
+                }else if(status == ILogin.LoginStatus.MEDIC_LOGGED || status == ILogin.LoginStatus.ADMIN_LOGGED ||status == ILogin.LoginStatus.PRIMARY_LOGGED){
+
+                    new PrescriveDrug();
+
+                }
 
             }
         });

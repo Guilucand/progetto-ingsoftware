@@ -75,8 +75,8 @@ public class MonitorGUI extends JFrame{
 
         for(int i = 0; i<4; i++){
 
-            TopPanel.add(new PatientMonitor(i+1, iMonitorInterface.getRoomByNumber(i+1)),i);
-            MidPanel.add(new PatientMonitor(i+5, iMonitorInterface.getRoomByNumber(i+5)),i);
+            TopPanel.add(new PatientMonitor(i+1, iMonitorInterface.getRoomByNumber(i+1),status),i);
+            MidPanel.add(new PatientMonitor(i+5, iMonitorInterface.getRoomByNumber(i+5),status),i);
             if(i == 0){
 
                 EmptyPanelAdmin epa = new EmptyPanelAdmin(status,adminInterface);
@@ -103,7 +103,7 @@ public class MonitorGUI extends JFrame{
                 BottomPanel.add(epa.getPanel(), i);
 
             }
-            else BottomPanel.add(new PatientMonitor(i+8,iMonitorInterface.getRoomByNumber(i+8)),i);
+            else BottomPanel.add(new PatientMonitor(i+8,iMonitorInterface.getRoomByNumber(i+8),status),i);
 
         }
 
