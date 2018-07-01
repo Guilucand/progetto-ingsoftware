@@ -69,9 +69,6 @@ public class DoseDrug extends JFrame{
         System.out.println(data.toString());
 
 
-
-
-
         Dimension preferredDimension = new Dimension(900, 750);
         this.MainPanel.setPreferredSize(preferredDimension);
 
@@ -87,10 +84,7 @@ public class DoseDrug extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-
-
                 System.out.println("aggiungi somministrazione");
-
             }
         });
         drugsList.addMouseListener(new MouseAdapter() {
