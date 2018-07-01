@@ -13,5 +13,5 @@ public final class ServerConfig {
     /**
      * Il nome DNS del server
      */
-    public static String hostname = "localhost";//"192.168.1.72";
+    public static String hostname = "localhost";//192.168.1.75";//"192.168.1.72";
 }
