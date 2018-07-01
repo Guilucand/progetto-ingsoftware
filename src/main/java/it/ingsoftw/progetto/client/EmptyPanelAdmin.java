@@ -15,11 +15,12 @@ public class EmptyPanelAdmin extends JPanel{
     private JButton openAdminPanel;
     private JPanel MainPanel;
     private JButton logOutButton;
+    private JButton vediReportButton;
     private MonitorGUI Monitor;
     private ILogin.LoginStatus status;
     private IAdmin adminInterface;
 
-    public EmptyPanelAdmin(MonitorGUI mgui , ILogin.LoginStatus status , IAdmin adminInterface){
+    public EmptyPanelAdmin(MonitorGUI mgui , ILogin.LoginStatus status,String username , IAdmin adminInterface){
 
         this.Monitor=mgui;
         this.status=status;
@@ -40,6 +41,15 @@ public class EmptyPanelAdmin extends JPanel{
                     Chiudi(mgui);
 
                 }
+
+            }
+        });
+
+        vediReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                new ReportFrame(status,username);
 
             }
         });

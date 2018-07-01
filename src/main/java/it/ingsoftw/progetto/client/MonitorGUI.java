@@ -99,7 +99,7 @@ public class MonitorGUI extends JFrame{
             }
             else if(i == 3){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin(this,status,adminInterface);
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(this,status,username,adminInterface);
 
                 BottomPanel.add(epa.getPanel(), i);
 

@@ -63,6 +63,8 @@ public class PatientMonitor extends JPanel{
     private JPanel mainPanel;
     private Thread sound;
     private IRoom room;
+    private boolean showpop = true;
+    private int temporimanente;
 
     final static String EMPTYROOM = "emptyRoomPanel";
     final static String PATIENTROOM = "fullRoomPanel";
@@ -193,6 +195,11 @@ public class PatientMonitor extends JPanel{
 
                         alarmList.get(ad).stop();
                         alarmList.remove(ad);
+                        temporimanente=Integer.parseInt(timerLabel.getText());
+                        timerLabel.setText("");
+
+                        //Aggiungere alla lista delle cose da fare un parametro che è completare lo spegnimento da parte del medico
+
 
                     }
 
@@ -204,6 +211,8 @@ public class PatientMonitor extends JPanel{
 
             }
         });
+
+
 
         // MESSAGES
 
@@ -304,6 +313,8 @@ public class PatientMonitor extends JPanel{
         else
             setupPatient();
 
+        boolean b = true;
+
         alarmLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -311,17 +322,23 @@ public class PatientMonitor extends JPanel{
 
                 System.out.println("mouse entrato");
 
-                addPopup();
-                pop.show(alarmLabel,1,1);
+                if(showpop){
 
+                    addPopup();
+                    pop.show(alarmLabel,alarmLabel.getWidth(),alarmLabel.getHeight());
+                    showpop = false;
+
+                }
             }
         });
+
         alarmLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
 
                 pop.setVisible(false);
+                showpop=true;
 
             }
         });
@@ -384,7 +401,7 @@ public class PatientMonitor extends JPanel{
 
             counter--;
 
-            int mincounter;
+            /*int mincounter;
 
             Set<IAlarmCallback.AlarmData> keyset = alarmList.keySet();
 
@@ -403,17 +420,17 @@ public class PatientMonitor extends JPanel{
             TimeClass tc1 = (TimeClass)al[0];
 
             mincounter = tc1.getCounter();
+            */
 
+            if(counter > 0){
 
-            if(mincounter > 0){
-
-                timerLabel.setText(""+mincounter);
+                timerLabel.setText(""+counter);
                 timerLabel.setForeground(Color.BLUE);
 
             }else{
 
 
-                timerLabel.setText(""+mincounter);
+                timerLabel.setText(""+counter);
                 timerLabel.setForeground(Color.RED);
 
             }
