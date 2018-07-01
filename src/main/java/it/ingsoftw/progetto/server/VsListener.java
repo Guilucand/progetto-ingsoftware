@@ -37,6 +37,11 @@ public class VsListener extends UnicastRemoteObject implements IVSListener {
         return true;
     }
 
+//    @Override
+//    public boolean disconnectVS(String id, IVSConnection connection) throws RemoteException {
+//        return false;
+//    }
+
     @Override
     public boolean stopAlarm(String id, int alarmId) {
         if (alarms.contains(alarmId)) {

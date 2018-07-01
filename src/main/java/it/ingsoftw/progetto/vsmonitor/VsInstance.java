@@ -6,6 +6,7 @@ import java.util.Random;
 
 import it.ingsoftw.progetto.common.IVSListener;
 import it.ingsoftw.progetto.common.MonitorData;
+import it.ingsoftw.progetto.server.ServerConfig;
 
 /**
  * Classe rappresentante una macchina di monitoraggio
@@ -44,17 +45,13 @@ public class VsInstance {
 
     }
 
+    IVSListener serverListener;
+    VsConnection conn;
 
-    public VsInstance(String id) {
-        ID = id;
-        GUI = new VsGui(id);
-        GUI.setUpdateFunction(this::generateDistribution);
-        VsConnection conn;
-        IVSListener serverListener;
-
+    public void connect() {
         try {
             conn = new VsConnection(GUI);
-            String url = "//localhost:8080/vsauth";
+            String url = "//" + ServerConfig.hostname + ":" + ServerConfig.port + "/vsauth";
             serverListener = (IVSListener) Naming.lookup(url);
             serverListener.connectVS(ID, conn);
             GUI.setConnectionStatus(true);
@@ -64,6 +61,16 @@ public class VsInstance {
             GUI.setConnectionStatus(false);
             return;
         }
+    }
+
+
+    public VsInstance(String id) {
+
+        ID = id;
+        GUI = new VsGui(id);
+        GUI.setUpdateFunction(this::generateDistribution);
+
+        connect();
 
         GUI.setAlarmCallback((desc, level)-> {
             try {
@@ -84,13 +91,16 @@ public class VsInstance {
         });
 
         GUI.setConnectionCallback((newStatus)-> {
-            throw new UnsupportedOperationException(); // Da implementare
+            if (newStatus) {// Connect
+                return true;
+            }
+            return false;
         });
 
         GUI.setMonitorDataChangedCallback((data)->{
             try {
                 serverListener.notifyMonitorUpdate(ID, data);
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 GUI.setConnectionStatus(false);
             }        });
     }

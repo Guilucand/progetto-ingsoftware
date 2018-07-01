@@ -125,6 +125,10 @@ public class VsGui {
             stopAlarms();
         });
 
+        connectionButton.addListener((b)->{
+            if (connectionCallback != null)
+                connectionCallback.apply(!connectionStatus);
+        });
 
 
         setBPM(60);

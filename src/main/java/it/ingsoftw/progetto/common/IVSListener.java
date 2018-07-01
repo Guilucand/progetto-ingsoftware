@@ -17,6 +17,17 @@ public interface IVSListener extends Remote {
      */
     boolean connectVS(String id, IVSConnection connection) throws RemoteException;
 
+
+    /**
+     *
+     * @param id
+     * @param connection
+     * @return
+     * @throws RemoteException
+     */
+//    boolean disconnectVS(String id, IVSConnection connection) throws RemoteException;
+
+
     /**
      * Inizia un allarme
      * @param id l'id della macchina
