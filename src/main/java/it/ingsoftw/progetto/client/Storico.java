@@ -168,7 +168,7 @@ public class Storico extends  JFrame{
                 if(leavePatientFrame == null){dispose();}
                 else if(leavePatientFrame.isShowing()){
 
-                    if(JOptionPane.showConfirmDialog(null,"Sei sicuro di voler uscire nonostante ci sia una schermata di dimisisone aperta?") == 0){
+                    if(JOptionPane.showConfirmDialog(null,"Sei sicuro di voler uscire nonostante ci sia una schermata di dimissione aperta?") == 0){
 
                         dispose();
                         leavePatientFrame.dispose();
