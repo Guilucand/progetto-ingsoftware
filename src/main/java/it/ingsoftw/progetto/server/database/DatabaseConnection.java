@@ -1,9 +1,7 @@
 package it.ingsoftw.progetto.server.database;
 
 import test.database.TestDatabaseConnection;
-import test.database.TestRecoveryDatabase;
 
-import java.rmi.RemoteException;
 import java.sql.*;
 import java.util.Properties;
 
@@ -17,7 +15,7 @@ public class DatabaseConnection implements IDatabaseConnection {
     private DrugsDatabase drugsDatabase;
     private RecoveryDatabase recoveryDatabase;
     private MessageDatabase messageDatabase;
-
+    private PrescriptionDatabase prescriptionDatabase;
 
     private static final String DATABASE_HOST = "localhost";
 
@@ -26,6 +24,7 @@ public class DatabaseConnection implements IDatabaseConnection {
     private static final String DATABASE_NAME = "ingsoft";
 
     private static final String DATABASE_PASS = "ingsoft";
+
 
 
     public DatabaseConnection() {
@@ -42,7 +41,7 @@ public class DatabaseConnection implements IDatabaseConnection {
     }
 
     @Override
-    public IUsersDatabase getUsersInterface() throws RemoteException {
+    public IUsersDatabase getUsersInterface() {
         if (usersDatabase == null) {
             usersDatabase = new UsersDatabase(connection);
         }
@@ -62,22 +61,29 @@ public class DatabaseConnection implements IDatabaseConnection {
     @Override
     public IRecoveryDatabase getRecoveryInterface() {
         if (recoveryDatabase == null) {
-            recoveryDatabase = new RecoveryDatabase(connection, getMessageDatabase());
+            recoveryDatabase = new RecoveryDatabase(connection, getMessageInterface());
         }
         return recoveryDatabase;
     }
 
     @Override
-    public IDrugsDatabase getDrugsDatabase() {
+    public IDrugsDatabase getDrugsInterface() {
         if (drugsDatabase == null)
             drugsDatabase = new DrugsDatabase(connection);
         return drugsDatabase;
     }
 
     @Override
-    public IMessageDatabase getMessageDatabase() {
+    public IMessageDatabase getMessageInterface() {
         if (messageDatabase == null)
             messageDatabase = new MessageDatabase(this);
         return messageDatabase;
+    }
+
+    @Override
+    public IPrescriptionDatabase getPrescriptionInterface() {
+        if (prescriptionDatabase == null)
+            prescriptionDatabase = new PrescriptionDatabase(connection, getDrugsInterface(), getUsersInterface());
+        return prescriptionDatabase;
     }
 }

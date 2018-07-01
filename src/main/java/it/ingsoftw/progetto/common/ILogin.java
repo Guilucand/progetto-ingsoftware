@@ -54,6 +54,12 @@ public interface ILogin extends Remote {
     LoginStatus isLogged() throws RemoteException;
 
     /**
+     * Ritorna l'utente loggato in questo momento
+     * @return l'utente
+     */
+    User getLoggedUser() throws RemoteException;
+
+    /**
      * Effettua il logout dell'utente connesso
      * @return true se la disconnessione ha avuto successo o nessun utente e' loggato
      * @throws RemoteException

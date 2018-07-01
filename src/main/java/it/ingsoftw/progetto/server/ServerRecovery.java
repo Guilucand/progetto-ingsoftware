@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
 
+import it.ingsoftw.progetto.common.DrugAdministration;
+import it.ingsoftw.progetto.common.DrugPrescription;
 import it.ingsoftw.progetto.common.IAlarmCallback;
 import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.IPatient;
@@ -14,6 +16,7 @@ import it.ingsoftw.progetto.common.PatientData;
 import it.ingsoftw.progetto.common.messages.IMessagesChangedCallback;
 import it.ingsoftw.progetto.common.messages.MessageObject;
 import it.ingsoftw.progetto.server.database.IMessageDatabase;
+import it.ingsoftw.progetto.server.database.IPrescriptionDatabase;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 import javafx.util.Pair;
 
@@ -22,16 +25,21 @@ public class ServerRecovery extends UnicastRemoteObject implements IPatient {
     private ClientStatus status;
     private IRecoveryDatabase database;
     private IMessageDatabase messageDatabase;
+    private final IPrescriptionDatabase prescriptionDatabase;
     private String recoveryId;
     private IAlarmCallback alarmCallback;
     private IMonitorDataUpdatedCallback monitorDataUpdatedCallback;
 
-    public ServerRecovery(ClientStatus status, IRecoveryDatabase database, IMessageDatabase messageDatabase, String recoveryId) throws RemoteException {
+    public ServerRecovery(ClientStatus status,
+                          IRecoveryDatabase database,
+                          IMessageDatabase messageDatabase,
+                          IPrescriptionDatabase prescriptionDatabase, String recoveryId) throws RemoteException {
         super(ServerConfig.port);
         this.status = status;
 
         this.database = database;
         this.messageDatabase = messageDatabase;
+        this.prescriptionDatabase = prescriptionDatabase;
         this.recoveryId = recoveryId;
     }
 
@@ -68,13 +76,18 @@ public class ServerRecovery extends UnicastRemoteObject implements IPatient {
     }
 
     @Override
-    public void addDrugPrescription() {
-
+    public void addDrugPrescription(DrugPrescription prescription) throws RemoteException {
+        prescriptionDatabase.addPrescription(recoveryId, status.getLoggedUser(), prescription);
     }
 
     @Override
-    public void addDrugAdministration() throws RemoteException {
+    public void addDrugAdministration(DrugAdministration administration) throws RemoteException {
+        prescriptionDatabase.addAdministration(recoveryId, status.getLoggedUser(), administration);
+    }
 
+    @Override
+    public List<DrugPrescription> getCurrentPrescriptions() throws RemoteException {
+        return prescriptionDatabase.getPrescriptions(recoveryId);
     }
 
     @Override

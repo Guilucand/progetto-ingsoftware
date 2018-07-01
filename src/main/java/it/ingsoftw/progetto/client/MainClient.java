@@ -59,7 +59,7 @@ public class MainClient {
                         break;
 
                     default:
-                        Logged(status,username);
+                        Logged(loginInterface, username);
                         break;
                 }
             });
@@ -97,8 +97,8 @@ public class MainClient {
 
     }
 
-    private static void Logged(ILogin.LoginStatus status, String username) throws RemoteException {
+    private static void Logged(ILogin loginInterface, String username) throws RemoteException {
 
-        new MonitorGUI(status,username,serverFactory);
+        new MonitorGUI(loginInterface, username, serverFactory);
     }
 }

@@ -55,6 +55,7 @@ public class PatientMonitor extends JPanel{
     private JLabel timerLabel;
     private JButton prescriviButton;
     private int roomNumber;
+    private final ILogin loginInterface;
     private IPatient patient;
     private EmptyRoom emptyRoom;
     private IAlarmCallback.AlarmData alarmData;
@@ -242,9 +243,10 @@ public class PatientMonitor extends JPanel{
         this.repaint();
     }
 
-    public PatientMonitor(int roomNumber, IRoom room,ILogin.LoginStatus status,String user) throws RemoteException {
+    public PatientMonitor(int roomNumber, IRoom room, ILogin loginInterface, String user) throws RemoteException {
 
         this.roomNumber = roomNumber;
+        this.loginInterface = loginInterface;
 
         if (room.hasPatient())
             this.patient = room.getCurrentPatient();
@@ -259,7 +261,7 @@ public class PatientMonitor extends JPanel{
 
         this.pop = new JPopupMenu();
 
-        if(status == ILogin.LoginStatus.NURSE_LOGGED) {
+        if(loginInterface.isLogged() == ILogin.LoginStatus.NURSE_LOGGED) {
 
             prescriviButton.setText("Somministra");
 
@@ -301,7 +303,7 @@ public class PatientMonitor extends JPanel{
                 super.mousePressed(e);
                 if (e.getButton() == MouseEvent.BUTTON1){
                     try {
-                        new Storico(room,status,user);
+                        new Storico(room, loginInterface.isLogged(), user);
                     } catch (RemoteException e1) {
                         e1.printStackTrace();
                     }
@@ -345,21 +347,29 @@ public class PatientMonitor extends JPanel{
                 }
             }
         });
-        prescriviButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        prescriviButton.addActionListener(e -> {
 
-                if(status == ILogin.LoginStatus.NURSE_LOGGED){
+            ILogin.LoginStatus status = ILogin.LoginStatus.NOTLOGGED;
+            try {
+                status = loginInterface.isLogged();
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
 
-                    new DoseDrug();
+            switch (status) {
+                case NURSE_LOGGED:
+                    new DoseDrug(patient);
+                break;
 
-
-                }else if(status == ILogin.LoginStatus.MEDIC_LOGGED || status == ILogin.LoginStatus.ADMIN_LOGGED ||status == ILogin.LoginStatus.PRIMARY_LOGGED){
-
-                    new PrescriveDrug();
-
-                }
-
+                case MEDIC_LOGGED:
+                case ADMIN_LOGGED:
+                case PRIMARY_LOGGED:
+                    try {
+                        new PrescriveDrug(loginInterface.getLoggedUser(), patient);
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                    break;
             }
         });
     }

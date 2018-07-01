@@ -8,8 +8,6 @@ import it.ingsoftw.progetto.common.IClientRmiFactory;
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.IMonitor;
 import it.ingsoftw.progetto.server.database.IDatabaseConnection;
-import it.ingsoftw.progetto.server.database.IUsersDatabase;
-import test.database.TestUsersDatabase;
 
 public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiFactory {
 
@@ -39,8 +37,9 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
         if (monitorInterface == null) {
             monitorInterface = new ServerMonitor(status,
                     databaseConnection.getRecoveryInterface(),
-                    databaseConnection.getMessageDatabase(),
-                    databaseConnection.getPatientsInterface());
+                    databaseConnection.getMessageInterface(),
+                    databaseConnection.getPatientsInterface(),
+                    databaseConnection.getPrescriptionInterface());
         }
         return monitorInterface;
     }

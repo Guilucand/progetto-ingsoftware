@@ -5,6 +5,7 @@ import it.ingsoftw.progetto.common.IPatient;
 import it.ingsoftw.progetto.common.IRoom;
 import it.ingsoftw.progetto.server.database.IMessageDatabase;
 import it.ingsoftw.progetto.server.database.IPatientsDatabase;
+import it.ingsoftw.progetto.server.database.IPrescriptionDatabase;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 
 import java.rmi.RemoteException;
@@ -17,18 +18,21 @@ public class ServerMonitor extends UnicastRemoteObject implements IMonitor {
     private IRecoveryDatabase recoveryDatabase;
     private IMessageDatabase messageDatabase;
     private IPatientsDatabase patientsDatabase;
+    private final IPrescriptionDatabase prescriptionDatabase;
     private HashMap<Integer, IRoom> roomInterfaces;
 
     public ServerMonitor(ClientStatus status,
                          IRecoveryDatabase recoveryDatabase,
                          IMessageDatabase messageDatabase,
-                         IPatientsDatabase patientsDatabase) throws RemoteException {
+                         IPatientsDatabase patientsDatabase,
+                         IPrescriptionDatabase prescriptionDatabase) throws RemoteException {
         super(ServerConfig.port);
         this.status = status;
 
         this.recoveryDatabase = recoveryDatabase;
         this.messageDatabase = messageDatabase;
         this.patientsDatabase = patientsDatabase;
+        this.prescriptionDatabase = prescriptionDatabase;
         roomInterfaces = new HashMap<>();
     }
 
@@ -40,6 +44,7 @@ public class ServerMonitor extends UnicastRemoteObject implements IMonitor {
                                     recoveryDatabase,
                                     patientsDatabase,
                                     messageDatabase,
+                                    prescriptionDatabase,
                                     roomNumber));
 
         return roomInterfaces.get(roomNumber);

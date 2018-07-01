@@ -8,39 +8,37 @@ import it.ingsoftw.progetto.common.IMonitor;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
 public class MonitorGUI extends JFrame{
 
-    private JPanel MainPanel;
-    private JPanel TopPanel;
-    private JPanel MidPanel;
-    private JPanel BottomPanel;
-    private ILogin.LoginStatus status;
+    private JPanel mainPanel;
+    private JPanel topPanel;
+    private JPanel midPanel;
+    private JPanel bottomPanel;
+    private ILogin loginInterface;
     private String username;
     private IClientRmiFactory serverFactory;
-    private IMonitor iMonitorInterface;
+    private IMonitor monitorInterface;
     private IAdmin adminInterface;
 
-    public MonitorGUI(ILogin.LoginStatus status, String username, IClientRmiFactory serverFactory) throws RemoteException {
+    public MonitorGUI(ILogin loginInterface, String username, IClientRmiFactory serverFactory) throws RemoteException {
 
         super("Monitor");
 
-        this.status = status;
+        this.loginInterface = loginInterface;
         this.username = username;
 
         this.serverFactory = serverFactory;
-        this.iMonitorInterface=serverFactory.getMonitorInterface();
+        this.monitorInterface =serverFactory.getMonitorInterface();
         this.adminInterface = serverFactory.getAdminInterface();
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
-        this.MainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),""+username,TitledBorder.TOP,TitledBorder.CENTER));
-        ((javax.swing.border.TitledBorder) this.MainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
+        this.mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),""+username,TitledBorder.TOP,TitledBorder.CENTER));
+        ((javax.swing.border.TitledBorder) this.mainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
 
-        this.setContentPane(MainPanel);
+        this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         this.addWindowListener(new java.awt.event.WindowAdapter(){
@@ -58,54 +56,52 @@ public class MonitorGUI extends JFrame{
 
         });
 
-        this.MainPanel.setOpaque(true);
-        this.MainPanel.setBackground(Color.WHITE);
+        this.mainPanel.setOpaque(true);
+        this.mainPanel.setBackground(Color.WHITE);
 
         Container c = this.getContentPane();
 
         c.setLayout(new GridLayout(3,1));
 
-        TopPanel = new JPanel(new GridLayout(1,4));
-        MidPanel = new JPanel(new GridLayout(1,4));
-        BottomPanel = new JPanel(new GridLayout(1,4));
+        topPanel = new JPanel(new GridLayout(1,4));
+        midPanel = new JPanel(new GridLayout(1,4));
+        bottomPanel = new JPanel(new GridLayout(1,4));
 
 
-        c.add("0",TopPanel);
-        c.add("1",MidPanel);
-        c.add("2",BottomPanel);
+        c.add("0", topPanel);
+        c.add("1", midPanel);
+        c.add("2", bottomPanel);
 
         for(int i = 0; i<4; i++){
 
-            TopPanel.add(new PatientMonitor(i+1, iMonitorInterface.getRoomByNumber(i+1),status,username),i);
-            MidPanel.add(new PatientMonitor(i+5, iMonitorInterface.getRoomByNumber(i+5),status,username),i);
+            topPanel.add(new PatientMonitor(i+1, monitorInterface.getRoomByNumber(i+1), loginInterface,username),i);
+            midPanel.add(new PatientMonitor(i+5, monitorInterface.getRoomByNumber(i+5), loginInterface,username),i);
             if(i == 0){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin(status,adminInterface,username);
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(loginInterface.isLogged(), adminInterface, username);
 
-                if(this.status == ILogin.LoginStatus.PRIMARY_LOGGED || this.status == ILogin.LoginStatus.ADMIN_LOGGED) {
-                    BottomPanel.add(epa.getPanel(), i);
+                switch (loginInterface.isLogged()) {
 
-                }else{
+                    case PRIMARY_LOGGED:
+                    case ADMIN_LOGGED:
+                        break;
 
-                    JPanel panel = epa.getPanel();
-                    panel.remove(epa.getButton());
-
-                    BottomPanel.add(epa.getPanel(), i);
-
-
+                    default:
+                        JPanel panel = epa.getPanel();
+                        panel.remove(epa.getButton());
                 }
-
+                bottomPanel.add(epa.getPanel(), i);
 
             }
             else if(i == 3){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin(this,status,username,adminInterface);
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(this,loginInterface.isLogged(), username, adminInterface);
                 epa.getPanel().remove(epa.getButtonreport());
 
-                BottomPanel.add(epa.getPanel(), i);
+                bottomPanel.add(epa.getPanel(), i);
 
             }
-            else BottomPanel.add(new PatientMonitor(i+8,iMonitorInterface.getRoomByNumber(i+8),status,username),i);
+            else bottomPanel.add(new PatientMonitor(i+8, monitorInterface.getRoomByNumber(i+8),loginInterface,username),i);
 
         }
 

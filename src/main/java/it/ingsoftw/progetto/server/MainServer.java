@@ -52,7 +52,7 @@ public class MainServer {
 //        for (Drug dr : d) {
 //            System.out.println(dr.commercialName + " -> " + dr.company + " : " + dr.activePrinciple);
 //            try {
-//                databaseConnection.getDrugsDatabase().deleteDrug(dr);
+//                databaseConnection.getDrugsInterface().deleteDrug(dr);
 //            } catch (SQLException e) {
 //                e.printStackTrace();
 //            }

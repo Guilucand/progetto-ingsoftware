@@ -1,11 +1,16 @@
 package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.Drug;
+import it.ingsoftw.progetto.common.DrugPrescription;
+import it.ingsoftw.progetto.common.IPatient;
+import it.ingsoftw.progetto.common.User;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.rmi.RemoteException;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,11 +20,13 @@ import java.util.List;
 
 
 public class PrescriveDrug extends JFrame{
+    private final User loggedUser;
+    private final IPatient patient;
     private JPanel MainPanel;
     private JList drugList;
     private JTextField therapyDurationTextField;
     private JTextField dailyDosesTextField;
-    private JPasswordField quantityTextField;
+    private JTextField quantityTextField;
     private JButton findDrugButton;
     private JTextField drugNameTextField;
     private JButton SaveDoseButton;
@@ -37,9 +44,11 @@ public class PrescriveDrug extends JFrame{
     private Drug selectedDrug;
     private JTable tabella;
 
-    public PrescriveDrug(){
+    public PrescriveDrug(User loggedUser, IPatient patient){
 
         super("Prescrizione dei farmaci");
+        this.loggedUser = loggedUser;
+        this.patient = patient;
 
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -85,10 +94,25 @@ public class PrescriveDrug extends JFrame{
             System.out.println(dataPrecrizione);
             String durataPrescrizione = therapyDurationTextField.getText();
             String doseGiornalieraPrescrizione = dailyDosesTextField.getText();
-            String quantitàFarmaco = quantityTextField.getSelectedText();
+            String quantitàFarmaco = quantityTextField.getText();
+            String notes = noteArea.getText();
 
-            System.out.println("Salvataggio prescrizione");
+            try {
+                patient.addDrugPrescription(new DrugPrescription(
+                        null,
+                        LocalDate.now(),
+                        durataPrescrizione,
+                        doseGiornalieraPrescrizione,
+                        quantitàFarmaco,
+                        notes,
+                        loggedUser));
 
+                System.out.println("Salvataggio prescrizione");
+                this.dispose();
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+                System.out.println("Errore durante l'inserimento della prescrizione");
+            }
         });
         nomeCheckBox.addActionListener(new ActionListener() {
             @Override
