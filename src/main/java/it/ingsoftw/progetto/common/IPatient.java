@@ -3,17 +3,12 @@ package it.ingsoftw.progetto.common;
 import it.ingsoftw.progetto.common.messages.IMessagesChangedCallback;
 import it.ingsoftw.progetto.common.messages.MessageObject;
 import javafx.util.Pair;
-import jdk.jfr.Timespan;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
-
-import javax.mail.Message;
 
 /**
  * Interfaccia di monitoraggio di un paziente attualmente ricoverato
@@ -61,7 +56,7 @@ public interface IPatient extends Remote {
      * @param prescription la prescrizione
      * @throws RemoteException
      */
-    void addDrugPrescription(DrugPrescription prescription) throws RemoteException;
+    boolean addDrugPrescription(DrugPrescription prescription) throws RemoteException;
 
     /**
      * Aggiunge una somministrazione

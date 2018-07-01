@@ -71,8 +71,10 @@ public class DoseDrug extends JFrame{
         }
 
 
-        for (int i = 0; i < drugPrescriptionList.size(); i++) {
-            this.listafarmaci.add(i, drugPrescriptionList.get(i));
+        if (drugPrescriptionList != null) {
+            for (int i = 0; i < drugPrescriptionList.size(); i++) {
+                this.listafarmaci.add(i, drugPrescriptionList.get(i));
+            }
         }
 
         this.drugsList.setModel(listafarmaci);

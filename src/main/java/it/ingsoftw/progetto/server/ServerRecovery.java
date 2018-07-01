@@ -76,8 +76,8 @@ public class ServerRecovery extends UnicastRemoteObject implements IPatient {
     }
 
     @Override
-    public void addDrugPrescription(DrugPrescription prescription) throws RemoteException {
-        prescriptionDatabase.addPrescription(recoveryId, status.getLoggedUser(), prescription);
+    public boolean addDrugPrescription(DrugPrescription prescription) throws RemoteException {
+        return prescriptionDatabase.addPrescription(recoveryId, status.getLoggedUser(), prescription);
     }
 
     @Override
