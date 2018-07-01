@@ -119,7 +119,7 @@ public class PatientMonitor extends JPanel{
 
         patient.setAlarmCallback(new AlarmCallback() {
             @Override
-            public void startAlarm(AlarmData alarmData) throws RemoteException {
+            public synchronized void startAlarm(AlarmData alarmData) throws RemoteException {
 
                 System.out.println("Alarm started!");
 
@@ -184,7 +184,7 @@ public class PatientMonitor extends JPanel{
             }
 
             @Override
-            public void stopAlarm(int alarmId) throws RemoteException {
+            public synchronized void stopAlarm(int alarmId) throws RemoteException {
 
 
                 Set<AlarmData> keyset = alarmList.keySet();
@@ -195,11 +195,13 @@ public class PatientMonitor extends JPanel{
 
                         alarmList.get(ad).stop();
                         alarmList.remove(ad);
+
                         temporimanente=Integer.parseInt(timerLabel.getText());
                         timerLabel.setText("");
 
                         //Aggiungere alla lista delle cose da fare un parametro che è completare lo spegnimento da parte del medico
 
+                        break;
 
                     }
 
@@ -362,7 +364,7 @@ public class PatientMonitor extends JPanel{
     }
 
 
-    private void addPopup(){
+    private synchronized void addPopup(){
 
         Set<IAlarmCallback.AlarmData> keyset = alarmList.keySet();
 
@@ -397,7 +399,7 @@ public class PatientMonitor extends JPanel{
         }
 
         @Override
-        public void actionPerformed(ActionEvent tc) {
+        public synchronized void actionPerformed(ActionEvent tc) {
 
             counter--;
 
