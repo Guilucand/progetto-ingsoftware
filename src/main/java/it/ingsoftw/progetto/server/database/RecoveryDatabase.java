@@ -153,10 +153,10 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
     @Override
     public void removeAlarmHook(String recoveryId, IAlarmCallback callback) {
-        Set<IAlarmCallback> callbacks = alarmsCallbacks.get(recoveryId);
-        if (callbacks == null)
-            return;
-        callbacks.remove(callback);
+//        Set<IAlarmCallback> callbacks = alarmsCallbacks.get(recoveryId);
+//        if (callbacks == null)
+//            return;
+//        callbacks.remove(callback);
     }
 
     @Override
