@@ -15,6 +15,9 @@ CREATE TABLE IF NOT EXISTS recovery (
     patientCode VARCHAR(48) NOT NULL REFERENCES patient(code),
     roomId VARCHAR(32) UNIQUE REFERENCES room(number),
 
+    startDate DATE NOT NULL,
+    endDate DATE,
+
     diagnosis VARCHAR(4096),
     dimissionLetter VARCHAR(4096)
 );
