@@ -190,7 +190,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="5b0bd" class="javax.swing.JTable" binding="table1" default-binding="true">
+          <component id="5b0bd" class="javax.swing.JTable" binding="tabellaFarmaci">
             <constraints/>
             <properties/>
           </component>

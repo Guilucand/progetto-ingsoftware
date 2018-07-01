@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.List;
@@ -29,7 +30,7 @@ public class PrescriveDrug extends JFrame{
     private JCheckBox principioAttivoCheckBox;
     private JTextField drugName;
     private JScrollPane scrollpaneTable;
-    private JTable table1;
+    private JTable tabellaFarmaci;
     private DrugsQuery drugsQuery;
     private DefaultListModel listafarmaci;
     private Drug[] drugListDB;
@@ -52,8 +53,6 @@ public class PrescriveDrug extends JFrame{
         tipoConfezioneCheckBox.setSelected(true);
 
         drugList.setCellRenderer(new DrugListRendererextends());
-
-        initTable();
 
         Dimension preferredDimension = new Dimension(900, 750);
         this.MainPanel.setPreferredSize(preferredDimension);
@@ -156,7 +155,7 @@ public class PrescriveDrug extends JFrame{
 
         String [] nomicolonne = new String[]{"Nome commerciale","Tipo confezione","Principio attivo","Azienda"};
 
-        /*String [][] data = new String[drugListDB.length][4];
+        String [][] data = new String[drugListDB.length][4];
 
 
         for(int i = 0; i<drugListDB.length; i++){
@@ -166,22 +165,23 @@ public class PrescriveDrug extends JFrame{
             data[i][2] = drugListDB[0].activePrinciple;
             data[i][3] = drugListDB[0].company;
 
-        }*/
+        }
 
-        String [][] data = new String[][]{
+        /*String [][] data = new String[][]{
 
                 {"ciao","ciao","ciao","ciao"},
                 {"ciao","ciao","ciao","ciao"}
 
-        };
+        };*/
 
 
-        tabella = new JTable(data,nomicolonne);
-        tabella.setPreferredScrollableViewportSize(new Dimension(500,50));
-        tabella.setFillsViewportHeight(true);
+        tabellaFarmaci.setModel(new DefaultTableModel(data,nomicolonne));
+        //tabella = new JTable(data,nomicolonne);
+        //tabella.setPreferredScrollableViewportSize(new Dimension(500,50));
+        //tabella.setFillsViewportHeight(true);
 
-        this.scrollpaneTable.removeAll();
-        this.scrollpaneTable.add(tabella);
+        //this.scrollpaneTable.removeAll();
+        //this.scrollpaneTable.add(tabella);
 
 
     }

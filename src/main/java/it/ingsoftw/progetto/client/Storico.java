@@ -156,7 +156,7 @@ public class Storico extends  JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                leavePatientFrame = new LeavePatient(stanza,user);
+                leavePatientFrame = new LeavePatient(stanza,user,questo());
 
             }
         });
@@ -166,11 +166,12 @@ public class Storico extends  JFrame{
 
 
                 if(leavePatientFrame == null){dispose();}
-                else if(leavePatientFrame.isActive()){
+                else if(leavePatientFrame.isShowing()){
 
                     if(JOptionPane.showConfirmDialog(null,"Sei sicuro di voler uscire nonostante ci sia una schermata di dimisisone aperta?") == 0){
 
                         dispose();
+                        leavePatientFrame.dispose();
 
                     }
 
@@ -200,4 +201,7 @@ public class Storico extends  JFrame{
         if(componente instanceof JLabel)((JLabel)componente).setIcon(icon);
         if(componente instanceof JButton)((JButton)componente).setIcon(icon);
     }
+
+    public void close(){this.dispose();}
+    private Storico questo(){return this;}
 }

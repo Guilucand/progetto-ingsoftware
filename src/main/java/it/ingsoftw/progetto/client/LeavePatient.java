@@ -15,7 +15,7 @@ public class LeavePatient extends JFrame{
     private JPanel MainPanel;
 
 
-    public LeavePatient(IRoom stanza, String user){
+    public LeavePatient(IRoom stanza, String user, Storico storico ){
 
         super("Lettera-Dimissioni");
 
@@ -60,7 +60,9 @@ public class LeavePatient extends JFrame{
 
                     //dimettipaziente
 
+                    storico.close();
                     dispose();
+
 
                 }
 

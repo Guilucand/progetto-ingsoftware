@@ -327,7 +327,7 @@ public class PatientMonitor extends JPanel{
                 if(showpop){
 
                     addPopup();
-                    pop.show(alarmLabel,alarmLabel.getWidth(),alarmLabel.getHeight());
+                    pop.show(alarmLabel,alarmLabel.getWidth()-(alarmLabel.getWidth()/2),alarmLabel.getHeight()-(alarmLabel.getHeight()/2));
                     showpop = false;
 
                 }
@@ -339,9 +339,10 @@ public class PatientMonitor extends JPanel{
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
 
-                pop.setVisible(false);
-                showpop=true;
-
+                if(!showpop) {
+                    pop.setVisible(false);
+                    showpop = true;
+                }
             }
         });
         prescriviButton.addActionListener(new ActionListener() {
