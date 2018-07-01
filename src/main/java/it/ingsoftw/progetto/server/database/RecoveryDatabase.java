@@ -5,19 +5,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.xml.transform.Result;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import it.ingsoftw.progetto.common.IAlarmCallback;
 import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.MonitorData;
-import it.ingsoftw.progetto.common.MonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.messages.AddDiagnosisMessage;
-import it.ingsoftw.progetto.common.messages.IMessagesChangedCallback;
+import javafx.util.Pair;
 
 public class RecoveryDatabase implements IRecoveryDatabase {
 
@@ -28,6 +32,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
     private Map<String, Set<IAlarmCallback>> alarmsCallbacks;
     private Map<String, Map<Integer, IAlarmCallback.AlarmData>> activeAlarms;
 
+    private Timer snapshotMonitorsTimer;
 
     public RecoveryDatabase(Connection connection, IMessageDatabase messageDatabase) {
 
@@ -37,12 +42,54 @@ public class RecoveryDatabase implements IRecoveryDatabase {
         this.monitorDataCallbacks = new HashMap<>();
         this.alarmsCallbacks = new HashMap<>();
         this.activeAlarms = new HashMap<>();
+        this.snapshotMonitorsTimer = new Timer();
         DatabaseUtils.createDatabaseFromSchema(connection, "schema/recovery.sql");
+
+
+        this.snapshotMonitorsTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                minuteSnapshot();
+            }
+        }, 0, 60 * 1000);
+    }
+
+    private List<String> getAllCurrentRecoveries() {
+        return getSqlResults("SELECT key FROM recovery WHERE roomId IS NOT NULL;");
+    }
+
+    private void minuteSnapshot() {
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        for (String recovery : getAllCurrentRecoveries()) {
+            MonitorData monitorData = currentMonitorsData.get(mapRecoveryToMachine(recovery));
+            addMonitorDataToDatabase(recovery, currentTime, monitorData);
+        }
+    }
+
+    private boolean addMonitorDataToDatabase(String recoveryId, LocalDateTime dateTime, MonitorData data) {
+        if (data == null)
+            return false;
+
+        String sql = "INSERT INTO vsdata (recoveryId, dateTime, bpm, sbp, dbp, temp) " +
+                "VALUES (?, ?, ?, ?, ?, ?);";
+        try {
+            PreparedStatement addMonitorData = connection.prepareStatement(sql);
+            addMonitorData.setInt(1, Integer.parseInt(recoveryId));
+            addMonitorData.setTimestamp(2, Timestamp.valueOf(dateTime));
+            addMonitorData.setInt(3, data.getBpm());
+            addMonitorData.setInt(4, data.getSbp());
+            addMonitorData.setInt(5, data.getDbp());
+            addMonitorData.setFloat(6, data.getTemp());
+            return addMonitorData.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     private boolean addMachine(String name) {
         String sql =
-                "INSERT into vsmachine (identifier) " +
+                "INSERT INTO vsmachine (identifier) " +
                         "VALUES (?);";
         try {
             PreparedStatement addMachine = connection.prepareStatement(sql);
@@ -55,7 +102,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
     private boolean addRoom(String number) {
         String sql =
-                "INSERT into room (number) " +
+                "INSERT INTO room (number) " +
                         "VALUES (?);";
         try {
             PreparedStatement addRoom = connection.prepareStatement(sql);
@@ -270,6 +317,21 @@ public class RecoveryDatabase implements IRecoveryDatabase {
         }
     }
 
+    private List<String> getSqlResults(String sql) {
+        List<String> results = new ArrayList<>();
+
+        try {
+            PreparedStatement getResult = connection.prepareStatement(sql);
+            ResultSet result = getResult.executeQuery();
+            while (result.next())
+                results.add(result.getString(1));
+            return results;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
     @Override
@@ -313,5 +375,49 @@ public class RecoveryDatabase implements IRecoveryDatabase {
         return getSingleArgSqlResult(
                 "SELECT key FROM recovery, room WHERE machine = ? AND recovery.roomId = room.number;",
                 machineId);
+    }
+
+    @Override
+    public String mapPatientToRecovery(String patientId) {
+        return getSingleArgSqlResult("SELECT key FROM recovery WHERE patientCode = ? AND roomId IS NOT NULL;",
+                patientId);
+    }
+
+    @Override
+    public String mapRecoveryToPatient(String recoveryId) {
+        return getSingleArgSqlResultIntParam("SELECT patientCode FROM recovery WHERE key = ?;",
+                Integer.valueOf(recoveryId));
+    }
+
+    @Override
+    public List<Pair<LocalDateTime, MonitorData>> getLastMonitorData(String recoveryId, int maxMinutes) {
+        String sql = "SELECT dateTime, bpm, sbp, dbp, temp FROM vsdata " +
+                "WHERE recoveryId = ? " +
+                "ORDER BY dateTime DESC " +
+                "LIMIT ?";
+
+        List<Pair<LocalDateTime, MonitorData>> results = new ArrayList<>();
+
+        try {
+            PreparedStatement getResult = connection.prepareStatement(sql);
+            getResult.setInt(1, Integer.parseInt(recoveryId));
+            getResult.setInt(2, maxMinutes);
+
+            ResultSet result = getResult.executeQuery();
+            while (result.next()) {
+                results.add(new Pair<>(
+                        result.getTimestamp(1).toLocalDateTime(),
+                        new MonitorData(
+                                result.getInt(2),
+                                result.getInt(3),
+                                result.getInt(4),
+                                result.getFloat(5))));
+            }
+            Collections.reverse(results);
+            return results;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

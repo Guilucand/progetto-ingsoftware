@@ -22,4 +22,15 @@ CREATE TABLE IF NOT EXISTS recovery (
     dimissionLetter VARCHAR(4096)
 );
 
+
+CREATE TABLE IF NOT EXISTS vsdata (
+    dateTime TIMESTAMP NOT NULL,
+    recoveryId INTEGER NOT NULL REFERENCES recovery(key),
+    bpm INTEGER,
+    sbp INTEGER,
+    dbp INTEGER,
+    temp NUMERIC (4, 2)
+);
+
+
 CREATE UNIQUE INDEX IF NOT EXISTS patientsUnique ON recovery(patientCode) WHERE (roomId IS NOT NULL);

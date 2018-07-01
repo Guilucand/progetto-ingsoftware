@@ -1,8 +1,12 @@
 package it.ingsoftw.progetto.server.database;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import it.ingsoftw.progetto.common.IAlarmCallback;
 import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.MonitorData;
+import javafx.util.Pair;
 
 public interface IRecoveryDatabase {
 
@@ -31,4 +35,10 @@ public interface IRecoveryDatabase {
 
     String mapRecoveryToMachine(String recoveryId);
     String mapMachineToRecovery(String machineId);
+
+    String mapPatientToRecovery(String patientId);
+
+    String mapRecoveryToPatient(String recoveryId);
+
+    List<Pair<LocalDateTime, MonitorData>> getLastMonitorData(String recoveryId, int maxMinutes);
 }

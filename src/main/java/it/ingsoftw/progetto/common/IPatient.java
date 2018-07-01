@@ -85,4 +85,6 @@ public interface IPatient extends Remote {
      * @param callback interfaccia di callback
      */
     void setMessagesChangedCallback(IMessagesChangedCallback callback) throws RemoteException;
+
+    List<Pair<LocalDateTime, MonitorData>> getLastVsData(int maxMinutes) throws RemoteException;
 }

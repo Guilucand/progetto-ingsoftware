@@ -7,6 +7,7 @@ import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 
 import java.rmi.RemoteException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -150,5 +151,20 @@ public class TestRecoveryDatabase implements IRecoveryDatabase {
     @Override
     public String mapMachineToRecovery(String machineId) {
         return mapRoomToRecovery(mapMachineToRoom(machineId));
+    }
+
+    @Override
+    public String mapPatientToRecovery(String patientId) {
+        return null;
+    }
+
+    @Override
+    public String mapRecoveryToPatient(String recoveryId) {
+        return null;
+    }
+
+    @Override
+    public List<Pair<LocalDateTime, MonitorData>> getLastMonitorData(String recoveryId, int maxMinutes) {
+        return null;
     }
 }

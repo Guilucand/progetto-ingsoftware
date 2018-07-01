@@ -52,6 +52,7 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
             currentPatient = new ServerRecovery(status,
                     recoveryDatabase,
                     messageDatabase,
+                    patientsDatabase,
                     prescriptionDatabase,
                     recoveryDatabase.mapRoomToRecovery(String.valueOf(roomId)));
 

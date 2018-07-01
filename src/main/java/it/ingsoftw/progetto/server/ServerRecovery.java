@@ -2,6 +2,7 @@ package it.ingsoftw.progetto.server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
@@ -16,6 +17,7 @@ import it.ingsoftw.progetto.common.PatientData;
 import it.ingsoftw.progetto.common.messages.IMessagesChangedCallback;
 import it.ingsoftw.progetto.common.messages.MessageObject;
 import it.ingsoftw.progetto.server.database.IMessageDatabase;
+import it.ingsoftw.progetto.server.database.IPatientsDatabase;
 import it.ingsoftw.progetto.server.database.IPrescriptionDatabase;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 import javafx.util.Pair;
@@ -25,6 +27,7 @@ public class ServerRecovery extends UnicastRemoteObject implements IPatient {
     private ClientStatus status;
     private IRecoveryDatabase database;
     private IMessageDatabase messageDatabase;
+    private IPatientsDatabase patientsDatabase;
     private final IPrescriptionDatabase prescriptionDatabase;
     private String recoveryId;
     private IAlarmCallback alarmCallback;
@@ -33,19 +36,26 @@ public class ServerRecovery extends UnicastRemoteObject implements IPatient {
     public ServerRecovery(ClientStatus status,
                           IRecoveryDatabase database,
                           IMessageDatabase messageDatabase,
+                          IPatientsDatabase patientsDatabase,
                           IPrescriptionDatabase prescriptionDatabase, String recoveryId) throws RemoteException {
         super(ServerConfig.port);
         this.status = status;
 
         this.database = database;
         this.messageDatabase = messageDatabase;
+        this.patientsDatabase = patientsDatabase;
         this.prescriptionDatabase = prescriptionDatabase;
         this.recoveryId = recoveryId;
     }
 
     @Override
     public PatientData getPatientData() {
-        return null;
+        try {
+            return patientsDatabase.getPatientById(database.mapRecoveryToPatient(recoveryId));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -102,5 +112,10 @@ public class ServerRecovery extends UnicastRemoteObject implements IPatient {
             callback.messagesChanged();
         } catch (RemoteException ignored) {
         }
+    }
+
+    @Override
+    public List<Pair<LocalDateTime, MonitorData>> getLastVsData(int maxMinutes) {
+        return database.getLastMonitorData(recoveryId, maxMinutes);
     }
 }

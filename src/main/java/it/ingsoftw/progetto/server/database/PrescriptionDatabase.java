@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import it.ingsoftw.progetto.common.DrugAdministration;
@@ -83,20 +84,21 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
             return null;
 
         return new DrugPrescription(
-                drugsDatabase.getDrug(result.getString(1)),
-                result.getDate(2).toLocalDate(),
-                result.getString(3),
+                result.getInt(1),
+                drugsDatabase.getDrug(result.getString(2)),
+                result.getDate(3).toLocalDate(),
                 result.getString(4),
                 result.getString(5),
                 result.getString(6),
-                usersDatabase.getEditableUser(result.getString(7)));
+                result.getString(7),
+                usersDatabase.getEditableUser(result.getString(8)));
     }
 
     @Override
     public List<DrugPrescription> getPrescriptions(String recoveryId) {
 
         String sql =
-                "SELECT drug, date, daysDuration, dosesPerDay, quantity, notes, medic FROM prescription " +
+                "SELECT key, drug, date, daysDuration, dosesPerDay, quantity, notes, medic FROM prescription " +
                         "WHERE recoveryId = ?;";
 
         try {

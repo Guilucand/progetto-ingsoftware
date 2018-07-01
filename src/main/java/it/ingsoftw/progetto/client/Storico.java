@@ -3,12 +3,14 @@ package it.ingsoftw.progetto.client;
 import it.ingsoftw.progetto.common.ILogin;
 import it.ingsoftw.progetto.common.IPatient;
 import it.ingsoftw.progetto.common.IRoom;
+import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.PatientData;
+import javafx.util.Pair;
+
 import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
-import org.knowm.xchart.internal.style.SeriesColorMarkerLineStyle;
-import org.knowm.xchart.style.XYStyler;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,6 +22,19 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalField;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Storico extends  JFrame{
     private JPanel MainPanel;
@@ -46,11 +61,20 @@ public class Storico extends  JFrame{
     private JLabel birthlocationParameter;
     private JButton dimettiButton;
     private JButton esciDalloStoricoButton;
-    private IPatient ipatient;
+    private IPatient patient;
     private PatientData patientData;
     private JFrame leavePatientFrame;
 
-    public Storico(IRoom stanza, ILogin.LoginStatus status, String user) throws RemoteException {
+    public void updateVsData(MonitorData data) {
+        if (data != null) {
+            temperatureParameter.setText(String.valueOf(data.getTemp()));
+            sbpParameter.setText(String.valueOf(data.getSbp()));
+            dbpParameter.setText(String.valueOf(data.getDbp()));
+            frequenceParameter.setText(String.valueOf(data.getBpm()));
+        }
+    }
+
+    public Storico(IRoom room, ILogin.LoginStatus status, String user) throws RemoteException {
 
         super("Storico");
 
@@ -70,27 +94,23 @@ public class Storico extends  JFrame{
 
         if(!(status == ILogin.LoginStatus.PRIMARY_LOGGED)) dimettiButton.setVisible(false);
 
-        ipatient = stanza.getCurrentPatient();
+        patient = room.getCurrentPatient();
         setImage("./img/image.png",imageLabel);
 
-        temperatureParameter.setText("36");
-        sbpParameter.setText("80");
-        dbpParameter.setText("90");
-        frequenceParameter.setText("100");
+        patientData = patient.getPatientData();
 
-        patientData = ipatient.getPatientData();
+        if (patientData != null) {
+            nameParameter.setText(patientData.getName());
+            surnameParameter.setText(patientData.getSurname());
+            cfParameter.setText(patientData.getCode());
+            birthlocationParameter.setText(patientData.getBirthPlace());
+            dateParameter.setText(patientData.getBirthDate().toString());
+        }
 
-        /*nameParameter.setText(patientData.getName());
-        surnameParameter.setText(patientData.getSurname());
-        cfParameter.setText(patientData.getCode());
-        birthlocationParameter.setText(patientData.getBirthPlace());
-        dateParameter.setText(patientData.getBirthDate().toString());
-*/
-
-        org.knowm.xchart.XYChart chartSBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("SBP").width(300).height(100).build();
-        org.knowm.xchart.XYChart chartDBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("DBP").width(300).height(100).build();
-        org.knowm.xchart.XYChart chartFrequence = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Frequence").width(300).height(100).build();
-        org.knowm.xchart.XYChart chartTemperature = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Temperature °C").width(300).height(100).build();
+        XYChart chartSBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("SBP").width(300).height(100).build();
+        XYChart chartDBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("DBP").width(300).height(100).build();
+        XYChart chartFrequence = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Frequence").width(300).height(100).build();
+        XYChart chartTemperature = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Temperature °C").width(300).height(100).build();
 
         chartSBP.getStyler().setSeriesColors(new Color[]{new Color(107,187,95)});
         chartDBP.getStyler().setSeriesColors(new Color[]{new Color(17,87,31)});
@@ -98,35 +118,80 @@ public class Storico extends  JFrame{
         chartTemperature.getStyler().setSeriesColors(new Color[]{new Color(70,83,187)});
 
 
-        chartSBP.getStyler().setYAxisMin((double) 0);
-        chartSBP.getStyler().setYAxisMax((double) 250);
-        chartSBP.getStyler().setXAxisMin((double) 0);
-        chartSBP.getStyler().setXAxisMax((double) 20);
+        chartSBP.getStyler().setYAxisMin(20.0);
+        chartSBP.getStyler().setYAxisMax(250.0);
 
-        chartDBP.getStyler().setYAxisMin((double) 0);
-        chartDBP.getStyler().setYAxisMax((double) 250);
-        chartDBP.getStyler().setXAxisMin((double) 0);
-        chartDBP.getStyler().setXAxisMax((double) 20);
+        chartDBP.getStyler().setYAxisMin(20.);
+        chartDBP.getStyler().setYAxisMax(250.0);
 
-        chartFrequence.getStyler().setYAxisMin((double) 0);
-        chartFrequence.getStyler().setYAxisMax((double) 250);
-        chartFrequence.getStyler().setXAxisMin((double) 0);
-        chartFrequence.getStyler().setXAxisMax((double) 20);
+        chartFrequence.getStyler().setYAxisMin(0.0);
+        chartFrequence.getStyler().setYAxisMax(250.0);
 
-        chartTemperature.getStyler().setYAxisMin((double) 0);
-        chartTemperature.getStyler().setYAxisMax((double) 45);
-        chartTemperature.getStyler().setXAxisMin((double) 0);
-        chartTemperature.getStyler().setXAxisMax((double) 20);
+        chartTemperature.getStyler().setYAxisMin(35.0);
+        chartTemperature.getStyler().setYAxisMax(45.0);
 
-        double[] yDataSBP = new double[] { 70.0, 75.0, 73.0 , 80.0 , 90.0 , 80 , 70 , 73.0 , 80.0 , 90.0 , 73.0 , 80.0 , 90.0 };
-        double[] yDataDBP = new double[] { 70.0, 75.0, 73.0 , 80.0 , 90.0 , 80 , 70 , 73.0 , 80.0 , 90.0 , 73.0 , 80.0 , 90.0 };
-        double[] yDataFrequence = new double[] { 70.0, 75.0, 73.0 , 80.0 , 90.0 , 80 , 70 , 73.0 , 80.0 , 90.0 , 73.0 , 80.0 , 90.0 };
-        double[] yDataTemperature = new double[] { 36.5, 36.5 , 36.6 , 36.7 , 37 ,37.1 , 37 ,37.1, 37 ,37.1, 37 ,37.1, 37 ,37.1 };
+        List<Pair<LocalDateTime, MonitorData>> historyData = patient.getLastVsData(120);
 
-        XYSeries serieProvaSBP = chartSBP.addSeries("SBP", yDataSBP);
-        XYSeries serieProvaDBP = chartDBP.addSeries("DBP", yDataDBP);
-        XYSeries serieProvaFrequence = chartFrequence.addSeries("Frequence", yDataFrequence);
-        XYSeries serieProvaTemperature = chartTemperature.addSeries("Temperature", yDataTemperature);
+        if (historyData != null) {
+
+            List<Integer> yDataSBP = new ArrayList<>();
+            List<Integer> yDataDBP = new ArrayList<>();
+            List<Integer> yDataFrequence = new ArrayList<>();
+            List<Float> yDataTemperature = new ArrayList<>();
+
+            List<Integer> xData = new ArrayList<>();//new Time[historyData.size()];
+            Map<Double, Object> xAxisOverrideMap = new HashMap<>();
+
+            long first = 0;
+            for (int i = 0; i < historyData.size(); i++) {
+                LocalDateTime currentTime = historyData
+                        .get(i)
+                        .getKey();
+
+                ZonedDateTime zonedDateTime = ZonedDateTime.of(currentTime, ZoneId.systemDefault());
+
+                long seconds = zonedDateTime.getLong(ChronoField.INSTANT_SECONDS);
+
+                if (i == 0) {
+                    first = seconds;
+                }
+
+                xData.add((int)(seconds - first));
+
+                if (i%5 == 0) {
+                    xAxisOverrideMap.put((double)(seconds - first),
+                            currentTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+                }
+
+                double maxXValue = xData.get(xData.size()-1);
+
+                chartSBP.getStyler().setXAxisMin(0.0);
+                chartSBP.getStyler().setXAxisMax(maxXValue);
+                chartDBP.getStyler().setXAxisMin(0.0);
+                chartDBP.getStyler().setXAxisMax(maxXValue);
+                chartFrequence.getStyler().setXAxisMin(0.0);
+                chartFrequence.getStyler().setXAxisMax(maxXValue);
+                chartTemperature.getStyler().setXAxisMin(0.0);
+                chartTemperature.getStyler().setXAxisMax(maxXValue);
+
+                MonitorData currentData = historyData.get(i).getValue();
+                yDataDBP.add(currentData.getDbp());
+                yDataSBP.add(currentData.getSbp());
+                yDataFrequence.add(currentData.getBpm());
+                yDataTemperature.add(currentData.getTemp());
+            }
+
+
+            XYSeries serieProvaSBP = chartSBP.addSeries("SBP", xData, yDataSBP);
+            XYSeries serieProvaDBP = chartDBP.addSeries("DBP", xData, yDataDBP);
+            XYSeries serieProvaFrequence = chartFrequence.addSeries("Frequence", xData, yDataFrequence);
+            XYSeries serieProvaTemperature = chartTemperature.addSeries("Temperature", xData, yDataTemperature);
+
+            chartDBP.setXAxisLabelOverrideMap(xAxisOverrideMap);
+            chartSBP.setXAxisLabelOverrideMap(xAxisOverrideMap);
+            chartFrequence.setXAxisLabelOverrideMap(xAxisOverrideMap);
+            chartTemperature.setXAxisLabelOverrideMap(xAxisOverrideMap);
+        }
 
         JPanel pnlChartSBP = new XChartPanel<>(chartSBP);
         JPanel pnlChartDBP = new XChartPanel<>(chartDBP);
@@ -152,32 +217,25 @@ public class Storico extends  JFrame{
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
         this.setVisible(true);
 
-        dimettiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        dimettiButton.addActionListener(e -> leavePatientFrame = new LeavePatient(room, user, questo()));
+        esciDalloStoricoButton.addActionListener(e -> {
 
-                leavePatientFrame = new LeavePatient(stanza,user,questo());
+            if (leavePatientFrame == null){
+                dispose();
+            }
+            else if (leavePatientFrame.isShowing()) {
+
+                if(JOptionPane.showConfirmDialog(null,"Chiudere senza salvare la schermata di dimissione?") == 0){
+
+                    dispose();
+                    leavePatientFrame.dispose();
+                }
 
             }
-        });
-        esciDalloStoricoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-
-                if(leavePatientFrame == null){dispose();}
-                else if(leavePatientFrame.isShowing()){
-
-                    if(JOptionPane.showConfirmDialog(null,"Sei sicuro di voler uscire nonostante ci sia una schermata di dimisisone aperta?") == 0){
-
-                        dispose();
-                        leavePatientFrame.dispose();
-
-                    }
-
-                }else if (!leavePatientFrame.isActive()){dispose();}
-
+            else if (!leavePatientFrame.isActive()){
+                dispose();
             }
+
         });
     }
 

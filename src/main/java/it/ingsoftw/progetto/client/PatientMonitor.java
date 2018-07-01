@@ -67,6 +67,8 @@ public class PatientMonitor extends JPanel{
     private boolean showpop = true;
     private int temporimanente;
 
+    private Storico historyWindow;
+
     final static String EMPTYROOM = "emptyRoomPanel";
     final static String PATIENTROOM = "fullRoomPanel";
 
@@ -108,6 +110,9 @@ public class PatientMonitor extends JPanel{
                     sbpParameter.setText(String.valueOf(data.getSbp()));
                     frequenceParameter.setText(String.valueOf(data.getBpm()));
                     temperatureParameter.setText(String.valueOf(data.getTemp()));
+                    if (historyWindow != null && historyWindow.isVisible()) {
+                        historyWindow.updateVsData(data);
+                    }
                 }
             }
         };
@@ -239,6 +244,14 @@ public class PatientMonitor extends JPanel{
         patientPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),"Stanza "+ roomNumber,TitledBorder.TOP,TitledBorder.CENTER));
         ((javax.swing.border.TitledBorder) patientPanel.getBorder()).setTitleFont(new Font("Arial", Font.BOLD, 16));
 
+        // DATA
+        PatientData patientData = patient.getPatientData();
+
+        if (patientData != null) {
+            nome.setText(patientData.getName());
+            cognome.setText(patientData.getSurname());
+        }
+
         this.revalidate();
         this.repaint();
     }
@@ -266,7 +279,6 @@ public class PatientMonitor extends JPanel{
             prescriviButton.setText("Somministra");
 
         }
-
 
         emptyRoom = new EmptyRoom();
         {
@@ -303,7 +315,8 @@ public class PatientMonitor extends JPanel{
                 super.mousePressed(e);
                 if (e.getButton() == MouseEvent.BUTTON1){
                     try {
-                        new Storico(room, loginInterface.isLogged(), user);
+                        historyWindow = new Storico(room, loginInterface.isLogged(), user);
+                        historyWindow.updateVsData(patient.getCurrentMonitorData());
                     } catch (RemoteException e1) {
                         e1.printStackTrace();
                     }
