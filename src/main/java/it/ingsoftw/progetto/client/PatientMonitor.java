@@ -358,8 +358,12 @@ public class PatientMonitor extends JPanel{
 
             switch (status) {
                 case NURSE_LOGGED:
-                    new DoseDrug(patient);
-                break;
+                    try {
+                        new DoseDrug(patient,loginInterface.getLoggedUser());
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                    break;
 
                 case MEDIC_LOGGED:
                 case ADMIN_LOGGED:

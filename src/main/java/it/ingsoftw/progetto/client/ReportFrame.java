@@ -3,6 +3,7 @@ package it.ingsoftw.progetto.client;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
+import it.ingsoftw.progetto.common.DrugPrescription;
 import it.ingsoftw.progetto.common.ILogin;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.image.BufferedImage;
 
 public class ReportFrame extends JFrame{
     private JList recoveryList;
@@ -21,13 +23,9 @@ public class ReportFrame extends JFrame{
     private JPanel dataPatientPanel;
     private JLabel imageLabel;
     private JLabel nameParameter;
-    private JLabel sbpParameter;
     private JLabel surnameParameter;
-    private JLabel dbpParameter;
     private JLabel cfParameter;
-    private JLabel frequenceParameter;
     private JLabel dateParameter;
-    private JLabel temperatureParameter;
     private JLabel birthlocationParameter;
     private JPanel SBPPanel;
     private JPanel SBPgraphicPanel;
@@ -39,6 +37,7 @@ public class ReportFrame extends JFrame{
     private JPanel TemperaturePanel;
     private JPanel temperaturegraphicPanel;
     private JButton stampaReportButton;
+    private JPanel reportRightPanel;
 
     public ReportFrame(ILogin.LoginStatus status, String username) {
 
@@ -69,10 +68,52 @@ public class ReportFrame extends JFrame{
 
                 System.out.println("Stampa il report");
 
+
             }
         });
 
 
+        /*
+        Element root = new Element("message");
+        Document document = new Document(root);
+
+        Document document = new Document();
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\temp\\test.pdf"));
+            document.open();
+            PdfContentByte contentByte = writer.getDirectContent();
+            PdfTemplate template = contentByte.createTemplate(500, 500);
+            Graphics2D g2 = template.createGraphics(500, 500);
+            panel.print(g2);
+            g2.dispose();
+            contentByte.addTemplate(template, 30, 300);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally{
+            if(document.isOpen()){
+                document.close();
+            }
+        }*/
+
+    }
+
+
+    public class recoveryListRenderer extends DefaultListCellRenderer {
+
+
+        public Component getListCellRendererComponent(
+                JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+        {
+
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+            DrugPrescription farmaco = (DrugPrescription)value;
+
+            setText(farmaco.drug.commercialName+" "+farmaco.drug.packageDescription);
+
+            return this;
+        }
 
     }
 

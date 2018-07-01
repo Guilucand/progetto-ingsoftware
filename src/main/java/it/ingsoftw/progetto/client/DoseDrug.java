@@ -1,19 +1,17 @@
 package it.ingsoftw.progetto.client;
 
-import it.ingsoftw.progetto.common.Drug;
-import it.ingsoftw.progetto.common.DrugAdministration;
-import it.ingsoftw.progetto.common.DrugPrescription;
-import it.ingsoftw.progetto.common.IPatient;
+import it.ingsoftw.progetto.common.*;
 
 import javax.swing.*;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,12 +25,13 @@ public class DoseDrug extends JFrame{
     private JButton aggiungiButton;
     private JTextArea noteArea;
     private JTextField drugName;
-    private Drug selectedDrug;
+    private DrugPrescription selectedDrug;
     private Drug[] drugListDB;
     private DefaultListModel listafarmaci;
     private IPatient patient;
+    private List<DrugPrescription> drugPrescriptionList;
 
-    public DoseDrug(IPatient patient) {
+    public DoseDrug(IPatient patient, User utente) {
 
         super("Somministrazione-Farmaci");
         this.patient = patient;
@@ -63,7 +62,7 @@ public class DoseDrug extends JFrame{
 
         this.listafarmaci = new DefaultListModel<>();
 
-        List<DrugPrescription> drugPrescriptionList = new ArrayList<>();
+        drugPrescriptionList = new ArrayList<>();
         try {
             drugPrescriptionList = patient.getCurrentPrescriptions();
         } catch (RemoteException e) {
@@ -78,6 +77,7 @@ public class DoseDrug extends JFrame{
         }
 
         this.drugsList.setModel(listafarmaci);
+        this.drugsList.setCellRenderer(new DrugPrescriveListRendererextends());
 
 
         Date data = new Date();
@@ -109,7 +109,38 @@ public class DoseDrug extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-//                patient.addDrugAdministration(new DrugAdministration(, , , , , , ));
+                LocalDateTime adesso = LocalDateTime.now();
+
+                int anno = adesso.getYear();
+                java.time.Month mese = adesso.getMonth();
+                int giorno = adesso.getDayOfMonth();
+                int ora = adesso.getHour();
+
+                if (ora < hourComboBox.getSelectedIndex()) {
+
+                    if(giorno == 1) {
+
+                        if(mese == Month.JANUARY){
+
+                            anno = anno-1;
+
+                        }else{
+
+                            mese = mese.minus(1);
+
+                        }
+
+                    }else{
+
+                        giorno = giorno - 1;
+                    }
+                }
+
+                try {
+                    patient.addDrugAdministration(new DrugAdministration(selectedDrug.key, LocalDateTime.of(anno,mese,giorno,hourComboBox.getSelectedIndex(),minuteComboBox.getSelectedIndex()),quantityTextField.getText(),noteArea.getText(),utente));
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
                 System.out.println("aggiungi somministrazione");
             }
         });
@@ -124,12 +155,31 @@ public class DoseDrug extends JFrame{
 
                     int index = theList.locationToIndex(e.getPoint());
 
-                    selectedDrug = drugListDB[index];
+                    selectedDrug = drugPrescriptionList.get(index);
 
-                    drugName.setText(selectedDrug.commercialName);
+                    drugName.setText(selectedDrug.drug.commercialName);
 
                 }
             }
         });
+    }
+
+
+    public class DrugPrescriveListRendererextends extends DefaultListCellRenderer {
+
+
+        public Component getListCellRendererComponent(
+                JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+        {
+
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+            DrugPrescription farmaco = (DrugPrescription)value;
+
+            setText(farmaco.drug.commercialName+" "+farmaco.drug.packageDescription);
+
+            return this;
+        }
+
     }
 }
