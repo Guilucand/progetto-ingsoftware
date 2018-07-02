@@ -4,13 +4,15 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import it.ingsoftw.progetto.common.IVSConnection;
+import it.ingsoftw.progetto.server.ReverseClientSocket;
+import it.ingsoftw.progetto.server.ServerConfig;
 
 public class VsConnection extends UnicastRemoteObject implements IVSConnection {
 
     VsGui gui;
 
     public VsConnection(VsGui gui) throws RemoteException {
-        super();
+        super(ServerConfig.reversePort, ReverseClientSocket.getClientSocketFactory(), ReverseClientSocket.getServerSocketFactory());
         this.gui = gui;
     }
 
