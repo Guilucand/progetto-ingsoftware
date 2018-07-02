@@ -167,7 +167,7 @@ class UsersDatabase implements IUsersDatabase {
     @Override
     public boolean updatePassword(String id, Password newPassword) throws SQLException {
         String sql =
-                "UPDATE users SET password = ?" +
+                "UPDATE users SET password = ? " +
                         "WHERE id = ?";
 
         PreparedStatement changePassword = connection.prepareStatement(sql);
