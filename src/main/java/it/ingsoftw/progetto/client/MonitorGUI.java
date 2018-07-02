@@ -5,7 +5,11 @@ import it.ingsoftw.progetto.common.*;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
 public class MonitorGUI extends JFrame{
@@ -19,13 +23,17 @@ public class MonitorGUI extends JFrame{
     private IClientRmiFactory serverFactory;
     private IMonitor monitorInterface;
     private IAdmin adminInterface;
+    private JMenuBar menuBar;
+    private ILogin.LoginStatus status;
 
-    public MonitorGUI(ILogin loginInterface, String username, IClientRmiFactory serverFactory) throws RemoteException {
+
+    public MonitorGUI(ILogin loginInterface, String username, ILogin.LoginStatus status,IClientRmiFactory serverFactory) throws RemoteException {
 
         super("Monitor");
 
         this.loginInterface = loginInterface;
         this.username = username;
+        this.status = status;
 
         this.serverFactory = serverFactory;
         this.monitorInterface =serverFactory.getMonitorInterface();
@@ -103,6 +111,55 @@ public class MonitorGUI extends JFrame{
 
         }
 
+        //menubar con cambia password
+
+        menuBar = new JMenuBar();
+
+        JMenu menu = new JMenu("menu");
+        JMenuItem changepassword = new JMenuItem("cambia password");
+        JMenuItem showreport = new JMenuItem("vedi report");
+        JMenuItem admin = new JMenuItem("apri pannello amministrativo");
+
+        menu.add(changepassword);
+        menu.add(showreport);
+
+        if(this.status == ILogin.LoginStatus.PRIMARY_LOGGED|| this.status == ILogin.LoginStatus.ADMIN_LOGGED){
+
+            menu.add(admin);
+
+        }
+
+
+        JMenuItem exit = new JMenuItem("esci");
+        menu.add(exit);
+
+        changepassword.addActionListener(e -> new ChangePassword(loginInterface));
+
+        showreport.addActionListener(e -> new ReportFrame(status,username));
+
+        admin.addActionListener(e -> {
+
+            try {
+                new AdminPanel(status,adminInterface);
+            } catch (RemoteException ee) {
+                ee.printStackTrace();
+            }
+
+        });
+
+        exit.addActionListener(e -> {
+
+            if(JOptionPane.showConfirmDialog(null,"Conferma Log-out") == 0){
+
+                Chiudi();
+
+            }
+
+        });
+
+
+        menuBar.add(menu);
+        this.setJMenuBar(menuBar);
 
         this.pack();
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
