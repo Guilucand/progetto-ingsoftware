@@ -38,13 +38,19 @@ public class DatabaseConnection implements IDatabaseConnection {
         } catch (SQLException e) {
             System.out.println("Impossibile stabilire una connessione con il database: " + e.getLocalizedMessage());
         }
+
+        usersDatabase = new UsersDatabase(connection);
+        patientsDatabase = new PatientsDatabase(connection);
+        drugsDatabase = new DrugsDatabase(connection);
+
+        recoveryDatabase = new RecoveryDatabase(connection, getMessageInterface());
+
+        messageDatabase = new MessageDatabase(this);
+        prescriptionDatabase = new PrescriptionDatabase(connection, getDrugsInterface(), getUsersInterface());
     }
 
     @Override
     public IUsersDatabase getUsersInterface() {
-        if (usersDatabase == null) {
-            usersDatabase = new UsersDatabase(connection);
-        }
         return usersDatabase;
     }
 
@@ -52,38 +58,26 @@ public class DatabaseConnection implements IDatabaseConnection {
 
     @Override
     public IPatientsDatabase getPatientsInterface() {
-        if (patientsDatabase == null) {
-            patientsDatabase = new PatientsDatabase(connection);
-        }
         return patientsDatabase;
     }
 
     @Override
     public IRecoveryDatabase getRecoveryInterface() {
-        if (recoveryDatabase == null) {
-            recoveryDatabase = new RecoveryDatabase(connection, getMessageInterface());
-        }
         return recoveryDatabase;
     }
 
     @Override
     public IDrugsDatabase getDrugsInterface() {
-        if (drugsDatabase == null)
-            drugsDatabase = new DrugsDatabase(connection);
         return drugsDatabase;
     }
 
     @Override
     public IMessageDatabase getMessageInterface() {
-        if (messageDatabase == null)
-            messageDatabase = new MessageDatabase(this);
         return messageDatabase;
     }
 
     @Override
     public IPrescriptionDatabase getPrescriptionInterface() {
-        if (prescriptionDatabase == null)
-            prescriptionDatabase = new PrescriptionDatabase(connection, getDrugsInterface(), getUsersInterface());
         return prescriptionDatabase;
     }
 }
