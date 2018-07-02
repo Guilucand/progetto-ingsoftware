@@ -1,10 +1,7 @@
 package it.ingsoftw.progetto.client;
 
-import it.ingsoftw.progetto.common.ILogin;
-import it.ingsoftw.progetto.common.IPatient;
-import it.ingsoftw.progetto.common.IRoom;
-import it.ingsoftw.progetto.common.MonitorData;
-import it.ingsoftw.progetto.common.PatientData;
+import it.ingsoftw.progetto.common.*;
+import it.ingsoftw.progetto.common.IRecovery;
 import javafx.util.Pair;
 
 import org.knowm.xchart.XChartPanel;
@@ -16,22 +13,16 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalField;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +52,7 @@ public class Storico extends  JFrame{
     private JLabel birthlocationParameter;
     private JButton dimettiButton;
     private JButton esciDalloStoricoButton;
-    private IPatient patient;
+    private IRecovery patient;
     private PatientData patientData;
     private JFrame leavePatientFrame;
 

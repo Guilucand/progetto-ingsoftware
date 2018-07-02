@@ -12,7 +12,7 @@ public interface IRecoveryDatabase {
 
     boolean setRoomMachineId(String roomId, String machineId);
 
-    String addRecovery(String patientId, String roomId);
+    String addRecovery(String patientCode, String roomId);
 
     void updateMonitorData(String machineId, MonitorData data);
 
@@ -36,7 +36,7 @@ public interface IRecoveryDatabase {
     String mapRecoveryToMachine(String recoveryId);
     String mapMachineToRecovery(String machineId);
 
-    String mapPatientToRecovery(String patientId);
+    String mapPatientToRecovery(String patientCode);
 
     String mapRecoveryToPatient(String recoveryId);
 

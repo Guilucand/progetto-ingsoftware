@@ -13,7 +13,7 @@ public interface IRecoveryCreator extends Remote {
      * @return la lista degli id
      * @throws RemoteException
      */
-    List<String> queryPatientId(String query) throws RemoteException;
+    List<String> queryPatientCode(String query) throws RemoteException;
 
     /**
      * Ritorna un paziente da un id

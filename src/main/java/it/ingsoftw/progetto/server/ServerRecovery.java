@@ -11,7 +11,7 @@ import it.ingsoftw.progetto.common.DrugAdministration;
 import it.ingsoftw.progetto.common.DrugPrescription;
 import it.ingsoftw.progetto.common.IAlarmCallback;
 import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
-import it.ingsoftw.progetto.common.IPatient;
+import it.ingsoftw.progetto.common.IRecovery;
 import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.PatientData;
 import it.ingsoftw.progetto.common.messages.IMessagesChangedCallback;
@@ -22,7 +22,7 @@ import it.ingsoftw.progetto.server.database.IPrescriptionDatabase;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
 import javafx.util.Pair;
 
-public class ServerRecovery extends UnicastRemoteObject implements IPatient {
+public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
 
     private ClientStatus status;
     private IRecoveryDatabase database;
@@ -51,7 +51,7 @@ public class ServerRecovery extends UnicastRemoteObject implements IPatient {
     @Override
     public PatientData getPatientData() {
         try {
-            return patientsDatabase.getPatientById(database.mapRecoveryToPatient(recoveryId));
+            return patientsDatabase.getPatientByCode(database.mapRecoveryToPatient(recoveryId));
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +76,7 @@ public class PatientsDatabase implements IPatientsDatabase {
 
 
     @Override
-    public PatientData getPatientById(String patientId) throws SQLException {
+    public PatientData getPatientByCode(String patientCode) throws SQLException {
         String sql =
                 "SELECT code, name, surname, birthdate, birthplace FROM patient " +
                         "WHERE " +
@@ -85,14 +84,14 @@ public class PatientsDatabase implements IPatientsDatabase {
                         ";";
 
         PreparedStatement queryUser = connection.prepareStatement(sql);
-        queryUser.setString(1, patientId);
+        queryUser.setString(1, patientCode);
         ResultSet result = queryUser.executeQuery();
 
         return getPatientDataFromResultSet(result);
     }
 
     @Override
-    public List<String> searchPatientsById(String patientId) throws SQLException {
+    public List<String> searchPatientsByCode(String patientCode) throws SQLException {
         String sql =
                 "SELECT code FROM patient " +
                         "WHERE " +
@@ -100,7 +99,7 @@ public class PatientsDatabase implements IPatientsDatabase {
                         ";";
 
         PreparedStatement queryUser = connection.prepareStatement(sql);
-        queryUser.setString(1, patientId + "%");
+        queryUser.setString(1, patientCode + "%");
         ResultSet result = queryUser.executeQuery();
 
         List<String> patientsIds = new ArrayList<>();
@@ -113,11 +112,11 @@ public class PatientsDatabase implements IPatientsDatabase {
     }
 
     @Override
-    public EditablePatientData getEditablePatient(String patientId) throws SQLException {
-        PatientData patientData = getPatientById(patientId);
+    public EditablePatientData getEditablePatient(String patientCode) throws SQLException {
+        PatientData patientData = getPatientByCode(patientCode);
         if (patientData == null) return null;
 
-        return new EditablePatientData(patientData, patientId);
+        return new EditablePatientData(patientData, patientCode);
     }
 
     @Override

@@ -3,7 +3,7 @@ package it.ingsoftw.progetto.server;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import it.ingsoftw.progetto.common.IPatient;
+import it.ingsoftw.progetto.common.IRecovery;
 import it.ingsoftw.progetto.common.IRecoveryCreator;
 import it.ingsoftw.progetto.common.IRoom;
 import it.ingsoftw.progetto.server.database.IMessageDatabase;
@@ -19,7 +19,7 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
     private IMessageDatabase messageDatabase;
     private IPrescriptionDatabase prescriptionDatabase;
     private int roomId;
-    private IPatient currentPatient;
+    private IRecovery currentPatient;
 
     protected ServerRoom(ClientStatus status,
                          IRecoveryDatabase recoveryDatabase,
@@ -47,7 +47,7 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
     }
 
     @Override
-    public IPatient getCurrentPatient() throws RemoteException {
+    public IRecovery getCurrentPatient() throws RemoteException {
         if (currentPatient == null)
             currentPatient = new ServerRecovery(status,
                     recoveryDatabase,

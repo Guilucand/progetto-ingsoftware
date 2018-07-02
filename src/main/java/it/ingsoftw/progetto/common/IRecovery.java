@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Interfaccia di monitoraggio di un paziente attualmente ricoverato
  */
-public interface IPatient extends Remote {
+public interface IRecovery extends Remote {
 
     /**
      * Ottiene i dati anagrafici del paziente

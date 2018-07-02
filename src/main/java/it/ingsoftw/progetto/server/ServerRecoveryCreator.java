@@ -1,10 +1,8 @@
 package it.ingsoftw.progetto.server;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import it.ingsoftw.progetto.common.EditablePatientData;
@@ -32,9 +30,9 @@ public class ServerRecoveryCreator extends UnicastRemoteObject implements IRecov
 
 
     @Override
-    public List<String> queryPatientId(String query) throws RemoteException {
+    public List<String> queryPatientCode(String query) throws RemoteException {
         try {
-            return patientsDatabase.searchPatientsById(query);
+            return patientsDatabase.searchPatientsByCode(query);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RemoteException(e.getMessage());
@@ -44,7 +42,7 @@ public class ServerRecoveryCreator extends UnicastRemoteObject implements IRecov
     @Override
     public PatientData getPatientFromId(String id) throws RemoteException {
         try {
-            return patientsDatabase.getPatientById(id);
+            return patientsDatabase.getPatientByCode(id);
         } catch (SQLException e) {
             return null;
         }

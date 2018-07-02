@@ -32,10 +32,10 @@ public class TestRecoveryDatabase implements IRecoveryDatabase {
     }
 
     @Override
-    public String addRecovery(String patientId, String roomId) {
+    public String addRecovery(String patientCode, String roomId) {
         String recoveryId = roomId;
 
-        recovery.put(recoveryId, new Pair<>(patientId, roomId));
+        recovery.put(recoveryId, new Pair<>(patientCode, roomId));
         return recoveryId;
     }
 
@@ -154,7 +154,7 @@ public class TestRecoveryDatabase implements IRecoveryDatabase {
     }
 
     @Override
-    public String mapPatientToRecovery(String patientId) {
+    public String mapPatientToRecovery(String patientCode) {
         return null;
     }
 

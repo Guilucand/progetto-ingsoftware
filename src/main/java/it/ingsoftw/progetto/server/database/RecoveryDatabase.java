@@ -1,11 +1,8 @@
 package it.ingsoftw.progetto.server.database;
 
 import java.rmi.RemoteException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,17 +131,19 @@ public class RecoveryDatabase implements IRecoveryDatabase {
     }
 
     @Override
-    public String addRecovery(String patientId, String roomId) {
+    public String addRecovery(String patientCode, String roomId) {
         String sql =
-                "INSERT INTO recovery (patientCode, roomId) " +
-                        "VALUES (?, ?) " +
+                "INSERT INTO recovery (patientCode, roomId, startDate) " +
+                        "VALUES (?, ?, ?) " +
                         "RETURNING key;";
 
         try {
-            PreparedStatement addMachine = connection.prepareStatement(sql);
-            addMachine.setString(1, patientId);
-            addMachine.setString(2, roomId);
-            ResultSet result = addMachine.executeQuery();
+            PreparedStatement addRecovery = connection.prepareStatement(sql);
+            addRecovery.setString(1, patientCode);
+            addRecovery.setString(2, roomId);
+            addRecovery.setDate(3, Date.valueOf(LocalDate.now()));
+
+            ResultSet result = addRecovery.executeQuery();
             if (!result.next())
                 return null;
 
@@ -378,9 +377,9 @@ public class RecoveryDatabase implements IRecoveryDatabase {
     }
 
     @Override
-    public String mapPatientToRecovery(String patientId) {
+    public String mapPatientToRecovery(String patientCode) {
         return getSingleArgSqlResult("SELECT key FROM recovery WHERE patientCode = ? AND roomId IS NOT NULL;",
-                patientId);
+                patientCode);
     }
 
     @Override

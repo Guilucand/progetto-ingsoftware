@@ -39,13 +39,14 @@ public class DatabaseConnection implements IDatabaseConnection {
             System.out.println("Impossibile stabilire una connessione con il database: " + e.getLocalizedMessage());
         }
 
+        messageDatabase = new MessageDatabase();
+
         usersDatabase = new UsersDatabase(connection);
         patientsDatabase = new PatientsDatabase(connection);
         drugsDatabase = new DrugsDatabase(connection);
 
         recoveryDatabase = new RecoveryDatabase(connection, getMessageInterface());
 
-        messageDatabase = new MessageDatabase(this);
         prescriptionDatabase = new PrescriptionDatabase(connection, getDrugsInterface(), getUsersInterface());
     }
 
@@ -53,8 +54,6 @@ public class DatabaseConnection implements IDatabaseConnection {
     public IUsersDatabase getUsersInterface() {
         return usersDatabase;
     }
-
-    private TestDatabaseConnection tmp = new TestDatabaseConnection();
 
     @Override
     public IPatientsDatabase getPatientsInterface() {

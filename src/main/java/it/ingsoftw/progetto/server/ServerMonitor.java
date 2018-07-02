@@ -1,7 +1,6 @@
 package it.ingsoftw.progetto.server;
 
 import it.ingsoftw.progetto.common.IMonitor;
-import it.ingsoftw.progetto.common.IPatient;
 import it.ingsoftw.progetto.common.IRoom;
 import it.ingsoftw.progetto.server.database.IMessageDatabase;
 import it.ingsoftw.progetto.server.database.IPatientsDatabase;

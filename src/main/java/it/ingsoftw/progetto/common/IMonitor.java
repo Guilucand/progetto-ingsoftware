@@ -12,7 +12,7 @@ public interface IMonitor extends Remote {
      * Ritorna un array dei pazienti ricoverati in questo momento
      * @return la lista di pazienti
      */
-//    IPatient[] getHospitalizedPatients();
+//    IRecovery[] getHospitalizedPatients();
 
     /**
      * Ritorna una stanza a partire dal suo numero

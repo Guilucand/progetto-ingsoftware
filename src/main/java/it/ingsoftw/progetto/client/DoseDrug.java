@@ -28,10 +28,10 @@ public class DoseDrug extends JFrame{
     private DrugPrescription selectedDrug;
     private Drug[] drugListDB;
     private DefaultListModel listafarmaci;
-    private IPatient patient;
+    private IRecovery patient;
     private List<DrugPrescription> drugPrescriptionList;
 
-    public DoseDrug(IPatient patient, User utente) {
+    public DoseDrug(IRecovery patient, User utente) {
 
         super("Somministrazione-Farmaci");
         this.patient = patient;

@@ -56,7 +56,7 @@ public class PatientMonitor extends JPanel{
     private JButton prescriviButton;
     private int roomNumber;
     private final ILogin loginInterface;
-    private IPatient patient;
+    private IRecovery patient;
     private EmptyRoom emptyRoom;
     private IAlarmCallback.AlarmData alarmData;
     private HashMap<IAlarmCallback.AlarmData,Timer> alarmList;

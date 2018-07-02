@@ -2,7 +2,7 @@ package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.Drug;
 import it.ingsoftw.progetto.common.DrugPrescription;
-import it.ingsoftw.progetto.common.IPatient;
+import it.ingsoftw.progetto.common.IRecovery;
 import it.ingsoftw.progetto.common.User;
 
 import java.awt.event.ActionEvent;
@@ -20,7 +20,7 @@ import java.awt.*;
 
 public class PrescriveDrug extends JFrame{
     private final User loggedUser;
-    private final IPatient patient;
+    private final IRecovery patient;
     private JPanel mainPanel;
     private JList drugList;
     private JTextField therapyDurationTextField;
@@ -43,7 +43,7 @@ public class PrescriveDrug extends JFrame{
     private Drug selectedDrug;
     private JTable tabella;
 
-    public PrescriveDrug(User loggedUser, IPatient patient){
+    public PrescriveDrug(User loggedUser, IRecovery patient){
 
         super("Prescrizione dei farmaci");
         this.loggedUser = loggedUser;

@@ -8,10 +8,7 @@ import it.ingsoftw.progetto.common.PatientData;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -70,7 +67,7 @@ public class AddPatient extends JFrame {
                     if (s.length() == 0)
                         return new ArrayList<>();
 
-                    return recoveryCreator.queryPatientId(s);
+                    return recoveryCreator.queryPatientCode(s);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -102,7 +99,7 @@ public class AddPatient extends JFrame {
 
             String name = nameTextField.getText();
             String surname = surnameTextField.getText();
-            String patientId = cfTextField.getText();
+            String patientCode = cfTextField.getText();
             String birthPlace = locationTextField.getText();
             LocalDate birthDate = LocalDate.of(
                     birthDatePicker.getModel().getYear(),
@@ -110,7 +107,7 @@ public class AddPatient extends JFrame {
                     birthDatePicker.getModel().getDay());
 
             try {
-                if (recoveryCreator.createRecovery(new PatientData(patientId,
+                if (recoveryCreator.createRecovery(new PatientData(patientCode,
                         name,
                         surname,
                         birthDate,

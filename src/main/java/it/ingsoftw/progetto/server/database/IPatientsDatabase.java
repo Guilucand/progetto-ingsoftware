@@ -10,10 +10,10 @@ public interface IPatientsDatabase {
     boolean addPatient(PatientData patient) throws SQLException;
     boolean removePatient(EditablePatientData patient) throws SQLException;
 
-    PatientData getPatientById(String patientId) throws SQLException;
-    List<String> searchPatientsById(String patientId) throws SQLException;
+    PatientData getPatientByCode(String patientCode) throws SQLException;
+    List<String> searchPatientsByCode(String patientCode) throws SQLException;
 
-    EditablePatientData getEditablePatient(String patientId) throws SQLException;
+    EditablePatientData getEditablePatient(String patientCode) throws SQLException;
 
     boolean updatePatient(EditablePatientData updatedPatientData) throws SQLException;
 

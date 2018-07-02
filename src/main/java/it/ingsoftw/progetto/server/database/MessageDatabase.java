@@ -13,13 +13,11 @@ import it.ingsoftw.progetto.common.messages.MessageObject;
 
 public class MessageDatabase implements IMessageDatabase {
 
-    private DatabaseConnection connection;
     private Map<String, Set<IMessagesChangedCallback>> callbacks;
     private Map<String, Set<MessageObject>> messages;
 
-    public MessageDatabase(DatabaseConnection connection) {
+    public MessageDatabase() {
 
-        this.connection = connection;
         this.callbacks = new HashMap<>();
         this.messages = new HashMap<>();
     }
