@@ -62,36 +62,36 @@ public class MainServer {
 
 
         // TEST
+        if (false) {
+            try {
+                databaseConnection.getUsersInterface().addUser(
+                        new User("user", "Cracco", "Ciao2", "guilucand@gmail.com", User.UserType.Primary),
+                        Password.fromPassword("pass"));
+                databaseConnection.getUsersInterface().addUser(
+                        new User("test", "Simo", "Ciao2", "simo@gmail.com", User.UserType.Admin),
+                        Password.fromPassword("prova"));
 
-        try {
-            databaseConnection.getUsersInterface().addUser(
-                    new User("user", "Cracco", "Ciao2", "guilucand@gmail.com", User.UserType.Primary),
-                    Password.fromPassword("pass"));
-            databaseConnection.getUsersInterface().addUser(
-                    new User("test", "Simo", "Ciao2", "simo@gmail.com", User.UserType.Admin),
-                    Password.fromPassword("prova"));
+                patientsDatabase.addPatient(new PatientData(
+                        "CRCNDR96T05A703M",
+                        "Andrea",
+                        "Cracco",
+                        LocalDate.of(1996, 12, 5),
+                        "Bassano del Grappa"));
 
-            patientsDatabase.addPatient(new PatientData(
-                    "CRCNDR96T05A703M",
-                    "Andrea",
-                    "Cracco",
-                     LocalDate.of(1996, 12, 5),
-                    "Bassano del Grappa"));
+                for (int i = 1; i <= 10; i++) {
+                    recoveryDatabase.setRoomMachineId(String.valueOf(i), String.valueOf(i));
+                }
 
-            for (int i = 1; i <= 10; i++) {
-                recoveryDatabase.setRoomMachineId(String.valueOf(i), String.valueOf(i));
+
+                for (int i = 1; i <= 10; i += 2) {
+                    patientsDatabase.addPatient(new PatientData("PATIENT" + String.valueOf(i), "A" + i, "B" + i, LocalDate.now(), "C" + i));
+                    recoveryDatabase.addRecovery("PATIENT" + String.valueOf(i), String.valueOf(i));
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-
-            for (int i = 1; i <= 10; i+= 2) {
-                patientsDatabase.addPatient(new PatientData("PATIENT"+ String.valueOf(i), "A" + i, "B" + i, LocalDate.now(), "C"+i));
-                recoveryDatabase.addRecovery("PATIENT" + String.valueOf(i), String.valueOf(i));
-            }
-
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
         }
 
 //            recoveryDatabase.setRoomMachineId(String.valueOf(i+1), String.valueOf(i+1));

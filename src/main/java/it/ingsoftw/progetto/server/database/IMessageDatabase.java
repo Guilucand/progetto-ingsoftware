@@ -13,6 +13,8 @@ public interface IMessageDatabase {
 
     void completeMessage(String recoveryId, String key);
 
+    void addSingleTimeMessage(String recoveryId, String key, MessageObject message);
+
     void addMessagesChangedCallback(String recoveryId, IMessagesChangedCallback callback);
 
     void removeMessagesChangedCallback(String recoveryId, IMessagesChangedCallback callback);

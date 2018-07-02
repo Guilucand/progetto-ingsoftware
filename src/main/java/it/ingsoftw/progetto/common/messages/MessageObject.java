@@ -31,6 +31,6 @@ public abstract class MessageObject implements Serializable {
      * per completare il messaggio
      * @return true se si dispongono dei privilegi necessari
      */
-    public abstract boolean canCompleteMessage();
+//    public abstract boolean canCompleteMessage();
 
 }

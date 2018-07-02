@@ -10,6 +10,10 @@ import javafx.util.Pair;
 
 public interface IRecoveryDatabase {
 
+    boolean addDiagnosis(String recoveryId, String diagnosis);
+
+    boolean leaveRecovery(String recoveryId, String dimissionLetter);
+
     boolean setRoomMachineId(String roomId, String machineId);
 
     String addRecovery(String patientCode, String roomId);

@@ -16,6 +16,20 @@ import java.util.List;
 public interface IRecovery extends Remote {
 
     /**
+     * Aggiunge la diagnosi
+     * @return true se aggiunta con successo
+     * @throws RemoteException
+     */
+    boolean addDiagnosis(String diagnosis) throws RemoteException;
+
+    /**
+     * Dimette un paziente
+     * @param dimissionLetter la lettera di dimissioni
+     * @return true se il paziente e' stato dimesso
+     */
+    boolean leavePatient(String dimissionLetter) throws RemoteException;
+
+    /**
      * Ottiene i dati anagrafici del paziente
      * @return i dati del paziente
      */
@@ -86,5 +100,11 @@ public interface IRecovery extends Remote {
      */
     void setMessagesChangedCallback(IMessagesChangedCallback callback) throws RemoteException;
 
+    /**
+     * Returns last vs data
+     * @param maxMinutes maximum minutes to return
+     * @return
+     * @throws RemoteException
+     */
     List<Pair<LocalDateTime, MonitorData>> getLastVsData(int maxMinutes) throws RemoteException;
 }

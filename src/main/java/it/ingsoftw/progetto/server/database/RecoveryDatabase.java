@@ -18,6 +18,7 @@ import it.ingsoftw.progetto.common.IAlarmCallback;
 import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.messages.AddDiagnosisMessage;
+import it.ingsoftw.progetto.common.messages.DimissionMessage;
 import javafx.util.Pair;
 
 public class RecoveryDatabase implements IRecoveryDatabase {
@@ -28,6 +29,8 @@ public class RecoveryDatabase implements IRecoveryDatabase {
     private Map<String, Set<IMonitorDataUpdatedCallback>> monitorDataCallbacks;
     private Map<String, Set<IAlarmCallback>> alarmsCallbacks;
     private Map<String, Map<Integer, IAlarmCallback.AlarmData>> activeAlarms;
+
+    public static final int SNAPSHOT_SECONDS_INTERVAL = 60;
 
     private Timer snapshotMonitorsTimer;
 
@@ -48,7 +51,60 @@ public class RecoveryDatabase implements IRecoveryDatabase {
             public void run() {
                 minuteSnapshot();
             }
-        }, 0, 60 * 1000);
+        }, 5000, SNAPSHOT_SECONDS_INTERVAL * 1000);
+        generateMessages();
+    }
+
+    private void generateMessages() {
+        getAllCurrentRecoveries();
+
+        List<String> recoveriesWithoutDiagnosis = getMissingDiagnosisLetter();
+        if (recoveriesWithoutDiagnosis != null) {
+            for (String recoveryId : recoveriesWithoutDiagnosis) {
+                messageDatabase.addMessage(recoveryId, "ADD_DIAGNOSIS", new AddDiagnosisMessage());
+            }
+        }
+    }
+
+    @Override
+    public boolean addDiagnosis(String recoveryId, String diagnosis) {
+        String sql = "UPDATE recovery SET diagnosis = ?";
+
+        try {
+            PreparedStatement addDiagnosis = connection.prepareStatement(sql);
+            addDiagnosis.setString(1, diagnosis);
+            addDiagnosis.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        messageDatabase.completeMessage(recoveryId, "ADD_DIAGNOSIS");
+        return true;
+    }
+
+    @Override
+    public boolean leaveRecovery(String recoveryId, String dimissionLetter) {
+        String sql = "UPDATE recovery SET (dimissionLetter, roomId) = (?, NULL) " +
+                "WHERE key = ?";
+
+        try {
+            PreparedStatement addDiagnosis = connection.prepareStatement(sql);
+            addDiagnosis.setString(1, dimissionLetter);
+            addDiagnosis.setInt(2, Integer.valueOf(recoveryId));
+
+            if (addDiagnosis.executeUpdate() > 0) {
+                messageDatabase.addSingleTimeMessage(recoveryId, "DIMISSION", new DimissionMessage());
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private List<String> getMissingDiagnosisLetter() {
+        return getSqlResults("SELECT key FROM recovery WHERE diagnosis IS NULL;");
     }
 
     private List<String> getAllCurrentRecoveries() {
@@ -118,7 +174,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
         String sql =
                 "UPDATE room SET (machine) " +
-                        "= (?) " +
+                        "= ROW(?) " +
                         "WHERE number = ?;";
         try {
             PreparedStatement setRoomMachine = connection.prepareStatement(sql);

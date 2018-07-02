@@ -2,17 +2,23 @@ package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.*;
 import it.ingsoftw.progetto.common.IRecovery;
+import it.ingsoftw.progetto.server.database.RecoveryDatabase;
 import javafx.util.Pair;
 
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
+import org.knowm.xchart.style.Theme;
+import org.knowm.xchart.style.markers.Marker;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,6 +61,17 @@ public class Storico extends  JFrame{
     private IRecovery patient;
     private PatientData patientData;
     private JFrame leavePatientFrame;
+    XYChart chartSBP;
+    XYChart chartDBP;
+    XYChart chartFrequence;
+    XYChart chartTemperature;
+
+    JPanel pnlChartSBP;
+    JPanel pnlChartDBP;
+    JPanel pnlChartFrequence;
+    JPanel pnlChartTemperature;
+
+    Timer updateChartTimer;
 
     public void updateVsData(MonitorData data) {
         if (data != null) {
@@ -85,7 +102,7 @@ public class Storico extends  JFrame{
 
         if(!(status == ILogin.LoginStatus.PRIMARY_LOGGED)) dimettiButton.setVisible(false);
 
-        patient = room.getCurrentPatient();
+        patient = room.getCurrentRecovery();
         setImage("./img/image.png",imageLabel);
 
         patientData = patient.getPatientData();
@@ -98,96 +115,22 @@ public class Storico extends  JFrame{
             dateParameter.setText(patientData.getBirthDate().toString());
         }
 
-        XYChart chartSBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("SBP").width(300).height(100).build();
-        XYChart chartDBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("DBP").width(300).height(100).build();
-        XYChart chartFrequence = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Frequence").width(300).height(100).build();
-        XYChart chartTemperature = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Temperature °C").width(300).height(100).build();
+        chartSBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("SBP").width(300).height(100).build();
+        chartDBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("DBP").width(300).height(100).build();
+        chartFrequence = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Frequence").width(300).height(100).build();
+        chartTemperature = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Temperature °C").width(300).height(100).build();
 
         chartSBP.getStyler().setSeriesColors(new Color[]{new Color(107,187,95)});
         chartDBP.getStyler().setSeriesColors(new Color[]{new Color(17,87,31)});
         chartFrequence.getStyler().setSeriesColors(new Color[]{new Color(187,35,34)});
         chartTemperature.getStyler().setSeriesColors(new Color[]{new Color(70,83,187)});
 
+        updateChart();
 
-        chartSBP.getStyler().setYAxisMin(20.0);
-        chartSBP.getStyler().setYAxisMax(250.0);
-
-        chartDBP.getStyler().setYAxisMin(20.);
-        chartDBP.getStyler().setYAxisMax(250.0);
-
-        chartFrequence.getStyler().setYAxisMin(0.0);
-        chartFrequence.getStyler().setYAxisMax(250.0);
-
-        chartTemperature.getStyler().setYAxisMin(35.0);
-        chartTemperature.getStyler().setYAxisMax(45.0);
-
-        List<Pair<LocalDateTime, MonitorData>> historyData = patient.getLastVsData(120);
-
-        if (historyData != null) {
-
-            List<Integer> yDataSBP = new ArrayList<>();
-            List<Integer> yDataDBP = new ArrayList<>();
-            List<Integer> yDataFrequence = new ArrayList<>();
-            List<Float> yDataTemperature = new ArrayList<>();
-
-            List<Integer> xData = new ArrayList<>();//new Time[historyData.size()];
-            Map<Double, Object> xAxisOverrideMap = new HashMap<>();
-
-            long first = 0;
-            for (int i = 0; i < historyData.size(); i++) {
-                LocalDateTime currentTime = historyData
-                        .get(i)
-                        .getKey();
-
-                ZonedDateTime zonedDateTime = ZonedDateTime.of(currentTime, ZoneId.systemDefault());
-
-                long seconds = zonedDateTime.getLong(ChronoField.INSTANT_SECONDS);
-
-                if (i == 0) {
-                    first = seconds;
-                }
-
-                xData.add((int)(seconds - first));
-
-                if (i%5 == 0) {
-                    xAxisOverrideMap.put((double)(seconds - first),
-                            currentTime.format(DateTimeFormatter.ofPattern("HH:mm")));
-                }
-
-                double maxXValue = xData.get(xData.size()-1);
-
-                chartSBP.getStyler().setXAxisMin(0.0);
-                chartSBP.getStyler().setXAxisMax(maxXValue);
-                chartDBP.getStyler().setXAxisMin(0.0);
-                chartDBP.getStyler().setXAxisMax(maxXValue);
-                chartFrequence.getStyler().setXAxisMin(0.0);
-                chartFrequence.getStyler().setXAxisMax(maxXValue);
-                chartTemperature.getStyler().setXAxisMin(0.0);
-                chartTemperature.getStyler().setXAxisMax(maxXValue);
-
-                MonitorData currentData = historyData.get(i).getValue();
-                yDataDBP.add(currentData.getDbp());
-                yDataSBP.add(currentData.getSbp());
-                yDataFrequence.add(currentData.getBpm());
-                yDataTemperature.add(currentData.getTemp());
-            }
-
-
-            XYSeries serieProvaSBP = chartSBP.addSeries("SBP", xData, yDataSBP);
-            XYSeries serieProvaDBP = chartDBP.addSeries("DBP", xData, yDataDBP);
-            XYSeries serieProvaFrequence = chartFrequence.addSeries("Frequence", xData, yDataFrequence);
-            XYSeries serieProvaTemperature = chartTemperature.addSeries("Temperature", xData, yDataTemperature);
-
-            chartDBP.setXAxisLabelOverrideMap(xAxisOverrideMap);
-            chartSBP.setXAxisLabelOverrideMap(xAxisOverrideMap);
-            chartFrequence.setXAxisLabelOverrideMap(xAxisOverrideMap);
-            chartTemperature.setXAxisLabelOverrideMap(xAxisOverrideMap);
-        }
-
-        JPanel pnlChartSBP = new XChartPanel<>(chartSBP);
-        JPanel pnlChartDBP = new XChartPanel<>(chartDBP);
-        JPanel pnlChartFrequence = new XChartPanel<>(chartFrequence);
-        JPanel pnlChartTemperature = new XChartPanel<>(chartTemperature);
+        pnlChartSBP = new XChartPanel<>(chartSBP);
+        pnlChartDBP = new XChartPanel<>(chartDBP);
+        pnlChartFrequence = new XChartPanel<>(chartFrequence);
+        pnlChartTemperature = new XChartPanel<>(chartTemperature);
 
         this.SBPgraphicPanel.setLayout(new GridLayout());
         this.SBPgraphicPanel.add(pnlChartSBP);
@@ -210,7 +153,6 @@ public class Storico extends  JFrame{
 
         dimettiButton.addActionListener(e -> leavePatientFrame = new LeavePatient(room, user, questo()));
         esciDalloStoricoButton.addActionListener(e -> {
-
             if (leavePatientFrame == null){
                 dispose();
             }
@@ -228,6 +170,148 @@ public class Storico extends  JFrame{
             }
 
         });
+
+        updateChartTimer = new Timer(1000, e -> updateChart());
+        updateChartTimer.start();
+
+    }
+
+    private void updateChart() {
+        if (!isVisible() && updateChartTimer != null)
+            updateChartTimer.stop();
+
+        chartSBP.getStyler().setYAxisMin(20.0);
+        chartSBP.getStyler().setYAxisMax(250.0);
+
+        chartDBP.getStyler().setYAxisMin(20.);
+        chartDBP.getStyler().setYAxisMax(250.0);
+
+        chartFrequence.getStyler().setYAxisMin(0.0);
+        chartFrequence.getStyler().setYAxisMax(250.0);
+
+        chartTemperature.getStyler().setYAxisMin(35.0);
+        chartTemperature.getStyler().setYAxisMax(45.0);
+
+        final int minutes = 120;
+        final int totSeconds = minutes * 60;
+
+        List<Pair<LocalDateTime, MonitorData>> historyData;
+        try {
+            historyData = patient.getLastVsData(minutes * (60 / RecoveryDatabase.SNAPSHOT_SECONDS_INTERVAL));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            historyData = null;
+        }
+
+        if (historyData != null && historyData.size() > 0) {
+
+            List<Integer> yDataSBP = new ArrayList<>();
+            List<Integer> yDataDBP = new ArrayList<>();
+            List<Integer> yDataFrequence = new ArrayList<>();
+            List<Float> yDataTemperature = new ArrayList<>();
+
+            List<Integer> xData = new ArrayList<>();//new Time[historyData.size()];
+            Map<Double, Object> xAxisOverrideMap = new HashMap<>();
+
+            long lastValue;
+            {
+                LocalDateTime lastTime = historyData
+                        .get(historyData.size() - 1)
+                        .getKey();
+                ZonedDateTime lastZonedDateTime = ZonedDateTime.of(lastTime, ZoneId.systemDefault());
+                lastValue = lastZonedDateTime.getLong(ChronoField.INSTANT_SECONDS);
+            }
+
+
+            for (int i = 0; i < historyData.size(); i++) {
+                LocalDateTime currentTime = historyData
+                        .get(i)
+                        .getKey();
+
+                ZonedDateTime zonedDateTime = ZonedDateTime.of(currentTime, ZoneId.systemDefault());
+
+                long seconds = zonedDateTime.getLong(ChronoField.INSTANT_SECONDS);
+
+                int secondsValue = (int) (totSeconds + (seconds - lastValue));
+
+                xData.add(secondsValue);
+
+                if (i % 15 == 0) {
+                    xAxisOverrideMap.put((double) secondsValue,
+                            currentTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+                }
+
+                double maxXValue = xData.get(xData.size() - 1);
+
+                chartSBP.getStyler().setXAxisMin(0.0);
+                chartSBP.getStyler().setXAxisMax(maxXValue);
+                chartDBP.getStyler().setXAxisMin(0.0);
+                chartDBP.getStyler().setXAxisMax(maxXValue);
+                chartFrequence.getStyler().setXAxisMin(0.0);
+                chartFrequence.getStyler().setXAxisMax(maxXValue);
+                chartTemperature.getStyler().setXAxisMin(0.0);
+                chartTemperature.getStyler().setXAxisMax(maxXValue);
+
+                MonitorData currentData = historyData.get(i).getValue();
+                yDataDBP.add(currentData.getDbp());
+                yDataSBP.add(currentData.getSbp());
+                yDataFrequence.add(currentData.getBpm());
+                yDataTemperature.add(currentData.getTemp());
+            }
+
+            chartSBP.getSeriesMap().containsKey("SBP");
+            chartDBP.removeSeries("DBP");
+            chartFrequence.removeSeries("Frequence");
+            chartTemperature.removeSeries("Temperature");
+
+
+
+
+            if (!chartSBP.getSeriesMap().containsKey("SBP"))
+                chartSBP.addSeries("SBP", xData, yDataSBP).setMarker(SeriesMarkers.NONE);
+            else
+                chartSBP.updateXYSeries("SBP", xData, yDataSBP, null);
+
+            if (!chartDBP.getSeriesMap().containsKey("DBP"))
+                chartDBP.addSeries("DBP", xData, yDataDBP).setMarker(SeriesMarkers.NONE);
+            else
+                chartDBP.updateXYSeries("DBP", xData, yDataDBP, null);
+
+            if (!chartFrequence.getSeriesMap().containsKey("Frequence"))
+                chartFrequence.addSeries("Frequence", xData, yDataFrequence).setMarker(SeriesMarkers.NONE);
+            else
+                chartFrequence.updateXYSeries("Frequence", xData, yDataFrequence, null);
+
+
+            if (!chartTemperature.getSeriesMap().containsKey("Temperature"))
+                chartTemperature.addSeries("Temperature", xData, yDataTemperature).setMarker(SeriesMarkers.NONE);
+            else
+                chartTemperature.updateXYSeries("Temperature", xData, yDataTemperature, null);
+
+
+            chartDBP.setXAxisLabelOverrideMap(xAxisOverrideMap);
+            chartSBP.setXAxisLabelOverrideMap(xAxisOverrideMap);
+            chartFrequence.setXAxisLabelOverrideMap(xAxisOverrideMap);
+            chartTemperature.setXAxisLabelOverrideMap(xAxisOverrideMap);
+
+            if (pnlChartSBP != null) {
+                pnlChartSBP.revalidate();
+                pnlChartSBP.repaint();
+            }
+            if (pnlChartDBP != null) {
+                pnlChartDBP.revalidate();
+                pnlChartDBP.repaint();
+            }
+            if (pnlChartFrequence != null) {
+                pnlChartFrequence.revalidate();
+                pnlChartFrequence.repaint();
+            }
+            if (pnlChartTemperature != null) {
+                pnlChartTemperature.revalidate();
+                pnlChartTemperature.repaint();
+            }
+
+        }
     }
 
 

@@ -49,6 +49,22 @@ public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
     }
 
     @Override
+    public boolean addDiagnosis(String diagnosis) {
+        if (diagnosis == null)
+            return false;
+
+        return database.addDiagnosis(recoveryId, diagnosis);
+    }
+
+    @Override
+    public boolean leavePatient(String dimissionLetter) {
+        if (dimissionLetter == null)
+            return false;
+
+        return database.leaveRecovery(recoveryId, dimissionLetter);
+    }
+
+    @Override
     public PatientData getPatientData() {
         try {
             return patientsDatabase.getPatientByCode(database.mapRecoveryToPatient(recoveryId));

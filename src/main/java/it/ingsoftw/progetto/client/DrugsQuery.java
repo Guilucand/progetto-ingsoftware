@@ -88,11 +88,18 @@ public class DrugsQuery {
             }
 
 
-            String select = "select?fl=*";
+            String select = "select?fl=" + String.join(",",
+                    "sm_field_descrizione_ditta",
+                    "sm_field_descrizione_farmaco",
+                    "sm_field_descrizione_confezione",
+                    "sm_field_codice_atc",
+                    "sm_field_descrizione_atc",
+                    "sm_field_aic");
             String where = "q=bundle:confezione_farmaco+" + queryField + ":"+ URLEncoder.encode(query.trim(), "UTF-8") + (wildcard ? "*" : "");
-            String options = "df=sm_field_descrizione_farmaco&wt=json&rows=150000";
+            String options = "df=sm_field_descrizione_farmaco&wt=json&rows=150";
 
-            InputStream jsonStream = new URL(baseAddress + select + "&" + where + "&" + options).openStream();
+            String urlString = baseAddress + select + "&" + where + "&" + options;
+            InputStream jsonStream = new URL(urlString).openStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(jsonStream, Charset.forName("UTF-8")));
             String jsonText = readAll(rd);
 

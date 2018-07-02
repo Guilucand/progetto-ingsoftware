@@ -5,6 +5,6 @@ import java.rmi.RemoteException;
 
 public interface IRoom extends Remote {
     IRecoveryCreator addRecovery() throws RemoteException;
-    boolean hasPatient() throws RemoteException;
-    IRecovery getCurrentPatient() throws RemoteException;
+    boolean hasRecovery() throws RemoteException;
+    IRecovery getCurrentRecovery() throws RemoteException;
 }

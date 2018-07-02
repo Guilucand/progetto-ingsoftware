@@ -1,5 +1,6 @@
 package it.ingsoftw.progetto.client;
 
+import it.ingsoftw.progetto.common.IRecovery;
 import it.ingsoftw.progetto.common.IRoom;
 
 import javax.swing.*;
@@ -7,6 +8,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class LeavePatient extends JFrame{
     private JLabel patientletterdimisisontitle;
@@ -15,7 +17,7 @@ public class LeavePatient extends JFrame{
     private JPanel MainPanel;
 
 
-    public LeavePatient(IRoom stanza, String user, Storico storico ){
+    public LeavePatient(IRoom stanza, String user, Storico storico){
 
         super("Lettera-Dimissioni");
 
@@ -52,13 +54,22 @@ public class LeavePatient extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String leavepatientletter = textArea1.getText();
+                String leavePatientLetter = textArea1.getText();
 
-                System.out.println(leavepatientletter);
+                System.out.println(leavePatientLetter);
 
                 if(JOptionPane.showConfirmDialog(null,"Confermi la dimissione del paziente?") == 0){
 
                     //dimettipaziente
+                    try {
+                        IRecovery recovery = stanza.getCurrentRecovery();
+                        if (!recovery.leavePatient(leavePatientLetter))
+                            return;
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                        return;
+                    }
+
 
                     storico.close();
                     dispose();

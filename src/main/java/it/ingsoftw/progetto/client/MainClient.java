@@ -1,5 +1,6 @@
 package it.ingsoftw.progetto.client;
 
+import java.awt.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 
@@ -25,8 +26,11 @@ public class MainClient {
 //            System.out.println(dr.commercialName + " -> " + dr.company + " : " + dr.activePrinciple);
 //        }
 
+//        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+//        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
-        System.setProperty("sun.java2d.uiScale","1");
+//        double ratio = dim.height / 1080.0;
+        System.setProperty("sun.java2d.uiScale", "2");//String.valueOf((int)ratio));
 
         try {
             // Connessione al server

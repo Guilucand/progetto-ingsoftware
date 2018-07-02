@@ -19,7 +19,8 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
     private IMessageDatabase messageDatabase;
     private IPrescriptionDatabase prescriptionDatabase;
     private int roomId;
-    private IRecovery currentPatient;
+    private IRecovery currentRecovery;
+    private String recoveryId;
 
     protected ServerRoom(ClientStatus status,
                          IRecoveryDatabase recoveryDatabase,
@@ -42,20 +43,26 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
     }
 
     @Override
-    public boolean hasPatient() throws RemoteException {
+    public boolean hasRecovery() throws RemoteException {
         return recoveryDatabase.mapRoomToRecovery(String.valueOf(roomId)) != null;
     }
 
     @Override
-    public IRecovery getCurrentPatient() throws RemoteException {
-        if (currentPatient == null)
-            currentPatient = new ServerRecovery(status,
+    public IRecovery getCurrentRecovery() throws RemoteException {
+        String recoveryId = recoveryDatabase.mapRoomToRecovery(String.valueOf(roomId));
+        if (recoveryId == null) {
+            return currentRecovery = null;
+        }
+
+        if (currentRecovery == null || (recoveryId != this.recoveryId))
+            this.recoveryId = recoveryId;
+            currentRecovery = new ServerRecovery(status,
                     recoveryDatabase,
                     messageDatabase,
                     patientsDatabase,
                     prescriptionDatabase,
-                    recoveryDatabase.mapRoomToRecovery(String.valueOf(roomId)));
+                    recoveryId);
 
-        return currentPatient;
+        return currentRecovery;
     }
 }

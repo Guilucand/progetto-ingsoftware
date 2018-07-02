@@ -23,42 +23,75 @@ public class MessageDatabase implements IMessageDatabase {
     }
 
     @Override
-    public synchronized List<MessageObject> getMessagesForRecovery(String recoveryId) {
-        Set<MessageObject> recoveryMessages = messages.get(recoveryId);
-        if (recoveryMessages == null)
-            return new ArrayList<>();
+    public List<MessageObject> getMessagesForRecovery(String recoveryId) {
 
-        return new ArrayList<>(recoveryMessages);
+        synchronized (messages) {
+
+            Set<MessageObject> recoveryMessages = messages.get(recoveryId);
+            if (recoveryMessages == null)
+                return new ArrayList<>();
+
+            return new ArrayList<>(recoveryMessages);
+        }
     }
 
     @Override
-    public synchronized void addMessage(String recoveryId, String key, MessageObject message) {
+    public void addMessage(String recoveryId, String key, MessageObject message) {
 
-        if (messages.get(recoveryId) == null)
-            messages.put(recoveryId, new HashSet<>());
+        synchronized (messages) {
 
-        messages.get(recoveryId).add(message);
+            if (messages.get(recoveryId) == null)
+                messages.put(recoveryId, new HashSet<>());
+
+            messages.get(recoveryId).add(message);
+        }
+
         notifyChanges(recoveryId);
     }
 
     @Override
-    public synchronized void completeMessage(String recoveryId, String key) {
+    public void completeMessage(String recoveryId, String key) {
 
-        Set<MessageObject> recoveryMessages = messages.get(recoveryId);
-        if (recoveryMessages == null)
-            return;
+        boolean removed;
+        synchronized (messages) {
+            Set<MessageObject> recoveryMessages = messages.get(recoveryId);
+            if (recoveryMessages == null)
+                return;
 
-        if (recoveryMessages.remove(key))
+            removed = recoveryMessages.remove(key);
+        }
+        if (removed)
             notifyChanges(recoveryId);
     }
 
-    private synchronized void notifyChanges(String recoveryId) {
-        Set<IMessagesChangedCallback> recoveryCallbacks = new HashSet<>();
-        if (recoveryCallbacks == null)
-            return;
+    @Override
+    public void addSingleTimeMessage(String recoveryId, String key, MessageObject message) {
+        addMessage(recoveryId, key, message);
+
+        synchronized (messages) {
+            Set<MessageObject> recoveryMessages = messages.get(recoveryId);
+            if (recoveryMessages == null)
+                return;
+
+            recoveryMessages.remove(key);
+        }
+    }
+
+    private void notifyChanges(String recoveryId) {
+        Set<IMessagesChangedCallback> recoveryCallbacks;
+        Set<IMessagesChangedCallback> recoveryCallbacksCopy;
+
+        synchronized (callbacks) {
+
+            recoveryCallbacks = callbacks.get(recoveryId);
+            if (recoveryCallbacks == null)
+                return;
+            // Copio l'oggetto per evitare problemi di sincronizzazione
+            recoveryCallbacksCopy = new HashSet<>(recoveryCallbacks);
+        }
 
         Set<IMessagesChangedCallback> unresponsive = new HashSet<>();
-        for (IMessagesChangedCallback callback : recoveryCallbacks) {
+        for (IMessagesChangedCallback callback : recoveryCallbacksCopy) {
             try {
                 callback.messagesChanged();
             } catch (RemoteException e) {
@@ -66,25 +99,32 @@ public class MessageDatabase implements IMessageDatabase {
             }
         }
 
-        for (IMessagesChangedCallback cb : unresponsive) {
-            recoveryCallbacks.remove(cb);
+        synchronized (callbacks) {
+            for (IMessagesChangedCallback cb : unresponsive) {
+                recoveryCallbacks.remove(cb);
+            }
         }
     }
 
     @Override
-    public synchronized void addMessagesChangedCallback(String recoveryId, IMessagesChangedCallback callback) {
-        if (callbacks.get(recoveryId) == null)
-            callbacks.put(recoveryId, new HashSet<>());
+    public void addMessagesChangedCallback(String recoveryId, IMessagesChangedCallback callback) {
 
-        callbacks.get(recoveryId).add(callback);
+        synchronized (callbacks) {
+            if (callbacks.get(recoveryId) == null)
+                callbacks.put(recoveryId, new HashSet<>());
+
+            callbacks.get(recoveryId).add(callback);
+        }
     }
 
     @Override
-    public synchronized void removeMessagesChangedCallback(String recoveryId, IMessagesChangedCallback callback) {
-        if (callbacks.get(recoveryId) == null)
-            return;
+    public void removeMessagesChangedCallback(String recoveryId, IMessagesChangedCallback callback) {
+        synchronized (callbacks) {
+            if (callbacks.get(recoveryId) == null)
+                return;
 
-        callbacks.get(recoveryId).remove(callback);
+            callbacks.get(recoveryId).remove(callback);
+        }
     }
 
 

@@ -4,6 +4,7 @@ package it.ingsoftw.progetto.client;
 
 
 import it.ingsoftw.progetto.common.*;
+import it.ingsoftw.progetto.common.messages.DimissionMessage;
 import it.ingsoftw.progetto.common.messages.MessageObject;
 import it.ingsoftw.progetto.common.messages.MessagesChangedCallback;
 
@@ -82,8 +83,8 @@ public class PatientMonitor extends JPanel{
             assignButton.addActionListener(e -> {
                 try {
                     new AddPatient(room.addRecovery(), ()-> {
-                        if (room.hasPatient()) {
-                            patient = room.getCurrentPatient();
+                        if (room.hasRecovery()) {
+                            patient = room.getCurrentRecovery();
                             setupPatient();
                         }
                     });
@@ -227,9 +228,17 @@ public class PatientMonitor extends JPanel{
         patient.setMessagesChangedCallback(new MessagesChangedCallback() {
             @Override
             public void messagesChanged() throws RemoteException {
-                System.out.println("Current messages: ");
+                System.out.println("Current messages: " + roomNumber);
                 for (MessageObject obj : patient.getMessages()) {
                     System.out.println(obj.getMessageType());
+
+                    switch (obj.getMessageType()) {
+                        case DimissionMessage
+                                .CONSTRUCTOR:
+                            updatePatient();
+
+                    }
+
                 }
             }
         });
@@ -260,11 +269,6 @@ public class PatientMonitor extends JPanel{
 
         this.roomNumber = roomNumber;
         this.loginInterface = loginInterface;
-
-        if (room.hasPatient())
-            this.patient = room.getCurrentPatient();
-        else
-            this.patient = null;
 
         this.room = room;
 
@@ -324,11 +328,7 @@ public class PatientMonitor extends JPanel{
             }
         });
 
-        // Mostra la stanza vuota o il paziente a seconda dello stato
-        if (patient == null)
-            cardLayout.show( mainPanel, EMPTYROOM);
-        else
-            setupPatient();
+        updatePatient();
 
         boolean b = true;
 
@@ -389,6 +389,25 @@ public class PatientMonitor extends JPanel{
                     break;
             }
         });
+    }
+
+    private void updatePatient() {
+
+        try {
+            if (room.hasRecovery())
+                this.patient = room.getCurrentRecovery();
+            else
+                this.patient = null;
+
+        // Mostra la stanza vuota o il paziente a seconda dello stato
+        if (patient == null)
+            cardLayout.show( mainPanel, EMPTYROOM);
+        else
+            setupPatient();
+
+        } catch (RemoteException e) {
+            this.patient = null;
+        }
     }
 
 
