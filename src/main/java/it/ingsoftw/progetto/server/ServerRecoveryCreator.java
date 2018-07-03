@@ -59,6 +59,6 @@ public class ServerRecoveryCreator extends UnicastRemoteObject implements IRecov
         } catch (SQLException e) {
             return false;
         }
-        return recoveryDatabase.addRecovery(patientData.getCode(), String.valueOf(roomId)) != null;
+        return recoveryDatabase.addRecovery(patientData, String.valueOf(roomId)) != null;
     }
 }

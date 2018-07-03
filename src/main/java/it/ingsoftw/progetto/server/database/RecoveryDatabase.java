@@ -13,7 +13,9 @@ import java.util.TimerTask;
 
 import it.ingsoftw.progetto.common.AlarmData;
 import it.ingsoftw.progetto.common.MonitorData;
+import it.ingsoftw.progetto.common.PatientData;
 import it.ingsoftw.progetto.common.messages.AlarmStopMessage;
+import it.ingsoftw.progetto.common.messages.PatientAddedMessage;
 import it.ingsoftw.progetto.common.messages.persistent.AlarmStartMessage;
 import it.ingsoftw.progetto.common.messages.MonitorDataChangedMessage;
 import it.ingsoftw.progetto.common.messages.persistent.RequestDiagnosisMessage;
@@ -68,6 +70,8 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
     @Override
     public boolean leaveRecovery(int recoveryKey, String dimissionLetter) {
+        String room = mapRecoveryToRoom(recoveryKey);
+
         String sql = "UPDATE recovery SET (dimissionLetter, roomId) = (?, NULL) " +
                 "WHERE key = ?";
 
@@ -78,7 +82,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
             if (addDiagnosis.executeUpdate() > 0) {
                 messageDatabase.addVolatileMessage(new DimissionMessage(recoveryKey,
-                        mapRecoveryToRoom(recoveryKey),
+                        room,
                         dimissionLetter));
                 return true;
             }
@@ -172,7 +176,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
     }
 
     @Override
-    public Integer addRecovery(String patientCode, String roomId) {
+    public Integer addRecovery(PatientData patient, String roomId) {
         String sql =
                 "INSERT INTO recovery (patientCode, roomId, startDate) " +
                         "VALUES (?, ?, ?) " +
@@ -180,7 +184,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
         try {
             PreparedStatement addRecovery = connection.prepareStatement(sql);
-            addRecovery.setString(1, patientCode);
+            addRecovery.setString(1, patient.getCode());
             addRecovery.setString(2, roomId);
             addRecovery.setDate(3, Date.valueOf(LocalDate.now()));
 
@@ -190,6 +194,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
             int recoveryKey = result.getInt(1);
 
+            messageDatabase.addVolatileMessage(new PatientAddedMessage(recoveryKey, roomId, patient));
             messageDatabase.addPersistentMessage(new RequestDiagnosisMessage(recoveryKey, roomId));
             return recoveryKey;
 

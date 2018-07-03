@@ -23,16 +23,10 @@ public class AddPatient extends JFrame {
     private JButton aggiungiRicoveroButton;
     private JPanel panelDate;
     private IRecoveryCreator recoveryCreator;
-    private IAddPatientCallback addPatientCallback;
     private JPanel Panel1;
     private JDatePicker birthDatePicker;
     private AutocompleteJTextFrame autocompleteCF;
     private final String dateFormatString = "dd/MM/yyyy";
-
-
-    interface IAddPatientCallback {
-        void patientAdded() throws RemoteException;
-    }
 
     private void setPatientData(PatientData data) {
         if (data == null)
@@ -47,12 +41,11 @@ public class AddPatient extends JFrame {
         birthDatePicker.getFormattedTextField().setText(birthDate.format(DateTimeFormatter.ofPattern(dateFormatString)));
     }
 
-    public AddPatient(IRecoveryCreator recoveryCreator, IAddPatientCallback addPatientCallback) {
+    public AddPatient(IRecoveryCreator recoveryCreator) {
 
         super("Aggiunta ricovero");
 
         this.recoveryCreator = recoveryCreator;
-        this.addPatientCallback = addPatientCallback;
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -113,7 +106,6 @@ public class AddPatient extends JFrame {
                         birthDate,
                         birthPlace))) {
                     this.dispose();
-                    addPatientCallback.patientAdded();
                 }
             } catch (RemoteException e1) {
                 e1.printStackTrace();

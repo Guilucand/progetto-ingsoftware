@@ -5,6 +5,7 @@ import java.util.List;
 
 import it.ingsoftw.progetto.common.AlarmData;
 import it.ingsoftw.progetto.common.MonitorData;
+import it.ingsoftw.progetto.common.PatientData;
 import javafx.util.Pair;
 
 public interface IRecoveryDatabase {
@@ -15,7 +16,7 @@ public interface IRecoveryDatabase {
 
     boolean setRoomMachineId(String roomId, String machineId);
 
-    Integer addRecovery(String patientCode, String roomId);
+    Integer addRecovery(PatientData patient, String roomId);
 
     void updateMonitorData(String machineId, MonitorData data);
 
