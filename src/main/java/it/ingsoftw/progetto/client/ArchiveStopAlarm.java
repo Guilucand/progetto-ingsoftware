@@ -17,7 +17,6 @@ public class ArchiveStopAlarm extends JFrame{
 
         super("Rapporto spegnimento allarme");
 
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
         this.MainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),user,TitledBorder.TOP,TitledBorder.CENTER));
         ((javax.swing.border.TitledBorder) this.MainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
@@ -26,7 +25,15 @@ public class ArchiveStopAlarm extends JFrame{
         MainPanel.setPreferredSize(preferredDimension);
 
         this.setContentPane(MainPanel);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        this.pack();
+
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
+
+        this.setVisible(true);
+
 
 
 

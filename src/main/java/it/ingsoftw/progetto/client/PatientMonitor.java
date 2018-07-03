@@ -4,9 +4,7 @@ package it.ingsoftw.progetto.client;
 
 
 import it.ingsoftw.progetto.common.*;
-import it.ingsoftw.progetto.common.messages.DimissionMessage;
-import it.ingsoftw.progetto.common.messages.MessageObject;
-import it.ingsoftw.progetto.common.messages.MessagesChangedCallback;
+import it.ingsoftw.progetto.common.messages.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -61,12 +59,12 @@ public class PatientMonitor extends JPanel{
     private EmptyRoom emptyRoom;
     private IAlarmCallback.AlarmData alarmData;
     private HashMap<IAlarmCallback.AlarmData,Timer> alarmList;
-    private JPopupMenu pop;
+    private JPopupMenu alarmPopMenu;
     private JPanel mainPanel;
     private Thread sound;
     private IRoom room;
-    private boolean showpop = true;
     private int temporimanente;
+    private boolean showpop;
 
     private Storico historyWindow;
 
@@ -215,6 +213,7 @@ public class PatientMonitor extends JPanel{
                 }
 
                 setImage("./img/alarmPaper.png",alarmLabel);
+
                 timerLabel.setText("");
                 timerLabel.setForeground(Color.black);
 
@@ -230,18 +229,22 @@ public class PatientMonitor extends JPanel{
             public void messagesChanged() throws RemoteException {
                 System.out.println("Current messages: " + roomNumber);
                 for (MessageObject obj : patient.getMessages()) {
+
+
                     System.out.println(obj.getMessageType());
 
                     switch (obj.getMessageType()) {
-                        case DimissionMessage
-                                .CONSTRUCTOR:
-                            updatePatient();
+
+                        case DimissionMessage.CONSTRUCTOR: updatePatient();break;
+                        case AddDiagnosisMessage.CONSTRUCTOR: setImage("./img/diagnosis.png",alarmLabel);; break;
+                        case AddStopMachineMessage.CONSTRUCTOR :setImage("./img/alarmPaper.png",alarmLabel);;break;
 
                     }
-
                 }
             }
         });
+
+
 
 
 
@@ -276,7 +279,7 @@ public class PatientMonitor extends JPanel{
 
         this.mainPanel = new JPanel(cardLayout = new CardLayout());
 
-        this.pop = new JPopupMenu();
+        this.alarmPopMenu = new JPopupMenu();
 
         if(loginInterface.isLogged() == ILogin.LoginStatus.NURSE_LOGGED) {
 
@@ -330,36 +333,6 @@ public class PatientMonitor extends JPanel{
 
         updatePatient();
 
-        boolean b = true;
-
-        alarmLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                super.mouseEntered(e);
-
-                System.out.println("mouse entrato");
-
-                if(showpop){
-
-                    addPopup();
-                    pop.show(alarmLabel,alarmLabel.getWidth()-(alarmLabel.getWidth()/2),alarmLabel.getHeight()-(alarmLabel.getHeight()/2));
-                    showpop = false;
-
-                }
-            }
-        });
-
-        alarmLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-
-                if(!showpop) {
-                    pop.setVisible(false);
-                    showpop = true;
-                }
-            }
-        });
         prescriviButton.addActionListener(e -> {
 
             ILogin.LoginStatus status = ILogin.LoginStatus.NOTLOGGED;
@@ -389,6 +362,29 @@ public class PatientMonitor extends JPanel{
                     break;
             }
         });
+
+
+        alarmLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                try {
+
+                    System.out.println("lista allarm vuota? " +alarmList.isEmpty()+" tipo utente loggato "+loginInterface.getLoggedUser().getUserType());
+
+                    if (e.getButton() == MouseEvent.BUTTON1 && alarmList.isEmpty() && loginInterface.getLoggedUser().getUserType() != User.UserType.Nurse){
+
+                        addPopup();
+
+                        alarmPopMenu.show(alarmLabel,alarmLabel.getWidth()-(alarmLabel.getWidth()/2),alarmLabel.getHeight()-(alarmLabel.getHeight()/2));
+
+                    }
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
     }
 
     private void updatePatient() {
@@ -411,19 +407,58 @@ public class PatientMonitor extends JPanel{
     }
 
 
-    private synchronized void addPopup(){
+    private synchronized void addPopup() throws RemoteException {
 
-        Set<IAlarmCallback.AlarmData> keyset = alarmList.keySet();
 
-        pop.removeAll();
+        java.util.List<MessageObject> messaggi = patient.getMessages();
+
+        alarmPopMenu.removeAll();
+
+        for(MessageObject mo : messaggi) {
+
+            JMenuItem nlabel = new JMenuItem(mo.getMessageText());
+
+
+            switch (mo.getMessageType()) {
+
+
+                case DimissionMessage.CONSTRUCTOR:
+
+                    System.out.println("constructor");
+
+                    break;
+
+                case AddDiagnosisMessage.CONSTRUCTOR:
+
+
+                    nlabel.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        new AddDiagnosis(patient);
+
+                    }
+                });
+
+                    break;
+            }
+
+            alarmPopMenu.add(nlabel);
+
+        }
+
+
+        /*Set<IAlarmCallback.AlarmData> keyset = alarmList.keySet();
+
+        alarmPopMenu.removeAll();
 
         for(IAlarmCallback.AlarmData ad : keyset){
 
             System.out.println("aggiungo "+ad.getLevel()+" a pop" );
             JLabel elemento = new JLabel(""+ad.getLevel());
-            pop.add(elemento);
+            alarmPopMenu.add(elemento);
 
-        }
+        }*/
 
 
 
