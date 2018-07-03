@@ -36,6 +36,8 @@ public class DoseDrug extends JFrame{
         super("Somministrazione-Farmaci");
         this.patient = patient;
 
+        this.setResizable(false);
+
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 

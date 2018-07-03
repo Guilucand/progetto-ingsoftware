@@ -45,6 +45,8 @@ public class AddPatient extends JFrame {
 
         super("Aggiunta ricovero");
 
+        this.setResizable(false);
+
         this.recoveryCreator = recoveryCreator;
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

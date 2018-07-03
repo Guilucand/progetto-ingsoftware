@@ -67,6 +67,8 @@ public class AdminPanel extends JFrame{
 
         super("Admin-Panel");
 
+        this.setResizable(false);
+
         this.status = status;
         this.adminInterface=adminInterface;
 

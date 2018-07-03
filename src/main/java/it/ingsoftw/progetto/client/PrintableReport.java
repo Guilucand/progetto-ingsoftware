@@ -122,8 +122,6 @@ public class PrintableReport extends JPanel {
             this.setLayout(new GridLayout(8,1,15,5));
 
 
-
-
             XYChart SBP = graphicList.get(0);
             XYChart DBP = graphicList.get(1);
             XYChart Frequence = graphicList.get(2);
