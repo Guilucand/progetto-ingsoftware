@@ -173,7 +173,6 @@ public class MonitorGUI extends JFrame{
 
         });
 
-<<<<<<< HEAD
         stampareport.addActionListener( e -> {
 
             //PrintableReport pr = new PrintableReport(true);
@@ -182,9 +181,6 @@ public class MonitorGUI extends JFrame{
 
         });
 
-
-=======
->>>>>>> 5bf478b3f3860666e48a72ff7b65d83cffe8fe4e
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
 
