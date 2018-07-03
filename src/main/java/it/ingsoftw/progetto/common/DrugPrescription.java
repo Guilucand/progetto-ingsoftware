@@ -7,15 +7,14 @@ public class DrugPrescription implements Serializable {
 
     public DrugPrescription(Drug drug, LocalDate prescriptionDate,
                             String durationDays, String dailyDoses,
-                            String qtyPerDose, String notes,
-                            User doctor) {
+                            String qtyPerDose, String notes) {
         this.drug = drug;
         this.prescriptionDate = prescriptionDate;
         this.durationDays = durationDays;
         this.dailyDoses = dailyDoses;
         this.qtyPerDose = qtyPerDose;
         this.notes = notes;
-        this.doctor = doctor;
+        this.doctor = null;
         this.key = 0;
     }
 

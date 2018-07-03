@@ -15,6 +15,7 @@ public class MainClient {
     private static ILogin.LoginStatus loginstatus = ILogin.LoginStatus.NOTLOGGED;
 
     static IClientRmiFactory serverFactory;
+    static MessagesDispatcher messagesDispatcher;
 
 
     public static void main(String[] args) throws RemoteException {
@@ -31,7 +32,7 @@ public class MainClient {
 //        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
 //        double ratio = dim.height / 1080.0;
-        System.setProperty("sun.java2d.uiScale", "1");//String.valueOf((int)ratio));
+        System.setProperty("sun.java2d.uiScale", "2");//String.valueOf((int)ratio));
 
         try {
             // Connessione al server
@@ -104,6 +105,11 @@ public class MainClient {
 
     private static void Logged(ILogin loginInterface, String username, ILogin.LoginStatus status) throws RemoteException {
 
-        new MonitorGUI(loginInterface, username,status, serverFactory);
+        MonitorGUI monitorGUI = new MonitorGUI(loginInterface, username,status, serverFactory);
+
+        if (messagesDispatcher == null) {
+            messagesDispatcher = new MessagesDispatcher(serverFactory.getMessageInterface(), monitorGUI);
+        }
+
     }
 }

@@ -7,9 +7,9 @@ import it.ingsoftw.progetto.common.DrugPrescription;
 import it.ingsoftw.progetto.common.User;
 
 public interface IPrescriptionDatabase {
-    boolean addPrescription(String recoveryId, User loggedUser, DrugPrescription prescription);
+    boolean addPrescription(int recoveryKey, User loggedUser, DrugPrescription prescription);
 
-    boolean addAdministration(String recoveryId, User loggedUser, DrugAdministration administration);
+    boolean addAdministration(int recoveryKey, User loggedUser, DrugAdministration administration);
 
-    List<DrugPrescription> getPrescriptions(String recoveryId);
+    List<DrugPrescription> getPrescriptions(int recoveryKey);
 }

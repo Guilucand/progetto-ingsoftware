@@ -7,14 +7,13 @@ import java.time.LocalDateTime;
 public class DrugAdministration implements Serializable {
     public DrugAdministration(int prescriptionKey,
                               LocalDateTime administrationDateTime,
-                              String qty, String notes,
-                              User nurse) {
+                              String qty, String notes) {
 
         this.prescriptionKey = prescriptionKey;
         this.administrationDateTime = administrationDateTime;
         this.qty = qty;
         this.notes = notes;
-        this.nurse = nurse;
+        this.nurse = null;
     }
 
     public final int prescriptionKey;

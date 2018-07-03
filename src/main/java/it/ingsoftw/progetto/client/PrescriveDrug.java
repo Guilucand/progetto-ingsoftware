@@ -19,8 +19,7 @@ import java.awt.*;
 
 
 public class PrescriveDrug extends JFrame{
-    private final User loggedUser;
-    private final IRecovery patient;
+    private IRecovery patient;
     private JPanel mainPanel;
     private JList drugList;
     private JTextField therapyDurationTextField;
@@ -43,10 +42,9 @@ public class PrescriveDrug extends JFrame{
     private Drug selectedDrug;
     private JTable tabella;
 
-    public PrescriveDrug(User loggedUser, IRecovery patient){
+    public PrescriveDrug(IRecovery patient){
 
         super("Prescrizione dei farmaci");
-        this.loggedUser = loggedUser;
         this.patient = patient;
 
         this.setContentPane(mainPanel);
@@ -103,8 +101,7 @@ public class PrescriveDrug extends JFrame{
                         durataPrescrizione,
                         doseGiornalieraPrescrizione,
                         quantitàFarmaco,
-                        notes,
-                        loggedUser))) {
+                        notes))) {
                     System.out.println("Salvataggio prescrizione");
                     this.dispose();
                 }

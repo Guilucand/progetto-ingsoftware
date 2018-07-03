@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 public class MonitorGUI extends JFrame{
 
@@ -25,12 +26,14 @@ public class MonitorGUI extends JFrame{
     private IAdmin adminInterface;
     private JMenuBar menuBar;
     private ILogin.LoginStatus status;
+    private HashMap<String, PatientMonitor> patientMonitors;
 
 
     public MonitorGUI(ILogin loginInterface, String username, ILogin.LoginStatus status,IClientRmiFactory serverFactory) throws RemoteException {
 
         super("Monitor");
 
+        this.patientMonitors = new HashMap<>();
         this.loginInterface = loginInterface;
         this.username = username;
         this.status = status;
@@ -78,10 +81,21 @@ public class MonitorGUI extends JFrame{
         c.add("1", midPanel);
         c.add("2", bottomPanel);
 
+        for (int i = 1; i <= 10; i++) {
+            patientMonitors.put(String.valueOf(i),
+                    new PatientMonitor(i,
+                            monitorInterface.getRoomByNumber(i),
+                            loginInterface.isLogged(),
+                            username)
+                    );
+        }
+
         for(int i = 0; i<4; i++){
 
-            topPanel.add(new PatientMonitor(i+1, monitorInterface.getRoomByNumber(i+1), loginInterface,username),i);
-            midPanel.add(new PatientMonitor(i+5, monitorInterface.getRoomByNumber(i+5), loginInterface,username),i);
+            topPanel.add(patientMonitors.get(String.valueOf(i + 1)), i);
+
+            midPanel.add(patientMonitors.get(String.valueOf(i + 5)), i);
+
             if(i == 0){
 
                 EmptyPanelAdmin epa = new EmptyPanelAdmin(loginInterface.isLogged(), adminInterface, username);
@@ -107,7 +121,7 @@ public class MonitorGUI extends JFrame{
                 bottomPanel.add(epa.getPanel(), i);
 
             }
-            else bottomPanel.add(new PatientMonitor(i+8, monitorInterface.getRoomByNumber(i+8),loginInterface,username),i);
+            else bottomPanel.add(patientMonitors.get(String.valueOf(i + 8)), i);
 
         }
 
@@ -159,6 +173,7 @@ public class MonitorGUI extends JFrame{
 
         });
 
+<<<<<<< HEAD
         stampareport.addActionListener( e -> {
 
             //PrintableReport pr = new PrintableReport(true);
@@ -168,12 +183,18 @@ public class MonitorGUI extends JFrame{
         });
 
 
+=======
+>>>>>>> 5bf478b3f3860666e48a72ff7b65d83cffe8fe4e
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
 
         this.pack();
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
         this.setVisible(true);
+    }
+
+    public PatientMonitor getPatientMonitorByRoom(String roomId) {
+        return patientMonitors.get(roomId);
     }
 
     private void Chiudi() {

@@ -15,6 +15,7 @@ public class VsInstance {
 
     public final String ID;
     public final VsGui GUI;
+    private int key;
 
     Random r = new Random();
 
@@ -46,15 +47,14 @@ public class VsInstance {
     }
 
     IVSListener serverListener;
-    VsConnection conn;
+
 
     public void connect() {
         try {
-            conn = new VsConnection(GUI);
             String url = "//" + ServerConfig.hostname + ":" + ServerConfig.port + "/vsauth";
             serverListener = (IVSListener) Naming.lookup(url);
-            serverListener.connectVS(ID, conn);
-            GUI.setConnectionStatus(true);
+            key = serverListener.connectVS(ID);
+            GUI.setConnectionStatus(key >= 0);
         }
         catch (Exception e) {
             System.out.println("Connection error: " + e.toString());
@@ -67,14 +67,14 @@ public class VsInstance {
     public VsInstance(String id) {
 
         ID = id;
-        GUI = new VsGui(id);
+        GUI = new VsGui(id, this);
         GUI.setUpdateFunction(this::generateDistribution);
 
         connect();
 
         GUI.setAlarmCallback((desc, level)-> {
             try {
-                return serverListener.startAlarm(ID, desc, level);
+                return serverListener.startAlarm(key, desc, level);
             } catch (RemoteException e) {
                 GUI.setConnectionStatus(false);
             }
@@ -83,7 +83,7 @@ public class VsInstance {
 
         GUI.setAlarmStopCallback((alarmId)-> {
             try {
-                return serverListener.stopAlarm(ID, alarmId);
+                return serverListener.stopAlarm(key, alarmId);
             } catch (RemoteException e) {
                 GUI.setConnectionStatus(false);
             }
@@ -96,12 +96,11 @@ public class VsInstance {
             }
             return false;
         });
+    }
 
-        GUI.setMonitorDataChangedCallback((data)->{
-            try {
-                serverListener.notifyMonitorUpdate(ID, data);
-            } catch (Exception e) {
-                GUI.setConnectionStatus(false);
-            }        });
+    public void updateMonitorData(MonitorData data) throws RemoteException {
+        if (serverListener != null) {
+            serverListener.notifyMonitorUpdate(key, data);
+        }
     }
 }
