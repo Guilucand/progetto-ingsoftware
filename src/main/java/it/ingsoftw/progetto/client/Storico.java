@@ -188,7 +188,12 @@ public class Storico extends  JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                PrintableReport printReport = new PrintableReport(true, room ,GraphicList);
+                PrintableReport printReport = null;
+                try {
+                    printReport = new PrintableReport(true, room ,GraphicList);
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
 
                 printReport.printToPdf("here");
 

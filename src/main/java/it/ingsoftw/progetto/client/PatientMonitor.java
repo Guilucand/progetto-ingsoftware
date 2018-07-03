@@ -38,7 +38,6 @@ public class PatientMonitor extends JPanel {
     private JLabel temperatureLabel;
 
 
-    private JButton modificaButton;
     private JLabel alarmLabel;
     private JLabel timerLabel;
     private JButton prescriviButton;
@@ -267,8 +266,6 @@ public class PatientMonitor extends JPanel {
         this.add(mainPanel, 0);
 
         //____LISTENER
-
-        modificaButton.addActionListener(e -> new EditPatient(this));
 
 
         image.addMouseListener(new MouseAdapter() {

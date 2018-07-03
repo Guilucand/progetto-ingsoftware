@@ -226,7 +226,9 @@
                       <gridbag weightx="1.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
-                    <border type="none"/>
+                    <border type="none">
+                      <color color="-1"/>
+                    </border>
                     <children>
                       <scrollpane id="3cb3f">
                         <constraints>
@@ -239,7 +241,9 @@
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints/>
                             <properties/>
-                            <border type="none"/>
+                            <border type="line">
+                              <color color="-16777216"/>
+                            </border>
                             <children/>
                           </grid>
                         </children>
@@ -262,7 +266,9 @@
                       <gridbag weightx="1.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
-                    <border type="none"/>
+                    <border type="none">
+                      <color color="-1"/>
+                    </border>
                     <children>
                       <scrollpane id="ae809" binding="scrollpaneDBP">
                         <constraints>
@@ -275,7 +281,9 @@
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints/>
                             <properties/>
-                            <border type="none"/>
+                            <border type="line">
+                              <color color="-16777216"/>
+                            </border>
                             <children/>
                           </grid>
                         </children>
@@ -298,7 +306,9 @@
                       <gridbag weightx="1.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
-                    <border type="none"/>
+                    <border type="line">
+                      <color color="-16777216"/>
+                    </border>
                     <children>
                       <component id="6f4ba" class="javax.swing.JLabel">
                         <constraints>
@@ -334,7 +344,9 @@
                       <gridbag weightx="1.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
-                    <border type="none"/>
+                    <border type="line">
+                      <color color="-16777216"/>
+                    </border>
                     <children>
                       <component id="77949" class="javax.swing.JLabel">
                         <constraints>
@@ -383,7 +395,7 @@
                   <hspacer id="34e8a">
                     <constraints>
                       <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag top="0" left="360" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+                      <gridbag top="0" left="320" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
                     </constraints>
                   </hspacer>
                   <hspacer id="afad1">

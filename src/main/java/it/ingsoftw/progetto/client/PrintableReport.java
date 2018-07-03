@@ -1,7 +1,6 @@
 package it.ingsoftw.progetto.client;
 
 import com.itextpdf.text.Document;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -11,9 +10,9 @@ import org.knowm.xchart.XYChart;
 
 import java.awt.*;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,15 +24,18 @@ public class PrintableReport extends JPanel {
     private boolean printable;
     private IRoom room;
     private ArrayList<XYChart> graphicList;
+    private static final int YLengthPDF = 1200;
 
 
-    PrintableReport(boolean printable, IRoom room, ArrayList<XYChart> graphicList ) {
+    PrintableReport(boolean printable, IRoom room, ArrayList<XYChart> graphicList ) throws RemoteException {
 
+        this.room = room;
         this.graphicList = graphicList;
         this.printable = printable;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.setBackground(Color.WHITE);
 
-        Dimension A4 = new Dimension(595, 842);
+        Dimension A4 = new Dimension(595, YLengthPDF);
 
 
         this.setPreferredSize(A4);
@@ -46,50 +48,24 @@ public class PrintableReport extends JPanel {
 
         this.setBorder(new EmptyBorder(40, 30, 30, 30));
 
+        this.add(new InfoField(room));
 
-        this.add(new InfoField("Nome    :", "Prova"));
-        this.add(new InfoField("Cognome     :", "Prova1"));
         this.add(new GraphicField(graphicList));
 
     }
 
-    private class InfoField extends JPanel {
 
-        public InfoField(String title, String value) {
-
-            this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-
-            JLabel titleLabel = new JLabel(title);
-            JLabel valueLabel = new JLabel(value);
-
-            Font baseFont = titleLabel.getFont();
-
-            titleLabel.setFont(baseFont.deriveFont(baseFont.getStyle() | Font.BOLD));
-            valueLabel.setFont(baseFont.deriveFont(baseFont.getStyle() & ~Font.BOLD));
-
-
-            this.add(titleLabel);
-
-            this.add(valueLabel);
-
-            if (printable) {
-                titleLabel.setBackground(Color.WHITE);
-                titleLabel.setBackground(Color.WHITE);
-                this.setBackground(Color.WHITE);
-            }
-        }
-
-    }
 
     public void printToPdf(String path) {
 
-        Document document = new Document(PageSize.A4);
+        Document document = new Document(new com.itextpdf.text.Rectangle(595,YLengthPDF));
         try {
 
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("test.pdf"));
             document.open();
 
             JFrame test = new JFrame();
+            test.setBackground(Color.WHITE);
 
             test.setContentPane(this);
 
@@ -115,7 +91,7 @@ public class PrintableReport extends JPanel {
         }
     }
 
-    private class GraphicField extends JPanel {
+   /* private class GraphicField extends JPanel {
 
         public GraphicField(ArrayList<XYChart> graphicList) {
 
@@ -127,6 +103,7 @@ public class PrintableReport extends JPanel {
             XYChart Frequence = graphicList.get(2);
             XYChart Temperature = graphicList.get(3);
 
+            this.setBackground(Color.WHITE);
 
             JPanel pnlChartSBP = new XChartPanel<>(SBP);
             JPanel pnlChartDBP = new XChartPanel<>(DBP);
@@ -149,5 +126,5 @@ public class PrintableReport extends JPanel {
 
 
         }
-    }
+    }*/
 }
