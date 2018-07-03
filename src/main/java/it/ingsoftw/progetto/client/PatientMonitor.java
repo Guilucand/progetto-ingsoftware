@@ -306,8 +306,6 @@ public class PatientMonitor extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
 
-                System.out.println("lista allarm vuota? " + alarmList.isEmpty() + " tipo utente loggato " + loginStatus);
-
                 if (e.getButton() == MouseEvent.BUTTON1 && alarmList.isEmpty() && loginStatus != ILogin.LoginStatus.NURSE_LOGGED) {
 
                     buildPopup();
@@ -340,8 +338,7 @@ public class PatientMonitor extends JPanel {
 
     private void buildPopup() {
 
-//        pop.removeAll();
-//        pop.add(new JMenuItem("Ciao"));
+        pop.removeAll();
 
         alarmPopMenu.removeAll();
         for (AlarmStartMessage alarmMessage : alarmList.values()) {
@@ -349,27 +346,31 @@ public class PatientMonitor extends JPanel {
             alarmPopMenu.add(nlabel);
         }
 
-//
-//                case DimissionMessage.CONSTRUCTOR:
-//
-//                    System.out.println("constructor");
-//
-//                    break;
-//
-//                case AddDiagnosisMessage.CONSTRUCTOR:
-//
-//
-//                    nlabel.addActionListener(new ActionListener() {
-//                    @Override
-//                    public void actionPerformed(ActionEvent e) {
-//
-//                        new AddDiagnosis(patient);
-//
-//                    }
-//                });
-//            System.out.println("Aggiungo " + ad.getLevel() + " a pop");
-//            JLabel element = new JLabel(String.valueOf(ad.getLevel()));
-//            pop.add(element);
+
+
+
+
+
+             /*   case DimissionMessage.CONSTRUCTOR:
+
+                    System.out.println("constructor");
+
+                    break;
+
+                case AddDiagnosisMessage.CONSTRUCTOR:
+
+
+                    nlabel.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        new AddDiagnosis(patient);
+
+                    }
+                });
+            System.out.println("Aggiungo " + ad.getLevel() + " a pop");
+            JLabel element = new JLabel(String.valueOf(ad.getLevel()));
+            pop.add(element);*/
 
     }
 

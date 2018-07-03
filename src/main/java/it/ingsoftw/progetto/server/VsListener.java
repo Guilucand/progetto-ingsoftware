@@ -34,7 +34,7 @@ public class VsListener extends UnicastRemoteObject implements IVSListener {
     @Override
     public synchronized int connectVS(String id) throws RemoteException {
         System.out.println("Connected vital signs monitor with id " + id);
-        if (connectedMonitors.containsKey(id))
+        if (connectedMonitors.containsValue(id))
             return -1;
 
         connectedMonitors.put(monitorsKey, id);

@@ -16,13 +16,13 @@ public class AlarmData implements Serializable {
 
         switch (this.level) {
             case Level1:
-                requiredTime = 60;
+                requiredTime = 180;
                 break;
             case Level2:
                 requiredTime = 120;
                 break;
             case Level3:
-                requiredTime = 180;
+                requiredTime = 60;
                 break;
         }
     }

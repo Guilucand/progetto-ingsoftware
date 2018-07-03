@@ -306,7 +306,7 @@
                       <gridbag weightx="1.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
-                    <border type="line">
+                    <border type="none">
                       <color color="-16777216"/>
                     </border>
                     <children>
@@ -344,7 +344,7 @@
                       <gridbag weightx="1.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
-                    <border type="line">
+                    <border type="none">
                       <color color="-16777216"/>
                     </border>
                     <children>
@@ -394,32 +394,17 @@
                   </vspacer>
                   <hspacer id="34e8a">
                     <constraints>
-                      <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag top="0" left="320" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                  </hspacer>
-                  <hspacer id="afad1">
-                    <constraints>
-                      <grid row="10" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag top="0" left="0" bottom="0" right="20" weightx="0.0" weighty="0.0"/>
+                      <grid row="10" column="2" row-span="1" col-span="2" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag top="0" left="270" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
                     </constraints>
                   </hspacer>
                   <component id="4a799" class="javax.swing.JButton" binding="esciDalloStoricoButton" default-binding="true">
                     <constraints>
                       <grid row="10" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
+                      <gridbag top="0" left="30" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
                       <text value=" esci dallo storico"/>
-                    </properties>
-                  </component>
-                  <component id="72268" class="javax.swing.JButton" binding="dimettiButton" default-binding="true">
-                    <constraints>
-                      <grid row="10" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <text value="Dimetti "/>
                     </properties>
                   </component>
                   <component id="98025" class="javax.swing.JButton" binding="stampaReportButton" default-binding="true">
@@ -437,6 +422,15 @@
                       <gridbag top="15" left="0" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
                     </constraints>
                   </vspacer>
+                  <component id="72268" class="javax.swing.JButton" binding="dimettiButton" default-binding="true">
+                    <constraints>
+                      <grid row="10" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="Dimetti "/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
             </children>

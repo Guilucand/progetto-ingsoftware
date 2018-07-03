@@ -36,11 +36,6 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
         this.messageDatabase = messageDatabase;
         this.prescriptionDatabase = prescriptionDatabase;
         this.roomId = roomId;
-        try {
-            System.out.println(getClientHost());
-        } catch (ServerNotActiveException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
