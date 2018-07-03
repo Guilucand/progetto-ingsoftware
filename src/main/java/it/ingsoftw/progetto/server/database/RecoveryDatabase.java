@@ -269,6 +269,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
         try {
             callback.monitorDataChanged(getCurrentVsData(recoveryId));
         } catch (RemoteException ignored) {
+            ignored.printStackTrace();
         }
     }
 
@@ -306,7 +307,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
         }
 
         for (IAlarmCallback cb : unresponsive) {
-            alarmsCallbacks.remove(cb);
+            currentAlarmCallbacks.remove(cb);
         }
         return alarmReceived;
     }
@@ -335,7 +336,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
             }
 
             for (IAlarmCallback cb : unresponsive) {
-                alarmsCallbacks.remove(cb);
+                currentAlarmCallbacks.remove(cb);
             }
             return true;
         }

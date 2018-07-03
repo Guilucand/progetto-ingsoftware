@@ -1,6 +1,7 @@
 package it.ingsoftw.progetto.server;
 
 import java.rmi.RemoteException;
+import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 
 import it.ingsoftw.progetto.common.IRecovery;
@@ -35,6 +36,11 @@ public class ServerRoom extends UnicastRemoteObject implements IRoom {
         this.messageDatabase = messageDatabase;
         this.prescriptionDatabase = prescriptionDatabase;
         this.roomId = roomId;
+        try {
+            System.out.println(getClientHost());
+        } catch (ServerNotActiveException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
