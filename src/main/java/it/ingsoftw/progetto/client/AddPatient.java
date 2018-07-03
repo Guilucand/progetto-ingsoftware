@@ -51,6 +51,8 @@ public class AddPatient extends JFrame {
 
         super("Aggiunta ricovero");
 
+        this.setResizable(false);
+
         this.recoveryCreator = recoveryCreator;
         this.addPatientCallback = addPatientCallback;
         this.setContentPane(MainPanel);

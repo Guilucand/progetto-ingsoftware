@@ -248,10 +248,11 @@ public class PatientMonitor extends JPanel {
             setImage("./img/aggiungi1.png", emptyRoom.assignButton);
             emptyRoom.assignButton.setBackground(new java.awt.Color(54, 193, 112));
         }
-//        Dimension preferredDimension = new Dimension(325, 200);
-//
-//        emptyRoom.panel.setPreferredSize(preferredDimension);
-//        patientPanel.setPreferredSize(preferredDimension);
+        Dimension preferredDimension = new Dimension(400, 250);
+
+        emptyRoom.panel.setPreferredSize(preferredDimension);
+        patientPanel.setPreferredSize(preferredDimension);
+
 
 
         this.mainPanel.add(patientPanel, PATIENTROOM);
@@ -343,6 +344,7 @@ public class PatientMonitor extends JPanel {
             JMenuItem nlabel = new JMenuItem(alarmMessage.getMessageText());
             alarmPopMenu.add(nlabel);
         }
+
 //
 //                case DimissionMessage.CONSTRUCTOR:
 //
