@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.print.Printable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -58,6 +59,7 @@ public class Storico extends  JFrame{
     private JLabel birthlocationParameter;
     private JButton dimettiButton;
     private JButton esciDalloStoricoButton;
+    private JButton stampaReportButton;
     private IRecovery patient;
     private PatientData patientData;
     private JFrame leavePatientFrame;
@@ -70,6 +72,8 @@ public class Storico extends  JFrame{
     JPanel pnlChartDBP;
     JPanel pnlChartFrequence;
     JPanel pnlChartTemperature;
+
+    private ArrayList<XYChart> GraphicList;
 
     Timer updateChartTimer;
 
@@ -132,6 +136,12 @@ public class Storico extends  JFrame{
         pnlChartFrequence = new XChartPanel<>(chartFrequence);
         pnlChartTemperature = new XChartPanel<>(chartTemperature);
 
+        GraphicList = new ArrayList<>();
+        GraphicList.add(chartSBP);
+        GraphicList.add(chartDBP);
+        GraphicList.add(chartFrequence);
+        GraphicList.add(chartTemperature);
+
         this.SBPgraphicPanel.setLayout(new GridLayout());
         this.SBPgraphicPanel.add(pnlChartSBP);
 
@@ -174,6 +184,17 @@ public class Storico extends  JFrame{
         updateChartTimer = new Timer(1000, e -> updateChart());
         updateChartTimer.start();
 
+        stampaReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                PrintableReport printReport = new PrintableReport(true, room ,GraphicList);
+
+                printReport.printToPdf("here");
+
+
+            }
+        });
     }
 
     private void updateChart() {
