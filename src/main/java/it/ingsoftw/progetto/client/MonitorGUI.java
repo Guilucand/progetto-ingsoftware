@@ -133,6 +133,7 @@ public class MonitorGUI extends JFrame{
         JMenuItem changepassword = new JMenuItem("cambia password");
         JMenuItem showreport = new JMenuItem("vedi report");
         JMenuItem admin = new JMenuItem("apri pannello amministrativo");
+        JMenuItem stampareport = new JMenuItem(("stampa report"));
 
         menu.add(changepassword);
         menu.add(showreport);
@@ -140,6 +141,7 @@ public class MonitorGUI extends JFrame{
         if(this.status == ILogin.LoginStatus.PRIMARY_LOGGED|| this.status == ILogin.LoginStatus.ADMIN_LOGGED){
 
             menu.add(admin);
+            menu.add(stampareport);
 
         }
 
@@ -171,6 +173,18 @@ public class MonitorGUI extends JFrame{
 
         });
 
+<<<<<<< HEAD
+        stampareport.addActionListener( e -> {
+
+            //PrintableReport pr = new PrintableReport(true);
+            //pr.printToPdf("/Desktop/fileprova.pdf");
+
+
+        });
+
+
+=======
+>>>>>>> 5bf478b3f3860666e48a72ff7b65d83cffe8fe4e
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
 
