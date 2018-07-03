@@ -4,12 +4,10 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import it.ingsoftw.progetto.client.MessagesDispatcher;
-import it.ingsoftw.progetto.common.IAdmin;
-import it.ingsoftw.progetto.common.IClientRmiFactory;
-import it.ingsoftw.progetto.common.ILogin;
-import it.ingsoftw.progetto.common.IMonitor;
+import it.ingsoftw.progetto.common.*;
 import it.ingsoftw.progetto.common.messages.IMessage;
 import it.ingsoftw.progetto.server.database.IDatabaseConnection;
+import it.ingsoftw.progetto.server.database.ServerRecoveryHistory;
 
 public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiFactory {
 
@@ -17,6 +15,8 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
     IMonitor monitorInterface;
     IAdmin adminInterface;
     IMessage messageInterface;
+    IRecoveryHistory recoveryHistoryInterface;
+
     IDatabaseConnection databaseConnection;
     ClientStatus status;
 
@@ -61,5 +61,12 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
             messageInterface = new ServerMessageDispatcher(databaseConnection.getMessageInterface());
         }
         return messageInterface;
+    }
+
+    public IRecoveryHistory getRecoveryHistoryInterface() throws RemoteException {
+        if (recoveryHistoryInterface == null)
+            recoveryHistoryInterface = new ServerRecoveryHistory(databaseConnection.getMessageInterface(),
+                    databaseConnection.getRecoveryInterface());
+        return recoveryHistoryInterface;
     }
 }

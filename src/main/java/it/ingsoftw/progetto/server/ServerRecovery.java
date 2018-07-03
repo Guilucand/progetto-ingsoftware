@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 
 import it.ingsoftw.progetto.common.DrugAdministration;
@@ -12,7 +11,6 @@ import it.ingsoftw.progetto.common.DrugPrescription;
 import it.ingsoftw.progetto.common.IRecovery;
 import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.PatientData;
-import it.ingsoftw.progetto.common.messages.MessageObject;
 import it.ingsoftw.progetto.server.database.IMessageDatabase;
 import it.ingsoftw.progetto.server.database.IPatientsDatabase;
 import it.ingsoftw.progetto.server.database.IPrescriptionDatabase;
@@ -105,6 +103,6 @@ public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
 
     @Override
     public List<Pair<LocalDateTime, MonitorData>> getLastVsData(int maxMinutes) {
-        return database.getLastMonitorData(recoveryKey, maxMinutes);
+        return database.getMonitorData(recoveryKey, LocalDateTime.now().minusMinutes(maxMinutes), LocalDateTime.now());
     }
 }

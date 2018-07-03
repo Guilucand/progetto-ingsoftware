@@ -1,11 +1,15 @@
 package it.ingsoftw.progetto.server.database;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import it.ingsoftw.progetto.common.messages.MessageObject;
 import it.ingsoftw.progetto.server.ServerMessageDispatcher;
+import javafx.util.Pair;
 
 public interface IMessageDatabase {
+
+    List<Pair<LocalDateTime, String>> getMessagesForRecovery(int recoveryKey, LocalDateTime begin, LocalDateTime end);
 
     /**
      * Aggiunge un messaggio persistente

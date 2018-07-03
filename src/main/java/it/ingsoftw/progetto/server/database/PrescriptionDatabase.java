@@ -49,7 +49,7 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
             addPrescription.setString(5, prescription.dailyDoses);
             addPrescription.setString(6, prescription.qtyPerDose);
             addPrescription.setString(7, prescription.notes);
-            addPrescription.setString(8, prescription.doctor.getId());
+            addPrescription.setString(8, loggedUser.getId());
             return addPrescription.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -63,7 +63,7 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
     @Override
     public boolean addAdministration(int recoveryKey, User loggedUser, DrugAdministration administration) {
         String sql = "INSERT INTO prescription (prescription, datetime, quantity, notes, nurse) " +
-                "= VALUES(?, ?, ?, ?, ?);";
+                "VALUES(?, ?, ?, ?, ?);";
 
         try {
             PreparedStatement addAdministration = connection.prepareStatement(sql);

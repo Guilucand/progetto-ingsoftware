@@ -12,6 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import it.ingsoftw.progetto.common.AlarmData;
+import it.ingsoftw.progetto.common.IRecoveryHistory;
 import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.PatientData;
 import it.ingsoftw.progetto.common.messages.AlarmStopMessage;
@@ -50,6 +51,14 @@ public class RecoveryDatabase implements IRecoveryDatabase {
                 minuteSnapshot();
             }
         }, 5000, SNAPSHOT_SECONDS_INTERVAL * 1000);
+
+        this.generateMessages();
+    }
+
+    private void generateMessages() {
+        for (Integer recoveryId : getMissingDiagnosisLetter()) {
+            messageDatabase.addPersistentMessage(new RequestDiagnosisMessage(recoveryId, mapRecoveryToRoom(recoveryId)));
+        }
     }
 
     @Override
@@ -382,18 +391,18 @@ public class RecoveryDatabase implements IRecoveryDatabase {
     }
 
     @Override
-    public List<Pair<LocalDateTime, MonitorData>> getLastMonitorData(int recoveryKey, int maxMinutes) {
+    public List<Pair<LocalDateTime, MonitorData>> getMonitorData(int recoveryKey, LocalDateTime begin, LocalDateTime end) {
         String sql = "SELECT dateTime, bpm, sbp, dbp, temp FROM vsdata " +
-                "WHERE recoveryKey = ? " +
-                "ORDER BY dateTime DESC " +
-                "LIMIT ?";
+                "WHERE recoveryKey = ? AND (dateTime BETWEEN ? AND ?) " +
+                "ORDER BY dateTime DESC ";
 
         List<Pair<LocalDateTime, MonitorData>> results = new ArrayList<>();
 
         try {
             PreparedStatement getResult = connection.prepareStatement(sql);
             getResult.setInt(1, recoveryKey);
-            getResult.setInt(2, maxMinutes);
+            getResult.setTimestamp(2, Timestamp.valueOf(begin));
+            getResult.setTimestamp(3, Timestamp.valueOf(end));
 
             ResultSet result = getResult.executeQuery();
             while (result.next()) {
@@ -406,6 +415,36 @@ public class RecoveryDatabase implements IRecoveryDatabase {
                                 result.getFloat(5))));
             }
             Collections.reverse(results);
+            return results;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<IRecoveryHistory.RecoveryInfo> getRecoveryInfos(LocalDateTime begin, LocalDateTime end) {
+        String sql = "SELECT recoveryKey, patientCode, startDate, endDate, diagnosis, dimissionLetter " +
+                "FROM recovery " +
+                "WHERE startDate BETWEEN ? AND ?;";
+
+        List<IRecoveryHistory.RecoveryInfo> results = new ArrayList<>();
+
+        try {
+            PreparedStatement getRecoveries = connection.prepareStatement(sql);
+            getRecoveries.setTimestamp(1, Timestamp.valueOf(begin));
+            getRecoveries.setTimestamp(2, Timestamp.valueOf(end));
+
+            ResultSet result = getRecoveries.executeQuery();
+            while (result.next()) {
+                results.add(new IRecoveryHistory.RecoveryInfo(
+                        result.getInt(1),
+                        result.getString(2),
+                        result.getTimestamp(3).toLocalDateTime(),
+                        result.getTimestamp(4).toLocalDateTime(),
+                        result.getString(5),
+                        result.getString(6)));
+            }
             return results;
         } catch (SQLException e) {
             e.printStackTrace();

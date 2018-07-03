@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import it.ingsoftw.progetto.common.AlarmData;
+import it.ingsoftw.progetto.common.IRecoveryHistory;
 import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.PatientData;
 import javafx.util.Pair;
@@ -39,5 +40,7 @@ public interface IRecoveryDatabase {
 
     String mapRecoveryToPatient(int recoveryKey);
 
-    List<Pair<LocalDateTime, MonitorData>> getLastMonitorData(int recoveryKey, int maxMinutes);
+    List<Pair<LocalDateTime, MonitorData>> getMonitorData(int recoveryKey, LocalDateTime begin, LocalDateTime end);
+
+    List<IRecoveryHistory.RecoveryInfo> getRecoveryInfos(LocalDateTime begin, LocalDateTime end);
 }

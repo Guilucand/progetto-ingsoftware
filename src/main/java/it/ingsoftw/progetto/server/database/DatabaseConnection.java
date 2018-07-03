@@ -39,7 +39,7 @@ public class DatabaseConnection implements IDatabaseConnection {
             System.out.println("Impossibile stabilire una connessione con il database: " + e.getLocalizedMessage());
         }
 
-        messageDatabase = new MessageDatabase();
+        messageDatabase = new MessageDatabase(connection);
 
         usersDatabase = new UsersDatabase(connection);
         patientsDatabase = new PatientsDatabase(connection);
