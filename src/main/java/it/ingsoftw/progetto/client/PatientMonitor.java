@@ -7,7 +7,6 @@ import it.ingsoftw.progetto.common.messages.MessageObject;
 import it.ingsoftw.progetto.common.messages.MonitorDataChangedMessage;
 import it.ingsoftw.progetto.common.messages.persistent.AlarmStartMessage;
 
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -21,7 +20,7 @@ import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class PatientMonitor extends JPanel{
+public class PatientMonitor extends JPanel {
 
     private final CardLayout cardLayout;
 
@@ -50,12 +49,13 @@ public class PatientMonitor extends JPanel{
     private final ILogin.LoginStatus loginStatus;
     private IRecovery recovery;
     private EmptyRoom emptyRoom;
-    private HashMap<Integer, AlarmData> alarmList;
+    private HashMap<Integer, AlarmStartMessage> alarmList;
     private JPopupMenu pop;
+    private JPopupMenu alarmPopMenu;
     private JPanel mainPanel;
     private IRoom room;
     private Timer coutdownTimer;
-    private boolean showpop = true;
+    private boolean showpop;
 
     private Storico historyWindow;
 
@@ -71,7 +71,7 @@ public class PatientMonitor extends JPanel{
 
             assignButton.addActionListener(e -> {
                 try {
-                    new AddPatient(room.addRecovery(), ()-> {
+                    new AddPatient(room.addRecovery(), () -> {
                         if (room.hasRecovery()) {
                             recovery = room.getCurrentRecovery();
                             setupPatient();
@@ -85,12 +85,12 @@ public class PatientMonitor extends JPanel{
     }
 
     private void updateAlarmImage() {
-        Collection<AlarmData> alarms = alarmList.values();
+        Collection<AlarmStartMessage> alarms = alarmList.values();
 
         AlarmLevel maxAlarmLevel = AlarmLevel.NoAlarm;
 
-        for(AlarmData alarmDesc : alarms) {
-            maxAlarmLevel = AlarmLevel.getMaximum(maxAlarmLevel, alarmDesc.getLevel());
+        for (AlarmStartMessage alarmDesc : alarms) {
+            maxAlarmLevel = AlarmLevel.getMaximum(maxAlarmLevel, alarmDesc.getAlarmData().getLevel());
         }
 
         switch (maxAlarmLevel) {
@@ -122,22 +122,22 @@ public class PatientMonitor extends JPanel{
         }
     }
 
-    private void startAlarm(AlarmData alarmData) {
+    private void startAlarm(AlarmStartMessage alarmData) {
 
         System.out.println("Alarm started!");
 
-        AlarmSound.getInstance().startAlarmSound(alarmData);
+        AlarmSound.getInstance().startAlarmSound(alarmData.getAlarmData());
 
-        alarmList.put(alarmData.getAlarmId(), alarmData);
+        alarmList.put(alarmData.getAlarmData().getAlarmId(), alarmData);
 
         updateAlarmImage();
     }
 
-    private void stopAlarm(AlarmData alarmData) {
-        AlarmSound.getInstance().stopAlarmSound(alarmData.getAlarmId());
-        alarmList.remove(alarmData.getAlarmId());
-        updateAlarmImage();
 
+    private void stopAlarm(AlarmStopMessage alarmData) {
+        AlarmSound.getInstance().stopAlarmSound(alarmData.getAlarmData().getAlarmId());
+        alarmList.remove(alarmData.getAlarmData().getAlarmId());
+        updateAlarmImage();
     }
 
     public void processMessage(MessageObject message) {
@@ -155,28 +155,29 @@ public class PatientMonitor extends JPanel{
                 break;
 
             case AlarmStartMessage
-                        .CONSTRUCTOR:
-                startAlarm(((AlarmStartMessage)message).getAlarmData());
+                    .CONSTRUCTOR:
+                startAlarm(((AlarmStartMessage) message));
                 break;
 
             case AlarmStopMessage
                     .CONSTRUCTOR:
-                stopAlarm(((AlarmStopMessage)message).getAlarmData());
+                stopAlarm(((AlarmStopMessage) message));
         }
     }
 
     private void setupPatient() throws RemoteException {
 
+//                        case AddDiagnosisMessage.CONSTRUCTOR: setImage("./img/diagnosis.png",alarmLabel);; break;
+//                        case AddStopMachineMessage.CONSTRUCTOR :setImage("./img/alarmPaper.png",alarmLabel);;break;
 
         MonitorData data = recovery.getCurrentMonitorData();
-
 
         cardLayout.show(mainPanel, PATIENTROOM);
 
 
         patientPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        patientPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),"Stanza "+ roomNumber,TitledBorder.TOP,TitledBorder.CENTER));
+        patientPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black), "Stanza " + roomNumber, TitledBorder.TOP, TitledBorder.CENTER));
         ((javax.swing.border.TitledBorder) patientPanel.getBorder()).setTitleFont(new Font("Arial", Font.BOLD, 16));
 
         // Imposto inizialmente i dati di monitoraggio
@@ -205,20 +206,19 @@ public class PatientMonitor extends JPanel{
 
         this.mainPanel = new JPanel(cardLayout = new CardLayout());
 
-        this.pop = new JPopupMenu();
+        this.alarmPopMenu = new JPopupMenu();
 
-        this.coutdownTimer = new Timer(200, (e)->{
+        this.coutdownTimer = new Timer(200, (e) -> {
 
             int minimumTimer = Integer.MAX_VALUE;
-            for (AlarmData alarms : alarmList.values()) {
-                minimumTimer = Math.min(minimumTimer, alarms.getSecondsLeft());
+            for (AlarmStartMessage alarms : alarmList.values()) {
+                minimumTimer = Math.min(minimumTimer, alarms.getAlarmData().getSecondsLeft());
             }
 
             if (minimumTimer == Integer.MAX_VALUE) {
                 timerLabel.setText("");
                 timerLabel.setForeground(Color.black);
-            }
-            else {
+            } else {
                 timerLabel.setText(String.valueOf(minimumTimer));
                 if (minimumTimer > 0)
                     timerLabel.setForeground(Color.BLUE);
@@ -230,7 +230,7 @@ public class PatientMonitor extends JPanel{
 
         this.coutdownTimer.start();
 
-        if(loginStatus == ILogin.LoginStatus.NURSE_LOGGED) {
+        if (loginStatus == ILogin.LoginStatus.NURSE_LOGGED) {
             prescriviButton.setText("Somministra");
         }
 
@@ -267,7 +267,7 @@ public class PatientMonitor extends JPanel{
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                if (e.getButton() == MouseEvent.BUTTON1){
+                if (e.getButton() == MouseEvent.BUTTON1) {
                     try {
                         historyWindow = new Storico(room, loginStatus, user);
                         historyWindow.updateVsData(recovery.getCurrentMonitorData());
@@ -280,34 +280,6 @@ public class PatientMonitor extends JPanel{
 
         updatePatient();
 
-        alarmLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                super.mouseEntered(e);
-
-                System.out.println("mouse entrato");
-
-                if(showpop){
-
-                    addPopup();
-                    pop.show(alarmLabel,alarmLabel.getWidth()-(alarmLabel.getWidth()/2),alarmLabel.getHeight()-(alarmLabel.getHeight()/2));
-                    showpop = false;
-
-                }
-            }
-        });
-
-        alarmLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-
-                if(!showpop) {
-                    pop.setVisible(false);
-                    showpop = true;
-                }
-            }
-        });
         prescriviButton.addActionListener(e -> {
 
             switch (loginStatus) {
@@ -322,6 +294,23 @@ public class PatientMonitor extends JPanel{
                     break;
             }
         });
+
+
+        alarmLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                System.out.println("lista allarm vuota? " + alarmList.isEmpty() + " tipo utente loggato " + loginStatus);
+
+                if (e.getButton() == MouseEvent.BUTTON1 && alarmList.isEmpty() && loginStatus != ILogin.LoginStatus.NURSE_LOGGED) {
+
+                    buildPopup();
+                    alarmPopMenu.show(alarmLabel, alarmLabel.getWidth() - (alarmLabel.getWidth() / 2), alarmLabel.getHeight() - (alarmLabel.getHeight() / 2));
+
+                }
+            }
+        });
     }
 
     private void updatePatient() {
@@ -332,11 +321,11 @@ public class PatientMonitor extends JPanel{
             else
                 this.recovery = null;
 
-        // Mostra la stanza vuota o il paziente a seconda dello stato
-        if (recovery == null)
-            cardLayout.show( mainPanel, EMPTYROOM);
-        else
-            setupPatient();
+            // Mostra la stanza vuota o il paziente a seconda dello stato
+            if (recovery == null)
+                cardLayout.show(mainPanel, EMPTYROOM);
+            else
+                setupPatient();
 
         } catch (RemoteException e) {
             this.recovery = null;
@@ -344,21 +333,41 @@ public class PatientMonitor extends JPanel{
     }
 
 
-    private synchronized void addPopup(){
+    private void buildPopup() {
 
-        pop.removeAll();
+//        pop.removeAll();
+//        pop.add(new JMenuItem("Ciao"));
 
-        for(AlarmData ad : alarmList.values()){
-
-            System.out.println("Aggiungo " + ad.getLevel() + " a pop");
-            JLabel element = new JLabel(String.valueOf(ad.getLevel()));
-            pop.add(element);
-
+        alarmPopMenu.removeAll();
+        for (AlarmStartMessage alarmMessage : alarmList.values()) {
+            JMenuItem nlabel = new JMenuItem(alarmMessage.getMessageText());
+            alarmPopMenu.add(nlabel);
         }
-
-
+//
+//                case DimissionMessage.CONSTRUCTOR:
+//
+//                    System.out.println("constructor");
+//
+//                    break;
+//
+//                case AddDiagnosisMessage.CONSTRUCTOR:
+//
+//
+//                    nlabel.addActionListener(new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//
+//                        new AddDiagnosis(patient);
+//
+//                    }
+//                });
+//            System.out.println("Aggiungo " + ad.getLevel() + " a pop");
+//            JLabel element = new JLabel(String.valueOf(ad.getLevel()));
+//            pop.add(element);
 
     }
+
+
 
     private void setImage(String pathimg, Object componente) {
 

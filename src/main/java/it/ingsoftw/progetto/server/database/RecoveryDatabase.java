@@ -18,6 +18,7 @@ import it.ingsoftw.progetto.common.messages.persistent.AlarmStartMessage;
 import it.ingsoftw.progetto.common.messages.MonitorDataChangedMessage;
 import it.ingsoftw.progetto.common.messages.persistent.RequestDiagnosisMessage;
 import it.ingsoftw.progetto.common.messages.DimissionMessage;
+import it.ingsoftw.progetto.common.messages.persistent.RequestStoppedAlarmReportMessage;
 import javafx.util.Pair;
 
 public class RecoveryDatabase implements IRecoveryDatabase {
@@ -237,6 +238,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
                 messageDatabase.removePersistentMessage(new AlarmStartMessage(recoveryKey, roomId, alarmData));
                 messageDatabase.addVolatileMessage(new AlarmStopMessage(recoveryKey, roomId, alarmData));
+                messageDatabase.addPersistentMessage(new RequestStoppedAlarmReportMessage(recoveryKey, roomId, alarmData));
             }
             return true;
         }
