@@ -173,6 +173,7 @@ public class MonitorGUI extends JFrame{
 
         });
 
+
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
 

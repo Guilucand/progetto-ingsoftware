@@ -4,6 +4,7 @@ import it.ingsoftw.progetto.common.AlarmData;
 import it.ingsoftw.progetto.common.messages.MessageObject;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * Messaggio che richiede
@@ -19,6 +20,20 @@ public class RequestStoppedAlarmReportMessage extends MessageObject {
     public RequestStoppedAlarmReportMessage(Integer recoveryKey, String roomId, AlarmData alarmData) {
         super(recoveryKey, roomId);
         this.alarmData = alarmData;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RequestStoppedAlarmReportMessage)) return false;
+        RequestStoppedAlarmReportMessage that = (RequestStoppedAlarmReportMessage) o;
+        return Objects.equals(alarmData, that.alarmData);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(alarmData);
     }
 
     @Override

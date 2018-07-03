@@ -1,10 +1,7 @@
 package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.*;
-import it.ingsoftw.progetto.common.messages.AlarmStopMessage;
-import it.ingsoftw.progetto.common.messages.DimissionMessage;
-import it.ingsoftw.progetto.common.messages.MessageObject;
-import it.ingsoftw.progetto.common.messages.MonitorDataChangedMessage;
+import it.ingsoftw.progetto.common.messages.*;
 import it.ingsoftw.progetto.common.messages.persistent.AlarmStartMessage;
 
 import javax.imageio.ImageIO;
@@ -71,12 +68,7 @@ public class PatientMonitor extends JPanel {
 
             assignButton.addActionListener(e -> {
                 try {
-                    new AddPatient(room.addRecovery(), () -> {
-                        if (room.hasRecovery()) {
-                            recovery = room.getCurrentRecovery();
-                            setupPatient();
-                        }
-                    });
+                    new AddPatient(room.addRecovery());
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
@@ -162,6 +154,21 @@ public class PatientMonitor extends JPanel {
             case AlarmStopMessage
                     .CONSTRUCTOR:
                 stopAlarm(((AlarmStopMessage) message));
+            break;
+
+            case PatientAddedMessage
+                    .CONSTRUCTOR:
+
+                try {
+                    if (room.hasRecovery()) {
+                        recovery = room.getCurrentRecovery();
+                        setupPatient();
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
+                break;
         }
     }
 
