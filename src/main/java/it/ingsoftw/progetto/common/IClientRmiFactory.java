@@ -1,5 +1,7 @@
 package it.ingsoftw.progetto.common;
 
+import it.ingsoftw.progetto.common.messages.IMessage;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -28,4 +30,11 @@ public interface IClientRmiFactory extends Remote {
      * @throws RemoteException
      */
     IAdmin getAdminInterface() throws RemoteException;
+
+    /**
+     * Ottiene un'interfaccia per la gestione dei messaggi
+     * da parte del client
+     */
+    IMessage getMessageInterface() throws RemoteException;
+
 }

@@ -31,7 +31,7 @@ public class DoseDrug extends JFrame{
     private IRecovery patient;
     private List<DrugPrescription> drugPrescriptionList;
 
-    public DoseDrug(IRecovery patient, User utente) {
+    public DoseDrug(IRecovery patient) {
 
         super("Somministrazione-Farmaci");
         this.patient = patient;
@@ -124,20 +124,28 @@ public class DoseDrug extends JFrame{
 
                             anno = anno-1;
 
-                        }else{
+                        } else {
 
                             mese = mese.minus(1);
 
                         }
 
-                    }else{
-
+                    } else {
                         giorno = giorno - 1;
                     }
                 }
 
                 try {
-                    patient.addDrugAdministration(new DrugAdministration(selectedDrug.key, LocalDateTime.of(anno,mese,giorno,hourComboBox.getSelectedIndex(),minuteComboBox.getSelectedIndex()),quantityTextField.getText(),noteArea.getText(),utente));
+                    patient.addDrugAdministration(new DrugAdministration(
+                            selectedDrug.key,
+                            LocalDateTime.of(
+                                    anno,
+                                    mese,
+                                    giorno,
+                                    hourComboBox.getSelectedIndex(),
+                                    minuteComboBox.getSelectedIndex()),
+                            quantityTextField.getText(),
+                            noteArea.getText()));
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }

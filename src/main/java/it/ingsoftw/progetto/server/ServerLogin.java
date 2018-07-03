@@ -99,8 +99,7 @@ public class ServerLogin extends UnicastRemoteObject implements ILogin {
                 return false;
 
             if (database.authenticateUser(loggedUser.getId(), oldPassword)) {
-                database.updatePassword(getLoggedUser().getId(), newPassword);
-                return true;
+                return database.updatePassword(getLoggedUser().getId(), newPassword);
             }
 
         } catch (SQLException e) {

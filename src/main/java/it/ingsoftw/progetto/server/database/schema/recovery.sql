@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS recovery (
 
 CREATE TABLE IF NOT EXISTS vsdata (
     dateTime TIMESTAMP NOT NULL,
-    recoveryId INTEGER NOT NULL REFERENCES recovery(key),
+    recoveryKey INTEGER NOT NULL REFERENCES recovery(key),
     bpm INTEGER,
     sbp INTEGER,
     dbp INTEGER,

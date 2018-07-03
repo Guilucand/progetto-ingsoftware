@@ -24,7 +24,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import it.ingsoftw.progetto.common.AlarmLevel;
-import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
+import it.ingsoftw.progetto.common.IVSListener;
 import it.ingsoftw.progetto.common.MonitorData;
 import javafx.util.Pair;
 
@@ -77,10 +77,12 @@ public class VsGui {
 
     List<Integer> alarms = new ArrayList<>();
     private Function<MonitorData, MonitorData> monitorDataFunction;
-    private IMonitorDataUpdatedCallback monitorDataUpdatedCallback;
+
+    private VsInstance instance;
 
     @SuppressWarnings("unchecked")
-    public VsGui(String name) {
+    public VsGui(String name, VsInstance instance) {
+        this.instance = instance;
 
         topPanel = new Panel(new LinearLayout(Direction.VERTICAL));
         topPanel.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
@@ -181,21 +183,6 @@ public class VsGui {
         alarms.clear();
     }
 
-    public void setMonitorDataChangedCallback(IMonitorDataUpdatedCallback callback) {
-        monitorDataUpdatedCallback = callback;
-        if (monitorDataUpdatedCallback != null) {
-            try {
-                monitorDataUpdatedCallback.monitorDataChanged(new MonitorData(
-                        currentBpm,
-                        currentSbp,
-                        currentDbp,
-                        currentTemp));
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     void heartUpdater() {
         boolean hearthShown = false;
 
@@ -232,19 +219,18 @@ public class VsGui {
 
             if (toUpdate) {
                 updateValues();
-                if (hasChanged) {
-                    hasChanged = false;
-                    if (monitorDataUpdatedCallback != null) {
-                        try {
-                            monitorDataUpdatedCallback.monitorDataChanged(new MonitorData(
-                                    currentBpm,
-                                    currentSbp,
-                                    currentDbp,
-                                    currentTemp));
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
+                try {
+                    if (hasChanged) {
+                        hasChanged = false;
+                        instance.updateMonitorData(new MonitorData(
+                                currentBpm,
+                                currentSbp,
+                                currentDbp,
+                                currentTemp));
                     }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    setConnectionStatus(false);
                 }
             }
 

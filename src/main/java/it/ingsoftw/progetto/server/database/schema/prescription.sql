@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS prescription (
     key SERIAL PRIMARY KEY,
-    recoveryId INTEGER NOT NULL REFERENCES recovery(key),
+    recoveryKey INTEGER NOT NULL REFERENCES recovery(key),
     drug CHAR(9) NOT NULL REFERENCES drug(aicCode),
     date         DATE,
     daysDuration VARCHAR(32),

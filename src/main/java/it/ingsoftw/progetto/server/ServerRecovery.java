@@ -9,12 +9,9 @@ import java.util.List;
 
 import it.ingsoftw.progetto.common.DrugAdministration;
 import it.ingsoftw.progetto.common.DrugPrescription;
-import it.ingsoftw.progetto.common.IAlarmCallback;
-import it.ingsoftw.progetto.common.IMonitorDataUpdatedCallback;
 import it.ingsoftw.progetto.common.IRecovery;
 import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.PatientData;
-import it.ingsoftw.progetto.common.messages.IMessagesChangedCallback;
 import it.ingsoftw.progetto.common.messages.MessageObject;
 import it.ingsoftw.progetto.server.database.IMessageDatabase;
 import it.ingsoftw.progetto.server.database.IPatientsDatabase;
@@ -29,15 +26,13 @@ public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
     private IMessageDatabase messageDatabase;
     private IPatientsDatabase patientsDatabase;
     private final IPrescriptionDatabase prescriptionDatabase;
-    private String recoveryId;
-    private IAlarmCallback alarmCallback;
-    private IMonitorDataUpdatedCallback monitorDataUpdatedCallback;
+    private int recoveryKey;
 
     public ServerRecovery(ClientStatus status,
                           IRecoveryDatabase database,
                           IMessageDatabase messageDatabase,
                           IPatientsDatabase patientsDatabase,
-                          IPrescriptionDatabase prescriptionDatabase, String recoveryId) throws RemoteException {
+                          IPrescriptionDatabase prescriptionDatabase, int recoveryKey) throws RemoteException {
         super(ServerConfig.port);
         this.status = status;
 
@@ -45,7 +40,7 @@ public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
         this.messageDatabase = messageDatabase;
         this.patientsDatabase = patientsDatabase;
         this.prescriptionDatabase = prescriptionDatabase;
-        this.recoveryId = recoveryId;
+        this.recoveryKey = recoveryKey;
     }
 
     @Override
@@ -53,7 +48,15 @@ public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
         if (diagnosis == null)
             return false;
 
-        return database.addDiagnosis(recoveryId, diagnosis);
+        if (this.status.getLoggedUser() != null) {
+            switch (this.status.getLoggedUser().getUserType()) {
+                case Primary:
+                case Medic:
+                case Admin:
+                    return database.addDiagnosis(recoveryKey, diagnosis);
+            }
+        }
+        return false;
     }
 
     @Override
@@ -61,13 +64,19 @@ public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
         if (dimissionLetter == null)
             return false;
 
-        return database.leaveRecovery(recoveryId, dimissionLetter);
+        if (this.status.getLoggedUser() != null) {
+            switch (this.status.getLoggedUser().getUserType()) {
+                case Primary:
+                    return database.leaveRecovery(recoveryKey, dimissionLetter);
+            }
+        }
+        return false;
     }
 
     @Override
     public PatientData getPatientData() {
         try {
-            return patientsDatabase.getPatientByCode(database.mapRecoveryToPatient(recoveryId));
+            return patientsDatabase.getPatientByCode(database.mapRecoveryToPatient(recoveryKey));
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -76,62 +85,26 @@ public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
 
     @Override
     public MonitorData getCurrentMonitorData() {
-        return database.getCurrentVsData(recoveryId);
-    }
-
-    @Override
-    public void setMonitorDataUpdatedCallback(IMonitorDataUpdatedCallback callback) {
-        monitorDataUpdatedCallback = callback;
-        database.addMonitorDataUpdatedCallbackHook(recoveryId, callback);
-    }
-
-    @Override
-    public Pair<LocalDateTime, MonitorData>[] getMonitorHistory(Period period) {
-        Pair<LocalDateTime, MonitorData>[] data = new Pair[1];
-        data[0] = new Pair<>(LocalDateTime.now(), getCurrentMonitorData());
-        return data;
-    }
-
-    @Override
-    public void setAlarmCallback(IAlarmCallback callback) throws RemoteException {
-        if (alarmCallback != null)
-            database.removeAlarmHook(recoveryId, alarmCallback);
-
-        alarmCallback = callback;
-        database.addAlarmHook(recoveryId, alarmCallback);
+        return database.getCurrentVsData(recoveryKey);
     }
 
     @Override
     public boolean addDrugPrescription(DrugPrescription prescription) throws RemoteException {
-        return prescriptionDatabase.addPrescription(recoveryId, status.getLoggedUser(), prescription);
+        return prescriptionDatabase.addPrescription(recoveryKey, status.getLoggedUser(), prescription);
     }
 
     @Override
     public void addDrugAdministration(DrugAdministration administration) throws RemoteException {
-        prescriptionDatabase.addAdministration(recoveryId, status.getLoggedUser(), administration);
+        prescriptionDatabase.addAdministration(recoveryKey, status.getLoggedUser(), administration);
     }
 
     @Override
     public List<DrugPrescription> getCurrentPrescriptions() throws RemoteException {
-        return prescriptionDatabase.getPrescriptions(recoveryId);
-    }
-
-    @Override
-    public List<MessageObject> getMessages() {
-        return messageDatabase.getMessagesForRecovery(recoveryId);
-    }
-
-    @Override
-    public void setMessagesChangedCallback(IMessagesChangedCallback callback) {
-        messageDatabase.addMessagesChangedCallback(recoveryId, callback);
-        try {
-            callback.messagesChanged();
-        } catch (RemoteException ignored) {
-        }
+        return prescriptionDatabase.getPrescriptions(recoveryKey);
     }
 
     @Override
     public List<Pair<LocalDateTime, MonitorData>> getLastVsData(int maxMinutes) {
-        return database.getLastMonitorData(recoveryId, maxMinutes);
+        return database.getLastMonitorData(recoveryKey, maxMinutes);
     }
 }

@@ -11,7 +11,6 @@ import it.ingsoftw.progetto.server.database.IUsersDatabase;
 public class TestDatabaseConnection implements IDatabaseConnection {
 
     private IUsersDatabase usersDatabase = new TestUsersDatabase();
-    private IRecoveryDatabase recoveryDatabase = new TestRecoveryDatabase();
 
     @Override
     public IUsersDatabase getUsersInterface() {
@@ -25,7 +24,7 @@ public class TestDatabaseConnection implements IDatabaseConnection {
 
     @Override
     public IRecoveryDatabase getRecoveryInterface() {
-        return recoveryDatabase;
+        return null;
     }
 
     @Override

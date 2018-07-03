@@ -1,131 +1,53 @@
 package it.ingsoftw.progetto.server.database;
 
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
-import it.ingsoftw.progetto.common.messages.IMessagesChangedCallback;
 import it.ingsoftw.progetto.common.messages.MessageObject;
+import it.ingsoftw.progetto.server.ServerMessageDispatcher;
 
 public class MessageDatabase implements IMessageDatabase {
 
-    private Map<String, Set<IMessagesChangedCallback>> callbacks;
-    private Map<String, Set<MessageObject>> messages;
+    private Set<MessageObject> persistentMessages;
+    private Set<ServerMessageDispatcher> messageDispatchers;
 
     public MessageDatabase() {
 
-        this.callbacks = new HashMap<>();
-        this.messages = new HashMap<>();
+        this.persistentMessages = new HashSet<>();
+        this.messageDispatchers = new HashSet<>();
     }
 
     @Override
-    public List<MessageObject> getMessagesForRecovery(String recoveryId) {
-
-        synchronized (messages) {
-
-            Set<MessageObject> recoveryMessages = messages.get(recoveryId);
-            if (recoveryMessages == null)
-                return new ArrayList<>();
-
-            return new ArrayList<>(recoveryMessages);
+    public synchronized void addPersistentMessage(MessageObject message) {
+        persistentMessages.add(message);
+        for (ServerMessageDispatcher dispatcher : messageDispatchers) {
+            dispatcher.addMessage(message);
         }
     }
 
     @Override
-    public void addMessage(String recoveryId, String key, MessageObject message) {
-
-        synchronized (messages) {
-
-            if (messages.get(recoveryId) == null)
-                messages.put(recoveryId, new HashSet<>());
-
-            messages.get(recoveryId).add(message);
-        }
-
-        notifyChanges(recoveryId);
+    public synchronized void removePersistentMessage(MessageObject message) {
+        persistentMessages.remove(message);
     }
 
     @Override
-    public void completeMessage(String recoveryId, String key) {
-
-        boolean removed;
-        synchronized (messages) {
-            Set<MessageObject> recoveryMessages = messages.get(recoveryId);
-            if (recoveryMessages == null)
-                return;
-
-            removed = recoveryMessages.remove(key);
-        }
-        if (removed)
-            notifyChanges(recoveryId);
-    }
-
-    @Override
-    public void addSingleTimeMessage(String recoveryId, String key, MessageObject message) {
-        addMessage(recoveryId, key, message);
-
-        synchronized (messages) {
-            Set<MessageObject> recoveryMessages = messages.get(recoveryId);
-            if (recoveryMessages == null)
-                return;
-
-            recoveryMessages.remove(key);
-        }
-    }
-
-    private void notifyChanges(String recoveryId) {
-        Set<IMessagesChangedCallback> recoveryCallbacks;
-        Set<IMessagesChangedCallback> recoveryCallbacksCopy;
-
-        synchronized (callbacks) {
-
-            recoveryCallbacks = callbacks.get(recoveryId);
-            if (recoveryCallbacks == null)
-                return;
-            // Copio l'oggetto per evitare problemi di sincronizzazione
-            recoveryCallbacksCopy = new HashSet<>(recoveryCallbacks);
-        }
-
-        Set<IMessagesChangedCallback> unresponsive = new HashSet<>();
-        for (IMessagesChangedCallback callback : recoveryCallbacksCopy) {
-            try {
-                callback.messagesChanged();
-            } catch (RemoteException e) {
-                unresponsive.add(callback);
-            }
-        }
-
-        synchronized (callbacks) {
-            for (IMessagesChangedCallback cb : unresponsive) {
-                recoveryCallbacks.remove(cb);
-            }
+    public synchronized void addVolatileMessage(MessageObject message) {
+        for (ServerMessageDispatcher dispatcher : messageDispatchers) {
+            dispatcher.addMessage(message);
         }
     }
 
     @Override
-    public void addMessagesChangedCallback(String recoveryId, IMessagesChangedCallback callback) {
-
-        synchronized (callbacks) {
-            if (callbacks.get(recoveryId) == null)
-                callbacks.put(recoveryId, new HashSet<>());
-
-            callbacks.get(recoveryId).add(callback);
-        }
+    public synchronized List<MessageObject> getPersistentMessagesList() {
+        return new ArrayList<>(persistentMessages);
     }
 
     @Override
-    public void removeMessagesChangedCallback(String recoveryId, IMessagesChangedCallback callback) {
-        synchronized (callbacks) {
-            if (callbacks.get(recoveryId) == null)
-                return;
-
-            callbacks.get(recoveryId).remove(callback);
+    public void registerDispatcher(ServerMessageDispatcher dispatcher) {
+        messageDispatchers.add(dispatcher);
+        for (MessageObject message : persistentMessages) {
+            dispatcher.addMessage(message);
         }
     }
-
-
 }

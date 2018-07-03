@@ -32,8 +32,8 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
     }
 
     @Override
-    public boolean addPrescription(String recoveryId, User loggedUser, DrugPrescription prescription) {
-        String sql = "INSERT INTO prescription (recoveryId, drug, date, daysDuration, dosesPerDay, quantity, notes, medic) " +
+    public boolean addPrescription(int recoveryKey, User loggedUser, DrugPrescription prescription) {
+        String sql = "INSERT INTO prescription (recoveryKey, drug, date, daysDuration, dosesPerDay, quantity, notes, medic) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
 
 
@@ -41,7 +41,7 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
         try {
             drugsDatabase.addDrug(prescription.drug);
             PreparedStatement addPrescription = connection.prepareStatement(sql);
-            addPrescription.setInt(1, Integer.valueOf(recoveryId));
+            addPrescription.setInt(1, Integer.valueOf(recoveryKey));
             addPrescription.setString(2, prescription.drug.aic);
             addPrescription.setDate(3, Date.valueOf(prescription.prescriptionDate));
 
@@ -61,7 +61,7 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
     }
 
     @Override
-    public boolean addAdministration(String recoveryId, User loggedUser, DrugAdministration administration) {
+    public boolean addAdministration(int recoveryKey, User loggedUser, DrugAdministration administration) {
         String sql = "INSERT INTO prescription (prescription, datetime, quantity, notes, nurse) " +
                 "= VALUES(?, ?, ?, ?, ?);";
 
@@ -95,15 +95,15 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
     }
 
     @Override
-    public List<DrugPrescription> getPrescriptions(String recoveryId) {
+    public List<DrugPrescription> getPrescriptions(int recoveryKey) {
 
         String sql =
                 "SELECT key, drug, date, daysDuration, dosesPerDay, quantity, notes, medic FROM prescription " +
-                        "WHERE recoveryId = ?;";
+                        "WHERE recoveryKey = ?;";
 
         try {
             PreparedStatement queryPrescriptions = connection.prepareStatement(sql);
-            queryPrescriptions.setInt(1, Integer.parseInt(recoveryId));
+            queryPrescriptions.setInt(1, recoveryKey);
             ResultSet result = queryPrescriptions.executeQuery();
             ArrayList<DrugPrescription> prescriptions = new ArrayList<>();
 

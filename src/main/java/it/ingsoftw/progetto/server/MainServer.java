@@ -2,11 +2,8 @@ package it.ingsoftw.progetto.server;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.sql.SQLException;
 import java.time.LocalDate;
 
-import it.ingsoftw.progetto.client.DrugsQuery;
-import it.ingsoftw.progetto.common.Drug;
 import it.ingsoftw.progetto.common.IClientListener;
 import it.ingsoftw.progetto.common.IVSListener;
 import it.ingsoftw.progetto.common.PatientData;
@@ -16,7 +13,6 @@ import it.ingsoftw.progetto.server.database.DatabaseConnection;
 import it.ingsoftw.progetto.server.database.IDatabaseConnection;
 import it.ingsoftw.progetto.server.database.IPatientsDatabase;
 import it.ingsoftw.progetto.server.database.IRecoveryDatabase;
-import test.database.TestDatabaseConnection;
 
 public class MainServer {
 
@@ -38,7 +34,6 @@ public class MainServer {
     public static void main(String[] args) {
 
         System.setProperty("java.rmi.server.hostname", ServerConfig.hostname);
-        ReverseClientSocket.initializeServer();
 
         IDatabaseConnection databaseConnection;
         databaseConnection = new DatabaseConnection();
