@@ -3,11 +3,15 @@ package it.ingsoftw.progetto.client;
 import it.ingsoftw.progetto.common.*;
 import it.ingsoftw.progetto.common.messages.*;
 import it.ingsoftw.progetto.common.messages.persistent.AlarmStartMessage;
+import it.ingsoftw.progetto.common.messages.persistent.RequestDiagnosisMessage;
+import it.ingsoftw.progetto.common.messages.persistent.RequestStoppedAlarmReportMessage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -137,28 +141,24 @@ public class PatientMonitor extends JPanel {
         System.out.println(message.getMessageType());
 
         switch (message.getMessageType()) {
-            case DimissionMessage
-                    .CONSTRUCTOR:
+
+            case DimissionMessage.CONSTRUCTOR:
                 updatePatient();
                 break;
 
-            case MonitorDataChangedMessage
-                    .CONSTRUCTOR:
+            case MonitorDataChangedMessage.CONSTRUCTOR:
                 updateVsData(((MonitorDataChangedMessage) message).getData());
                 break;
 
-            case AlarmStartMessage
-                    .CONSTRUCTOR:
+            case AlarmStartMessage.CONSTRUCTOR:
                 startAlarm(((AlarmStartMessage) message));
                 break;
 
-            case AlarmStopMessage
-                    .CONSTRUCTOR:
+            case AlarmStopMessage.CONSTRUCTOR:
                 stopAlarm(((AlarmStopMessage) message));
             break;
 
-            case PatientAddedMessage
-                    .CONSTRUCTOR:
+            case PatientAddedMessage.CONSTRUCTOR:
 
                 try {
                     if (room.hasRecovery()) {
@@ -168,6 +168,22 @@ public class PatientMonitor extends JPanel {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+
+                break;
+
+            case RequestDiagnosisMessage.CONSTRUCTOR:
+
+                setImage("./img/diagnosis.png",alarmLabel);
+                addToPopup(message);
+
+
+                break;
+
+            case RequestStoppedAlarmReportMessage.CONSTRUCTOR:
+
+                setImage("./img/alarmPaper.png",alarmLabel);
+                addToPopup(message);
+
 
                 break;
         }
@@ -341,7 +357,12 @@ public class PatientMonitor extends JPanel {
 
     private void buildPopup() {
 
-        pop.removeAll();
+
+
+
+
+
+        /*pop.removeAll();
 
         alarmPopMenu.removeAll();
         for (AlarmStartMessage alarmMessage : alarmList.values()) {
@@ -354,7 +375,7 @@ public class PatientMonitor extends JPanel {
 
 
 
-             /*   case DimissionMessage.CONSTRUCTOR:
+                case DimissionMessage.CONSTRUCTOR:
 
                     System.out.println("constructor");
 
@@ -375,6 +396,37 @@ public class PatientMonitor extends JPanel {
             JLabel element = new JLabel(String.valueOf(ad.getLevel()));
             pop.add(element);*/
 
+    }
+
+
+
+    private void addToPopup(MessageObject messaggio){
+
+
+        JMenuItem new_message = new JMenuItem(messaggio.getMessageText());
+
+        alarmPopMenu.add(new_message);
+
+        switch (messaggio.getMessageType()){
+
+            case RequestDiagnosisMessage.CONSTRUCTOR:
+
+                new_message.addActionListener(e -> {
+
+                    new AddDiagnosis(recovery);
+
+                });
+
+                break;
+
+            case RequestStoppedAlarmReportMessage.CONSTRUCTOR:
+
+                new_message.addActionListener(e -> {
+
+                    new ArchiveStopAlarm(recovery);
+
+                });
+        }
     }
 
 
