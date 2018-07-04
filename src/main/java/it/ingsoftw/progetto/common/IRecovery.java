@@ -1,6 +1,5 @@
 package it.ingsoftw.progetto.common;
 
-import it.ingsoftw.progetto.common.messages.MessageObject;
 import javafx.util.Pair;
 
 import java.rmi.Remote;
@@ -25,6 +24,14 @@ public interface IRecovery extends Remote {
      * @throws RemoteException
      */
     boolean addDiagnosis(String diagnosis) throws RemoteException;
+
+    /**
+     * Aggiunge un report per un allarme
+     * @param alarmData l'allarme di riferimento
+     * @param report il report
+     * @throws RemoteException
+     */
+    void addAlarmReport(AlarmData alarmData, String report) throws RemoteException;
 
     /**
      * Dimette un paziente

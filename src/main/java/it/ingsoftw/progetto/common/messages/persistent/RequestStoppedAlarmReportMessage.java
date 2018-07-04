@@ -49,6 +49,10 @@ public class RequestStoppedAlarmReportMessage extends MessageObject {
                         ": " + alarmData.getDescription();
     }
 
+    public AlarmData getAlarmData() {
+        return alarmData;
+    }
+
     @Override
     public boolean loggedMessage() {
         return false;

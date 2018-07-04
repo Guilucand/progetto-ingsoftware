@@ -32,7 +32,7 @@ public class MainClient {
 //        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
 //        double ratio = dim.height / 1080.0;
-        System.setProperty("sun.java2d.uiScale", "1");//String.valueOf((int)ratio));
+        System.setProperty("sun.java2d.uiScale", "2");//String.valueOf((int)ratio));
 
         try {
             // Connessione al server

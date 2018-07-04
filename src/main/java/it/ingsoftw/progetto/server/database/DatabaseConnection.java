@@ -39,15 +39,21 @@ public class DatabaseConnection implements IDatabaseConnection {
             System.out.println("Impossibile stabilire una connessione con il database: " + e.getLocalizedMessage());
         }
 
-        messageDatabase = new MessageDatabase(connection);
 
         usersDatabase = new UsersDatabase(connection);
         patientsDatabase = new PatientsDatabase(connection);
         drugsDatabase = new DrugsDatabase(connection);
 
+        RecoveryDatabase.createSchema(connection);
+        messageDatabase = new MessageDatabase(connection);
+
+
         recoveryDatabase = new RecoveryDatabase(connection, getMessageInterface());
 
-        prescriptionDatabase = new PrescriptionDatabase(connection, getDrugsInterface(), getUsersInterface());
+        prescriptionDatabase = new PrescriptionDatabase(connection, getDrugsInterface(),
+                getUsersInterface(),
+                getRecoveryInterface(),
+                getMessageInterface());
     }
 
     @Override

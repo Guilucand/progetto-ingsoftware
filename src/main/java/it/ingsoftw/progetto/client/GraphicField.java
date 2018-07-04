@@ -20,23 +20,21 @@ public class GraphicField extends JPanel{
     private JPanel temperaturegraphicPanel;
 
 
-    public GraphicField(ArrayList<XYChart> graphicList){
+    public GraphicField(HistoryChartsManager graphicList){
 
         this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
         this.setPreferredSize(new Dimension(595,900));
 
-        XYChart SBP = graphicList.get(0);
-        XYChart DBP = graphicList.get(1);
-        XYChart Frequence = graphicList.get(2);
-        XYChart Temperature = graphicList.get(3);
+        SBPgraphicPanel.setLayout(new BoxLayout(SBPgraphicPanel, BoxLayout.PAGE_AXIS));
+        DBPgraphicPanel.setLayout(new BoxLayout(DBPgraphicPanel, BoxLayout.PAGE_AXIS));
+        FrequencegraphicPanel.setLayout(new BoxLayout(FrequencegraphicPanel, BoxLayout.PAGE_AXIS));
+        temperaturegraphicPanel.setLayout(new BoxLayout(temperaturegraphicPanel, BoxLayout.PAGE_AXIS));
 
-        this.setBackground(Color.WHITE);
-
-        SBPgraphicPanel = new XChartPanel<>(SBP);
-        DBPgraphicPanel = new XChartPanel<>(DBP);
-        FrequencegraphicPanel = new XChartPanel<>(Frequence);
-        temperaturegraphicPanel = new XChartPanel<>(Temperature);
+        SBPgraphicPanel.add(graphicList.getPnlChartSBP());
+        DBPgraphicPanel.add(graphicList.getPnlChartDBP());
+        FrequencegraphicPanel.add(graphicList.getPnlChartFrequence());
+        temperaturegraphicPanel.add(graphicList.getPnlChartTemperature());
 
 
         this.add(MainPanel);

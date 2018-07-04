@@ -20,6 +20,8 @@ public class MonitorGUI extends JFrame{
     private IClientRmiFactory serverFactory;
     private IMonitor monitorInterface;
     private IAdmin adminInterface;
+    private IRecoveryHistory recoveryHistoryInterface;
+
     private JMenuBar menuBar;
     private ILogin.LoginStatus status;
     private HashMap<String, PatientMonitor> patientMonitors;
@@ -37,8 +39,9 @@ public class MonitorGUI extends JFrame{
         this.status = status;
 
         this.serverFactory = serverFactory;
-        this.monitorInterface =serverFactory.getMonitorInterface();
+        this.monitorInterface = serverFactory.getMonitorInterface();
         this.adminInterface = serverFactory.getAdminInterface();
+        this.recoveryHistoryInterface = serverFactory.getRecoveryHistoryInterface();
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -83,7 +86,7 @@ public class MonitorGUI extends JFrame{
             patientMonitors.put(String.valueOf(i),
                     new PatientMonitor(i,
                             monitorInterface.getRoomByNumber(i),
-                            serverFactory.getRecoveryHistoryInterface(), username, loginStatus
+                            recoveryHistoryInterface, username, loginStatus
                     )
                     );
         }
@@ -96,7 +99,10 @@ public class MonitorGUI extends JFrame{
 
             if(i == 0){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin(loginStatus, adminInterface, username);
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(loginStatus,
+                        adminInterface,
+                        recoveryHistoryInterface,
+                        username);
 
                 switch (loginStatus) {
 
@@ -154,7 +160,11 @@ public class MonitorGUI extends JFrame{
             }
         });
 
-        showreport.addActionListener(e -> new ReportFrame(status,username));
+        showreport.addActionListener(e ->
+                new ReportFrame(status,
+                        username,
+                        recoveryHistoryInterface
+                        ));
 
         admin.addActionListener(e -> {
 

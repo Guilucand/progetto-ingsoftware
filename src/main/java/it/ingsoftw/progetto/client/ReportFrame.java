@@ -1,47 +1,38 @@
 package it.ingsoftw.progetto.client;
 
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfTemplate;
 import it.ingsoftw.progetto.common.DrugPrescription;
 import it.ingsoftw.progetto.common.ILogin;
 
 import javax.swing.*;
-import javax.swing.text.Document;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import com.itextpdf.text.pdf.PdfWriter;
-import java.awt.image.BufferedImage;
+
+import it.ingsoftw.progetto.common.IRecoveryHistory;
+
+import java.rmi.RemoteException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportFrame extends JFrame{
     private JList recoveryList;
     private JPanel MainPanel;
     private JScrollPane scrollMainPanel;
-    private JPanel dataPatientPanel;
-    private JLabel imageLabel;
-    private JLabel nameParameter;
-    private JLabel surnameParameter;
-    private JLabel cfParameter;
-    private JLabel dateParameter;
-    private JLabel birthlocationParameter;
-    private JPanel SBPPanel;
-    private JPanel SBPgraphicPanel;
-    private JPanel DBPPanel;
-    private JScrollPane scrollpaneDBP;
-    private JPanel DBPgraphicPanel;
-    private JPanel FrequencePanel;
-    private JPanel FrequencegraphicPanel;
-    private JPanel TemperaturePanel;
-    private JPanel temperaturegraphicPanel;
     private JButton stampaReportButton;
     private JPanel reportRightPanel;
+    private JPanel reportMainPanel;
+    private IRecoveryHistory recoveryHistory;
+    private List<PrintableReport> printableReports;
 
-    public ReportFrame(ILogin.LoginStatus status, String username) {
+    public ReportFrame(ILogin.LoginStatus status,
+                       String username,
+                       IRecoveryHistory recoveryHistory) {
 
         super("Pannello dei Report");
+        this.recoveryHistory = recoveryHistory;
+        this.printableReports = new ArrayList<>();
 
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -55,6 +46,38 @@ public class ReportFrame extends JFrame{
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
+
+        List<IRecoveryHistory.RecoveryInfo> recoveryInfoList;
+
+        LocalDateTime now = LocalDateTime.now();
+
+        try {
+            recoveryInfoList = recoveryHistory.getRecoveriesList(now.minusWeeks(1), now);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        if (recoveryInfoList == null)
+            return;
+
+        for (IRecoveryHistory.RecoveryInfo recoveryInfo : recoveryInfoList) {
+
+            try {
+                this.printableReports.add(new PrintableReport(true,
+                        recoveryInfo.getRecoveryKey(),
+                        recoveryHistory,
+                        now.minusWeeks(1),
+                        now
+                        ));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i < printableReports.size(); i++) {
+            reportMainPanel.add(printableReports.get(i), i);
+        }
 
         this.setVisible(true);
 

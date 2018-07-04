@@ -145,6 +145,7 @@ public class DoseDrug extends JFrame{
                                     minuteComboBox.getSelectedIndex()),
                             quantityTextField.getText(),
                             noteArea.getText()));
+                    DoseDrug.this.dispose();
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }

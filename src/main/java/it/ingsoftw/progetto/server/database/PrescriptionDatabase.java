@@ -16,18 +16,28 @@ import it.ingsoftw.progetto.common.DrugAdministration;
 import it.ingsoftw.progetto.common.DrugPrescription;
 import it.ingsoftw.progetto.common.PatientData;
 import it.ingsoftw.progetto.common.User;
+import it.ingsoftw.progetto.common.messages.AddedAdministrationMessage;
+import it.ingsoftw.progetto.common.messages.AddedPrescriptionMessage;
 
-public class PrescriptionDatabase implements IPrescriptionDatabase{
+public class PrescriptionDatabase implements IPrescriptionDatabase {
 
     private final Connection connection;
     private IDrugsDatabase drugsDatabase;
     private IUsersDatabase usersDatabase;
+    private IRecoveryDatabase recoveryDatabase;
+    private IMessageDatabase messageDatabase;
 
-    public PrescriptionDatabase(Connection connection, IDrugsDatabase drugsDatabase, IUsersDatabase usersDatabase) {
+    public PrescriptionDatabase(Connection connection,
+                                IDrugsDatabase drugsDatabase,
+                                IUsersDatabase usersDatabase,
+                                IRecoveryDatabase recoveryDatabase,
+                                IMessageDatabase messageDatabase) {
 
         this.connection = connection;
         this.drugsDatabase = drugsDatabase;
         this.usersDatabase = usersDatabase;
+        this.recoveryDatabase = recoveryDatabase;
+        this.messageDatabase = messageDatabase;
         DatabaseUtils.createDatabaseFromSchema(connection, "schema/prescription.sql");
     }
 
@@ -35,8 +45,6 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
     public boolean addPrescription(int recoveryKey, User loggedUser, DrugPrescription prescription) {
         String sql = "INSERT INTO prescription (recoveryKey, drug, date, daysDuration, dosesPerDay, quantity, notes, medic) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
-
-
 
         try {
             drugsDatabase.addDrug(prescription.drug);
@@ -50,14 +58,17 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
             addPrescription.setString(6, prescription.qtyPerDose);
             addPrescription.setString(7, prescription.notes);
             addPrescription.setString(8, loggedUser.getId());
-            return addPrescription.executeUpdate() > 0;
+            if (addPrescription.executeUpdate() > 0) {
+                messageDatabase.addVolatileMessage(new AddedPrescriptionMessage(recoveryKey,
+                        recoveryDatabase.mapRecoveryToRoom(recoveryKey),
+                        prescription
+                ));
+                return true;
+            }
 
-        } catch (SQLException e) {
-            return false;
+        } catch (Exception e) {
         }
-        catch (Exception e) {
-            return false;
-        }
+        return false;
     }
 
     @Override
@@ -72,10 +83,34 @@ public class PrescriptionDatabase implements IPrescriptionDatabase{
             addAdministration.setString(3, administration.qty);
             addAdministration.setString(4, administration.notes);
             addAdministration.setString(5, loggedUser.getId());
+            messageDatabase.addVolatileMessage(new AddedAdministrationMessage(recoveryKey,
+                    recoveryDatabase.mapRecoveryToRoom(recoveryKey),
+                    administration,
+                    getPrescription(administration.prescriptionKey)
+            ));
             return addAdministration.executeUpdate() > 0;
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    private DrugPrescription getPrescription(int prescriptionKey) {
+
+        String sql =
+                "SELECT key, drug, date, daysDuration, dosesPerDay, quantity, notes, medic FROM prescription " +
+                        "WHERE key = ?;";
+
+        try {
+            PreparedStatement queryPrescriptions = connection.prepareStatement(sql);
+            queryPrescriptions.setInt(1, prescriptionKey);
+            ResultSet result = queryPrescriptions.executeQuery();
+            ArrayList<DrugPrescription> prescriptions = new ArrayList<>();
+
+            return getPrescriptionFromResultSet(result);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        return null;
     }
 
     private DrugPrescription getPrescriptionFromResultSet(ResultSet result) throws SQLException {

@@ -1,5 +1,6 @@
 package it.ingsoftw.progetto.client;
 
+import it.ingsoftw.progetto.common.AlarmData;
 import it.ingsoftw.progetto.common.IRecovery;
 import it.ingsoftw.progetto.common.IRoom;
 
@@ -16,13 +17,15 @@ public class ArchiveStopAlarm extends JFrame{
     private JButton inviaButton;
     private JButton chiudiButton;
     IRecovery recovery;
+    private AlarmData alarmData;
 
-    public ArchiveStopAlarm(IRecovery recovery) {
+    public ArchiveStopAlarm(IRecovery recovery, AlarmData alarmData) {
 
         super("Rapporto spegnimento allarme");
 
 
         this.recovery = recovery;
+        this.alarmData = alarmData;
         Dimension preferredDimension = new Dimension(750, 500);
         MainPanel.setPreferredSize(preferredDimension);
 
@@ -40,10 +43,12 @@ public class ArchiveStopAlarm extends JFrame{
         inviaButton.addActionListener(e -> {
 
             String report = activityReportTextArea.getText();
-
-            //
-            dispose();
-
+            try {
+                recovery.addAlarmReport(alarmData, report);
+                dispose();
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
         });
 
         chiudiButton.addActionListener(e -> {
