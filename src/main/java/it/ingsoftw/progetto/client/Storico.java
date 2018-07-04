@@ -62,17 +62,7 @@ public class Storico extends  JFrame{
     private JButton stampaReportButton;
     private PatientData patientData;
     private JFrame leavePatientFrame;
-    XYChart chartSBP;
-    XYChart chartDBP;
-    XYChart chartFrequence;
-    XYChart chartTemperature;
-
-    JPanel pnlChartSBP;
-    JPanel pnlChartDBP;
-    JPanel pnlChartFrequence;
-    JPanel pnlChartTemperature;
-
-    private ArrayList<XYChart> GraphicList;
+    private HistoryChartsManager historyChartsManager;
 
     Timer updateChartTimer;
     private IRecovery recovery;
@@ -94,6 +84,7 @@ public class Storico extends  JFrame{
         this.recovery = recovery;
         this.recoveryHistory = recoveryHistory;
         this.recoveryInfo = recoveryHistory.getRecoveryFromKey(recovery.getKey());
+        this.historyChartsManager = new HistoryChartsManager(recovery, 120);
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -123,40 +114,17 @@ public class Storico extends  JFrame{
             dateParameter.setText(patientData.getBirthDate().toString());
         }
 
-        chartSBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("SBP").width(300).height(100).build();
-        chartDBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("DBP").width(300).height(100).build();
-        chartFrequence = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Frequence").width(300).height(100).build();
-        chartTemperature = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Temperature °C").width(300).height(100).build();
-
-        chartSBP.getStyler().setSeriesColors(new Color[]{new Color(107,187,95)});
-        chartDBP.getStyler().setSeriesColors(new Color[]{new Color(17,87,31)});
-        chartFrequence.getStyler().setSeriesColors(new Color[]{new Color(187,35,34)});
-        chartTemperature.getStyler().setSeriesColors(new Color[]{new Color(70,83,187)});
-
-        updateChart();
-
-        pnlChartSBP = new XChartPanel<>(chartSBP);
-        pnlChartDBP = new XChartPanel<>(chartDBP);
-        pnlChartFrequence = new XChartPanel<>(chartFrequence);
-        pnlChartTemperature = new XChartPanel<>(chartTemperature);
-
-        GraphicList = new ArrayList<>();
-        GraphicList.add(chartSBP);
-        GraphicList.add(chartDBP);
-        GraphicList.add(chartFrequence);
-        GraphicList.add(chartTemperature);
-
         this.SBPgraphicPanel.setLayout(new GridLayout());
-        this.SBPgraphicPanel.add(pnlChartSBP);
+        this.SBPgraphicPanel.add(historyChartsManager.getPnlChartSBP());
 
         this.DBPgraphicPanel.setLayout(new GridLayout());
-        this.DBPgraphicPanel.add(pnlChartDBP);
+        this.DBPgraphicPanel.add(historyChartsManager.getPnlChartDBP());
 
         this.FrequencegraphicPanel.setLayout(new GridLayout());
-        this.FrequencegraphicPanel.add(pnlChartFrequence);
+        this.FrequencegraphicPanel.add(historyChartsManager.getPnlChartFrequence());
 
         this.temperaturegraphicPanel.setLayout(new GridLayout());
-        this.temperaturegraphicPanel.add(pnlChartTemperature);
+        this.temperaturegraphicPanel.add(historyChartsManager.getPnlChartTemperature());
 
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -185,8 +153,14 @@ public class Storico extends  JFrame{
 
         });
 
-        updateChartTimer = new Timer(1000, e -> updateChart());
+        updateChartTimer = new Timer(1000, e -> {
+            if (!isVisible() && updateChartTimer != null)
+                updateChartTimer.stop();
+
+            historyChartsManager.updateChart();
+        });
         updateChartTimer.start();
+
 
         stampaReportButton.addActionListener(new ActionListener() {
             @Override
@@ -194,7 +168,7 @@ public class Storico extends  JFrame{
 
                 PrintableReport printReport = null;
                 try {
-                    printReport = new PrintableReport(true, recovery.getKey(), recoveryHistory ,GraphicList);
+                    printReport = new PrintableReport(true, recovery.getKey(), recoveryHistory, LocalDateTime.now().minusMinutes(600), LocalDateTime.now());
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
@@ -206,143 +180,7 @@ public class Storico extends  JFrame{
         });
     }
 
-    private void updateChart() {
-        if (!isVisible() && updateChartTimer != null)
-            updateChartTimer.stop();
 
-        chartSBP.getStyler().setYAxisMin(20.0);
-        chartSBP.getStyler().setYAxisMax(250.0);
-
-        chartDBP.getStyler().setYAxisMin(20.);
-        chartDBP.getStyler().setYAxisMax(250.0);
-
-        chartFrequence.getStyler().setYAxisMin(0.0);
-        chartFrequence.getStyler().setYAxisMax(250.0);
-
-        chartTemperature.getStyler().setYAxisMin(35.0);
-        chartTemperature.getStyler().setYAxisMax(45.0);
-
-        final int minutes = 120;
-        final int totSeconds = minutes * 60;
-
-        List<Pair<LocalDateTime, MonitorData>> historyData;
-        try {
-            historyData = recovery.getLastVsData(minutes * (60 / RecoveryDatabase.SNAPSHOT_SECONDS_INTERVAL));
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            historyData = null;
-        }
-
-        if (historyData != null && historyData.size() > 0) {
-
-            List<Integer> yDataSBP = new ArrayList<>();
-            List<Integer> yDataDBP = new ArrayList<>();
-            List<Integer> yDataFrequence = new ArrayList<>();
-            List<Float> yDataTemperature = new ArrayList<>();
-
-            List<Integer> xData = new ArrayList<>();//new Time[historyData.size()];
-            Map<Double, Object> xAxisOverrideMap = new HashMap<>();
-
-            long lastValue;
-            {
-                LocalDateTime lastTime = historyData
-                        .get(historyData.size() - 1)
-                        .getKey();
-                ZonedDateTime lastZonedDateTime = ZonedDateTime.of(lastTime, ZoneId.systemDefault());
-                lastValue = lastZonedDateTime.getLong(ChronoField.INSTANT_SECONDS);
-            }
-
-
-            for (int i = 0; i < historyData.size(); i++) {
-                LocalDateTime currentTime = historyData
-                        .get(i)
-                        .getKey();
-
-                ZonedDateTime zonedDateTime = ZonedDateTime.of(currentTime, ZoneId.systemDefault());
-
-                long seconds = zonedDateTime.getLong(ChronoField.INSTANT_SECONDS);
-
-                int secondsValue = (int) (totSeconds + (seconds - lastValue));
-
-                xData.add(secondsValue);
-
-                if (i % 15 == 0) {
-                    xAxisOverrideMap.put((double) secondsValue,
-                            currentTime.format(DateTimeFormatter.ofPattern("HH:mm")));
-                }
-
-                double maxXValue = xData.get(xData.size() - 1);
-
-                chartSBP.getStyler().setXAxisMin(0.0);
-                chartSBP.getStyler().setXAxisMax(maxXValue);
-                chartDBP.getStyler().setXAxisMin(0.0);
-                chartDBP.getStyler().setXAxisMax(maxXValue);
-                chartFrequence.getStyler().setXAxisMin(0.0);
-                chartFrequence.getStyler().setXAxisMax(maxXValue);
-                chartTemperature.getStyler().setXAxisMin(0.0);
-                chartTemperature.getStyler().setXAxisMax(maxXValue);
-
-                MonitorData currentData = historyData.get(i).getValue();
-                yDataDBP.add(currentData.getDbp());
-                yDataSBP.add(currentData.getSbp());
-                yDataFrequence.add(currentData.getBpm());
-                yDataTemperature.add(currentData.getTemp());
-            }
-
-            chartSBP.getSeriesMap().containsKey("SBP");
-            chartDBP.removeSeries("DBP");
-            chartFrequence.removeSeries("Frequence");
-            chartTemperature.removeSeries("Temperature");
-
-
-
-
-            if (!chartSBP.getSeriesMap().containsKey("SBP"))
-                chartSBP.addSeries("SBP", xData, yDataSBP).setMarker(SeriesMarkers.NONE);
-            else
-                chartSBP.updateXYSeries("SBP", xData, yDataSBP, null);
-
-            if (!chartDBP.getSeriesMap().containsKey("DBP"))
-                chartDBP.addSeries("DBP", xData, yDataDBP).setMarker(SeriesMarkers.NONE);
-            else
-                chartDBP.updateXYSeries("DBP", xData, yDataDBP, null);
-
-            if (!chartFrequence.getSeriesMap().containsKey("Frequence"))
-                chartFrequence.addSeries("Frequence", xData, yDataFrequence).setMarker(SeriesMarkers.NONE);
-            else
-                chartFrequence.updateXYSeries("Frequence", xData, yDataFrequence, null);
-
-
-            if (!chartTemperature.getSeriesMap().containsKey("Temperature"))
-                chartTemperature.addSeries("Temperature", xData, yDataTemperature).setMarker(SeriesMarkers.NONE);
-            else
-                chartTemperature.updateXYSeries("Temperature", xData, yDataTemperature, null);
-
-
-            chartDBP.setXAxisLabelOverrideMap(xAxisOverrideMap);
-            chartSBP.setXAxisLabelOverrideMap(xAxisOverrideMap);
-            chartFrequence.setXAxisLabelOverrideMap(xAxisOverrideMap);
-            chartTemperature.setXAxisLabelOverrideMap(xAxisOverrideMap);
-
-            if (pnlChartSBP != null) {
-                pnlChartSBP.revalidate();
-                pnlChartSBP.repaint();
-            }
-            if (pnlChartDBP != null) {
-                pnlChartDBP.revalidate();
-                pnlChartDBP.repaint();
-            }
-            if (pnlChartFrequence != null) {
-                pnlChartFrequence.revalidate();
-                pnlChartFrequence.repaint();
-            }
-            if (pnlChartTemperature != null) {
-                pnlChartTemperature.revalidate();
-                pnlChartTemperature.repaint();
-            }
-
-        }
-    }
 
 
     private void setImage(String pathimg, Object componente) {

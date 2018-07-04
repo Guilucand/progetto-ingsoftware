@@ -35,17 +35,14 @@ public class EmptyPanelAdmin extends JPanel{
 
         MainPanel.remove(openAdminPanel);
 
-        logOutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        logOutButton.addActionListener(e -> {
 
-                if(JOptionPane.showConfirmDialog(null,"Conferma Log-out") == 0){
+            if(JOptionPane.showConfirmDialog(null,"Conferma Log-out") == 0){
 
-                    Chiudi(mgui);
-
-                }
+                Chiudi(mgui);
 
             }
+
         });
 
         vediReportButton.addActionListener(new ActionListener() {
@@ -53,7 +50,8 @@ public class EmptyPanelAdmin extends JPanel{
             public void actionPerformed(ActionEvent e) {
 
                 System.out.println("aperto il frame dei report");
-                new ReportFrame(status,username);
+                //new ReportFrame(status,username);
+//                new PrintableReport()
 
             }
         });

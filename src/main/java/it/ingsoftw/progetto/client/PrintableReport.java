@@ -5,44 +5,66 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import it.ingsoftw.progetto.common.IRecoveryHistory;
-import it.ingsoftw.progetto.common.IRoom;
-import org.knowm.xchart.XYChart;
+import javafx.util.Pair;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.io.FileOutputStream;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class PrintableReport extends JPanel {
 
     private boolean printable;
     private IRecoveryHistory recoveryHistory;
     private IRecoveryHistory.RecoveryInfo recoveryInfo;
-    private ArrayList<XYChart> graphicList;
+    private HistoryChartsManager graphicList;
+    private JTextPane logsTextPanel;
     private static final int YLengthPDF = 1200;
 
 
-    PrintableReport(boolean printable, int recoveryKey, IRecoveryHistory recoveryHistory, ArrayList<XYChart> graphicList ) throws RemoteException {
+    PrintableReport(boolean printable,
+                    int recoveryKey,
+                    IRecoveryHistory recoveryHistory,
+                    LocalDateTime begin,
+                    LocalDateTime end) throws RemoteException {
 
         this.recoveryHistory = recoveryHistory;
         this.recoveryInfo = recoveryHistory.getRecoveryFromKey(recoveryKey);
-        this.graphicList = graphicList;
+        this.graphicList = new HistoryChartsManager(recoveryInfo.getRecoveryKey(), recoveryHistory, begin, end);
         this.printable = printable;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setBackground(Color.WHITE);
+        this.logsTextPanel = new JTextPane();
+        this.logsTextPanel.setContentType("text/html");
+        this.logsTextPanel.setEditable(false);
 
-        Dimension A4 = new Dimension(595, YLengthPDF);
+        List<Pair<LocalDateTime, String>> events = this.recoveryHistory.getEventsBetween(recoveryKey, begin, end);
 
 
-        this.setPreferredSize(A4);
-        this.setMinimumSize(A4);
-        this.setMaximumSize(A4);
-        this.setSize(A4);
+        StringBuilder logs = new StringBuilder();
+        logs.append("<h1>Registro degli eventi</h1></br>");
+
+        for (Pair<LocalDateTime, String> event : events) {
+            logs.append("<p><b>" +event.getKey().format(DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm:ss")) +
+                        ":</b>   " + event.getValue() + "</p>");
+        }
+
+
+        this.logsTextPanel.setText(logs.toString());
+
+        Dimension A4min = new Dimension(595, YLengthPDF);
+        Dimension A4max = new Dimension(595, YLengthPDF*10);
+
+
+//        this.setPreferredSize(A4);
+        this.setMinimumSize(A4min);
+        this.setMaximumSize(A4max);
+//        this.setSize(A4min);
 
         if (printable)
             this.setBackground(Color.WHITE);
@@ -52,13 +74,17 @@ public class PrintableReport extends JPanel {
         this.add(new InfoField(recoveryInfo, recoveryHistory));
 
         this.add(new GraphicField(graphicList));
+
+        this.add(logsTextPanel);
     }
 
 
 
     public void printToPdf(String path) {
 
-        Document document = new Document(new com.itextpdf.text.Rectangle(595,YLengthPDF));
+        Document document = new Document(new com.itextpdf.text.Rectangle(
+                getPreferredSize().width,
+                getPreferredSize().height));
         try {
 
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("test.pdf"));
@@ -71,7 +97,7 @@ public class PrintableReport extends JPanel {
 
 
             test.pack();
-            test.setVisible(true);
+//            test.setVisible(true);
 
             PdfContentByte contentByte = writer.getDirectContent();
 
