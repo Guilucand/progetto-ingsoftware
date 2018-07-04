@@ -1,5 +1,6 @@
 package it.ingsoftw.progetto.client;
 
+import it.ingsoftw.progetto.common.IRecovery;
 import it.ingsoftw.progetto.common.IRoom;
 
 import javax.swing.*;
@@ -7,21 +8,22 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class ArchiveStopAlarm extends JFrame{
     private JTextArea activityReportTextArea;
-    private JButton archiveActivity;
     private JPanel MainPanel;
+    private JButton inviaButton;
+    private JButton chiudiButton;
+    IRecovery recovery;
 
-    public ArchiveStopAlarm(IRoom room, String user) {
+    public ArchiveStopAlarm(IRecovery recovery) {
 
         super("Rapporto spegnimento allarme");
 
 
-        this.MainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black),user,TitledBorder.TOP,TitledBorder.CENTER));
-        ((javax.swing.border.TitledBorder) this.MainPanel.getBorder()).setTitleFont(new Font("Droid Serif", Font.ITALIC, 14));
-
-        Dimension preferredDimension = new Dimension(400, 600);
+        this.recovery = recovery;
+        Dimension preferredDimension = new Dimension(750, 500);
         MainPanel.setPreferredSize(preferredDimension);
 
         this.setContentPane(MainPanel);
@@ -35,19 +37,23 @@ public class ArchiveStopAlarm extends JFrame{
         this.setVisible(true);
 
 
+        inviaButton.addActionListener(e -> {
 
+            String report = activityReportTextArea.getText();
 
-        archiveActivity.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            //
+            dispose();
 
-                String activityReport = "";
+        });
 
-                activityReport = activityReportTextArea.getText();
+        chiudiButton.addActionListener(e -> {
 
-                //Archivia report sulle attività fatte al paziente per farlo tornare allo stato normale
+            if(JOptionPane.showConfirmDialog(null,"Confermi la chiusura?") == 0){
+
+                dispose();
 
             }
+
         });
     }
 }

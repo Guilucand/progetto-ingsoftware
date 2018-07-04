@@ -7,6 +7,7 @@ import it.ingsoftw.progetto.common.messages.MonitorDataChangedMessage;
 import java.rmi.RemoteException;
 
 public class MessagesDispatcher {
+
     private IMessage messageInterface;
     private MonitorGUI monitorGUI;
     private Thread dispatchThread;
