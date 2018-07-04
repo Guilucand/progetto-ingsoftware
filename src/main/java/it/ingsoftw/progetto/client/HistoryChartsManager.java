@@ -64,6 +64,8 @@ public class HistoryChartsManager {
         updateChart();
     }
 
+
+
     public HistoryChartsManager(int recoveryKey,
                                 IRecoveryHistory recoveryHistory,
                                 LocalDateTime begin,
@@ -78,10 +80,10 @@ public class HistoryChartsManager {
 
 
     private HistoryChartsManager() {
-        chartSBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("SBP").width(300).height(100).build();
-        chartDBP = new XYChartBuilder().xAxisTitle("time").yAxisTitle("DBP").width(300).height(100).build();
-        chartFrequence = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Frequence").width(300).height(100).build();
-        chartTemperature = new XYChartBuilder().xAxisTitle("time").yAxisTitle("Temperature °C").width(300).height(100).build();
+        chartSBP = new XYChartBuilder().xAxisTitle("").yAxisTitle("SBP").width(300).height(100).build();
+        chartDBP = new XYChartBuilder().xAxisTitle("").yAxisTitle("DBP").width(300).height(100).build();
+        chartFrequence = new XYChartBuilder().xAxisTitle("").yAxisTitle("BPM").width(300).height(100).build();
+        chartTemperature = new XYChartBuilder().xAxisTitle("").yAxisTitle("Temperatura °C").width(300).height(100).build();
 
         chartSBP.getStyler().setSeriesColors(new Color[]{new Color(107,187,95)});
         chartDBP.getStyler().setSeriesColors(new Color[]{new Color(17,87,31)});
@@ -183,12 +185,6 @@ public class HistoryChartsManager {
             chartFrequence.getStyler().setXAxisMax(maxXValue);
             chartTemperature.getStyler().setXAxisMin(0.0);
             chartTemperature.getStyler().setXAxisMax(maxXValue);
-
-
-            chartSBP.getSeriesMap().containsKey("SBP");
-            chartDBP.removeSeries("DBP");
-            chartFrequence.removeSeries("BPM");
-            chartTemperature.removeSeries("Temperatura");
 
 
             if (!chartSBP.getSeriesMap().containsKey("SBP"))

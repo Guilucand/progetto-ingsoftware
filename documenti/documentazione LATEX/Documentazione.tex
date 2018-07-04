@@ -36,14 +36,38 @@
 \newpage
 
 
-\section{descrizione del progetto}
+\section{Descrizione del progetto}
 
-sadsa
-d
-as
-d
-sa
-d
+Questo progetto implementa una interfaccia per la gestione dei ricoveri di un reparto di rianimazione.
+\`E possibile verificare in tempo reale i dati di monitoraggio delle macchine di supporto vitale (bpm, sbp, dbp, temperatura),
+visualizzare gli allarmi e scrivere report, aggiungere e rimuovere ricoveri, visualizzare lo storico dei ricoveri,
+prescrivere farmaci e somministrare farmaci.
+\`E inoltre possibile osservare i grafici dell'andamento dei parametri nelle ultime 2 ore.\\
+
+Il software \`e stato implementato utilizzando un'architettura client-server, dove sia le interfacce utente che le macchine
+di monitoraggio si connettono ad un unico server centrale.\\
+
+L'aggiornamento dei client da parte del server \`e effettuato tramite un sistema ad eventi, in cui ogni client rimane in attesa
+di un messaggio dal server in un thread separato, ed appena lo riceve lo processa e richiede un altro messaggio.
+In questo modo \`e possibile eseguire l'update in tempo reale sul proprio client delle modifiche effettuate in altri client.\\
+
+L'interfaccia di comunicazione client-server \`e implementata utilizzando le Java RMI, ovvero un framework in grado di eseguire
+in modo trasparente metodi di interfacce chiamate dal client ma implementate sul server.\\
+
+L'interfaccia iniziale di comunicazione \`e una factory con cui il server genera le altre sottointerfacce specifiche per ogni finestra.\\
+
+Ogni finestra ha una sua specifica interfaccia con il server, che permette di effettuare soltanto alcune azioni, a seconda della tipologia.
+
+Per il salvataggio dei dati \`e stato utilizzato il database PostgreSQL, creando delle interfacce wrapper di ogni tabella, cos\`i da separare
+l'effettiva implementazione e connessione SQL dal resto del server.
+
+Il frontend \`e implementato utilizzando Java Swing, ed ogni finestra \`e creata per svolgere uno scopo (comunicando con il server
+tramite un'interfaccia specifica) e termina automaticamente al completamento (es. login, aggiunta ricovero, inserimento prescrizione, ecc...).\\
+
+Gli utenti del software sono gestiti dal primario o da medici che il primario pu\`o nominare amministratori.\\
+
+Per l'aggiunta dei farmaci \`e utilizzato il database online all'indirizzo:\\
+https://farmaci.agenziafarmaco.gov.it/bancadatifarmaci/home
 
 
 \section{USE CASE del software}

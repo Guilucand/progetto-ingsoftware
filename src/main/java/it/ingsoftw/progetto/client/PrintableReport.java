@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PrintableReport extends JPanel {
@@ -132,12 +133,27 @@ public class PrintableReport extends JPanel {
         return template;
     }
 
-    public static void saveMultipleReports(String path, PrintableReport... reports) {
-        if (reports == null || reports.length == 0)
+    public static void saveMultipleReports(String path, List<PrintableReport> reports) {
+        if (reports == null || reports.size() == 0)
             return;
+
+        int prefSizeX = -1;
+        int presSizeY = -1;
+        for (PrintableReport report : reports) {
+            Dimension dim = report.getPreferredSize();
+            if (prefSizeX < dim.width)
+                prefSizeX = dim.width;
+            if (presSizeY < dim.height)
+                presSizeY = dim.height;
+        }
+
+        for (PrintableReport report : reports) {
+            report.setPreferredSize(new Dimension(prefSizeX, presSizeY));
+        }
+
         Document document = new Document(new com.itextpdf.text.Rectangle(
-                reports[0].getPreferredSize().width,
-                reports[0].getPreferredSize().height));
+                prefSizeX,
+                presSizeY));
         try {
 
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -160,7 +176,9 @@ public class PrintableReport extends JPanel {
     }
 
     public void printToPdf(String path) {
-        saveMultipleReports(path, this);
+        List<PrintableReport> tmp = new ArrayList<>();
+        tmp.add(this);
+        saveMultipleReports(path, tmp);
     }
    /* private class GraphicField extends JPanel {
 
