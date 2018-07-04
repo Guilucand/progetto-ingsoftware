@@ -6,11 +6,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import it.ingsoftw.progetto.common.DrugAdministration;
-import it.ingsoftw.progetto.common.DrugPrescription;
-import it.ingsoftw.progetto.common.IRecovery;
-import it.ingsoftw.progetto.common.MonitorData;
-import it.ingsoftw.progetto.common.PatientData;
+import it.ingsoftw.progetto.common.*;
+import it.ingsoftw.progetto.common.messages.AddedStopAlarmMessage;
+import it.ingsoftw.progetto.common.messages.persistent.RequestStoppedAlarmReportMessage;
 import it.ingsoftw.progetto.server.database.IMessageDatabase;
 import it.ingsoftw.progetto.server.database.IPatientsDatabase;
 import it.ingsoftw.progetto.server.database.IPrescriptionDatabase;
@@ -60,6 +58,16 @@ public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
             }
         }
         return false;
+    }
+
+    @Override
+    public void addAlarmReport(AlarmData alarmData, String report) {
+        messageDatabase.removePersistentMessage(new RequestStoppedAlarmReportMessage(recoveryKey,
+                database.mapRecoveryToRoom(recoveryKey), alarmData));
+        messageDatabase.addVolatileMessage(new AddedStopAlarmMessage(recoveryKey,
+                database.mapRecoveryToRoom(recoveryKey),
+                report,
+                alarmData));
     }
 
     @Override

@@ -143,7 +143,6 @@ public class HistoryChartsManager {
                 lastValue = lastZonedDateTime.getLong(ChronoField.INSTANT_SECONDS);
             }
 
-
             for (int i = 0; i < historyData.size(); i++) {
                 LocalDateTime currentTime = historyData
                         .get(i)

@@ -59,9 +59,8 @@ public class PatientMonitor extends JPanel {
 
     private Storico historyWindow;
     private IRecoveryHistory recoveryHistory;
-    private ArrayList<MessageObject> messageList;
-    private static JMenuItem DIAGNOSIS_MSG;
-    private Map<JMenuItem ,Integer > stop_maschine_message;
+    private static JMenuItem diagnosisMsg;
+    private Map<Integer, JMenuItem> stopMachineMessage;
 
 
     final static String EMPTYROOM = "emptyRoomPanel";
@@ -159,7 +158,7 @@ public class PatientMonitor extends JPanel {
 
             case AlarmStopMessage.CONSTRUCTOR:
                 stopAlarm(((AlarmStopMessage) message));
-            break;
+                break;
 
             case PatientAddedMessage.CONSTRUCTOR:
 
@@ -176,79 +175,57 @@ public class PatientMonitor extends JPanel {
 
             case RequestDiagnosisMessage.CONSTRUCTOR:
 
-                setImage("./img/diagnosis.png",alarmLabel);
                 addToPopup(message);
-                messageList.add(message);
-
+                updateImagealarmLabel();
 
                 break;
 
             case AddedDiagnosisMessage.CONSTRUCTOR:
 
-                 checkImagealarmLabel();
-                 deleteMessageFromList(message);
-                 removeToPopup(message);
-
-
+                removeFromPopup(message);
+                updateImagealarmLabel();
                 break;
 
             case RequestStoppedAlarmReportMessage.CONSTRUCTOR:
 
-                setImage("./img/alarmPaper.png",alarmLabel);
                 addToPopup(message);
-                messageList.add(message);
+                updateImagealarmLabel();
 
+                break;
+
+            case AddedStopAlarmMessage.CONSTRUCTOR:
+
+                removeFromPopup(message);
+                updateImagealarmLabel();
 
                 break;
         }
     }
 
-    private void removeToPopup(MessageObject message) {
+    private void removeFromPopup(MessageObject message) {
 
-        if (message.getMessageType() == AddedDiagnosisMessage.CONSTRUCTOR) messagePopMenu.remove(DIAGNOSIS_MSG);
+        switch (message.getMessageType()) {
+            case AddedDiagnosisMessage.CONSTRUCTOR:
+                messagePopMenu.remove(diagnosisMsg);
+                diagnosisMsg = null;
+                break;
+            case AddedStopAlarmMessage.CONSTRUCTOR:
+                Integer alarmId = ((AddedStopAlarmMessage) message).getAlarmData().getAlarmId();
+                messagePopMenu.remove(stopMachineMessage.get(alarmId));
+                stopMachineMessage.remove(alarmId);
+        }
 
 
     }
 
-    private void deleteMessageFromList(MessageObject message) {
+    private void updateImagealarmLabel() {
 
-        for(MessageObject mo : messageList){
-
-            if(mo.getMessageText().equals(message.getMessageText())){
-
-                messageList.remove(mo);
-
-            }
-
-        }
-
-    }
-
-    private void checkImagealarmLabel() {
-
-        if(messageList.isEmpty()){setImage("",alarmLabel);}
-        else{
-
-            MessageObject mo = messageList.get(messageList.size()-1);
-
-            switch(mo.getMessageType()){
-
-                case RequestDiagnosisMessage.CONSTRUCTOR:
-
-                    setImage("./img/diagnosis.png",alarmLabel);
-                    break;
-
-                case RequestStoppedAlarmReportMessage.CONSTRUCTOR:
-
-                    setImage("./img/alarmPaper.png",alarmLabel);
-                    break;
-
-            }
-
-        }
-
-
-
+        if (diagnosisMsg != null)
+            setImage("./img/diagnosis.png", alarmLabel);
+        else if (stopMachineMessage.size() > 0)
+            setImage("./img/alarmPaper.png", alarmLabel);
+        else
+            setImage(null, alarmLabel);
     }
 
     private void setupPatient() throws RemoteException {
@@ -287,8 +264,7 @@ public class PatientMonitor extends JPanel {
         this.recoveryHistory = recoveryHistory;
         this.loginStatus = loginStatus;
 
-        this.messageList = new ArrayList<>();
-        this.stop_maschine_message = new HashMap<JMenuItem, Integer>();
+        this.stopMachineMessage = new HashMap<>();
 
         this.room = room;
 
@@ -470,47 +446,51 @@ public class PatientMonitor extends JPanel {
 
         messagePopMenu.add(new_message);
 
+
         switch (messaggio.getMessageType()){
 
             case RequestDiagnosisMessage.CONSTRUCTOR:
 
+                diagnosisMsg = new_message;
+
                 new_message.addActionListener(e -> {
-
-                    DIAGNOSIS_MSG = new_message;
                     new AddDiagnosis(recovery);
-
                 });
 
                 break;
 
             case RequestStoppedAlarmReportMessage.CONSTRUCTOR:
 
+                AlarmData alarmData = ((RequestStoppedAlarmReportMessage)messaggio).getAlarmData();
+                stopMachineMessage.put(
+                            alarmData.getAlarmId(),
+                                new_message);
+
                 new_message.addActionListener(e -> {
-
-                    stop_maschine_message.put(((AlarmStartMessage)messaggio).getAlarmData().getAlarmId());
-                    new ArchiveStopAlarm(recovery);
-
+                    new ArchiveStopAlarm(recovery, alarmData);
                 });
         }
     }
 
-
-
     private void setImage(String pathimg, Object componente) {
 
-        InputStream imgStream = PatientMonitor.class.getResourceAsStream(pathimg);
+        ImageIcon icon = null;
 
-        BufferedImage myImg=null;
+        if (pathimg != null) {
+            InputStream imgStream = PatientMonitor.class.getResourceAsStream(pathimg);
 
-        try {
-            myImg = ImageIO.read(imgStream);
+            BufferedImage myImg=null;
 
-        } catch (IOException e) {
+            try {
+                myImg = ImageIO.read(imgStream);
 
-            e.printStackTrace();
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+
+            icon = new ImageIcon(myImg);
         }
-
-        ImageIcon icon = new ImageIcon(myImg);
 
         if(componente instanceof JLabel)((JLabel)componente).setIcon(icon);
         if(componente instanceof JButton)((JButton)componente).setIcon(icon);

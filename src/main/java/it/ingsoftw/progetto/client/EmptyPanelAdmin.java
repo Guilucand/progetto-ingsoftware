@@ -2,6 +2,7 @@ package it.ingsoftw.progetto.client;
 
 import it.ingsoftw.progetto.common.IAdmin;
 import it.ingsoftw.progetto.common.ILogin;
+import it.ingsoftw.progetto.common.IRecoveryHistory;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -19,6 +20,7 @@ public class EmptyPanelAdmin extends JPanel{
     private MonitorGUI Monitor;
     private ILogin.LoginStatus status;
     private IAdmin adminInterface;
+    private IRecoveryHistory recoveryHistory;
 
     public EmptyPanelAdmin(MonitorGUI mgui,
                            ILogin.LoginStatus status,
@@ -58,10 +60,14 @@ public class EmptyPanelAdmin extends JPanel{
     }
 
 
-    public EmptyPanelAdmin(ILogin.LoginStatus status,IAdmin adminInterface, String username){
+    public EmptyPanelAdmin(ILogin.LoginStatus status,
+                           IAdmin adminInterface,
+                           IRecoveryHistory recoveryHistory,
+                           String username){
 
         this.status=status;
         this.adminInterface = adminInterface;
+        this.recoveryHistory = recoveryHistory;
 
         Dimension preferredDimension = new Dimension(400, 200);
 
@@ -77,14 +83,13 @@ public class EmptyPanelAdmin extends JPanel{
             }
         });
 
-        vediReportButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        vediReportButton.addActionListener(e -> {
 
-                System.out.println("aperto il frame dei report");
-                new ReportFrame(status,username);
+            System.out.println("aperto il frame dei report");
+            new ReportFrame(status,
+                    username,
+                    recoveryHistory);
 
-            }
         });
 
 

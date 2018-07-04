@@ -80,7 +80,8 @@ public class PrintableReport extends JPanel {
 
 
 
-    public void printToPdf(String path) {
+    @Deprecated
+    public void printToPdfOld(String path) {
 
         Document document = new Document(new com.itextpdf.text.Rectangle(
                 getPreferredSize().width,
@@ -90,22 +91,22 @@ public class PrintableReport extends JPanel {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("test.pdf"));
             document.open();
 
-            JFrame test = new JFrame();
-            test.setBackground(Color.WHITE);
-
-            test.setContentPane(this);
-
-
-            test.pack();
+            JFrame preRenderer = new JFrame();
+            preRenderer.setBackground(Color.WHITE);
+            preRenderer.setContentPane(this);
+            preRenderer.pack();
 //            test.setVisible(true);
 
             PdfContentByte contentByte = writer.getDirectContent();
 
-            PdfTemplate template = contentByte.createTemplate(this.getWidth(), this.getHeight());
-            Graphics2D g2 = template.createGraphics(this.getWidth(), this.getHeight());
-            this.print(g2);
-            g2.dispose();
-            contentByte.addTemplate(template, 0, 0);
+            for (int i = 0; i < 2; i++) {
+                document.newPage();
+                PdfTemplate template = contentByte.createTemplate(this.getWidth(), this.getHeight());
+                Graphics2D g2 = template.createGraphics(this.getWidth(), this.getHeight());
+                this.print(g2);
+                g2.dispose();
+                contentByte.addTemplate(template, 0, 0);
+             }
 
         } catch (Exception e1) {
             e1.printStackTrace();
@@ -117,6 +118,50 @@ public class PrintableReport extends JPanel {
         }
     }
 
+    public PdfTemplate getPdfTemplate(PdfContentByte contentByte) {
+
+        JFrame preRenderer = new JFrame();
+        preRenderer.setBackground(Color.WHITE);
+        preRenderer.setContentPane(this);
+        preRenderer.pack();
+
+        PdfTemplate template = contentByte.createTemplate(this.getWidth(), this.getHeight());
+        Graphics2D g2 = template.createGraphics(this.getWidth(), this.getHeight());
+        this.print(g2);
+        g2.dispose();
+        return template;
+    }
+
+    public static void saveMultipleReports(String path, PrintableReport... reports) {
+        if (reports == null || reports.length == 0)
+            return;
+        Document document = new Document(new com.itextpdf.text.Rectangle(
+                reports[0].getPreferredSize().width,
+                reports[0].getPreferredSize().height));
+        try {
+
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+            document.open();
+
+            PdfContentByte contentByte = writer.getDirectContent();
+
+            for (PrintableReport report : reports) {
+                document.newPage();
+                contentByte.addTemplate(report.getPdfTemplate(contentByte), 0, 0);
+            }
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        } finally {
+            if (document.isOpen()) {
+                document.close();
+            }
+        }
+    }
+
+    public void printToPdf(String path) {
+        saveMultipleReports(path, this);
+    }
    /* private class GraphicField extends JPanel {
 
         public GraphicField(ArrayList<XYChart> graphicList) {

@@ -32,6 +32,10 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
     private Timer snapshotMonitorsTimer;
 
+    public static void createSchema(Connection connection) {
+        DatabaseUtils.createDatabaseFromSchema(connection, "schema/recovery.sql");
+    }
+
     public RecoveryDatabase(Connection connection, IMessageDatabase messageDatabase) {
 
         this.connection = connection;
@@ -39,8 +43,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
         this.currentMonitorsData = new HashMap<>();
         this.activeAlarms = new HashMap<>();
         this.snapshotMonitorsTimer = new Timer();
-        DatabaseUtils.createDatabaseFromSchema(connection, "schema/recovery.sql");
-
+        createSchema(connection);
 
         this.snapshotMonitorsTimer.schedule(new TimerTask() {
             @Override
@@ -117,7 +120,10 @@ public class RecoveryDatabase implements IRecoveryDatabase {
         }
     }
 
-    private boolean addMonitorDataToDatabase(int recoveryKey, LocalDateTime dateTime, MonitorData data) {
+    /**
+     * Metodo pubblico solo per testing!
+     */
+    public boolean addMonitorDataToDatabase(int recoveryKey, LocalDateTime dateTime, MonitorData data) {
         if (data == null)
             return false;
 
@@ -436,11 +442,13 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
             ResultSet result = getRecoveries.executeQuery();
             while (result.next()) {
+                Timestamp endTimestamp = result.getTimestamp(4);
+
                 results.add(new IRecoveryHistory.RecoveryInfo(
                         result.getInt(1),
                         result.getString(2),
                         result.getTimestamp(3).toLocalDateTime(),
-                        result.getTimestamp(4).toLocalDateTime(),
+                        (endTimestamp != null) ? endTimestamp.toLocalDateTime() : null,
                         result.getString(5),
                         result.getString(6)));
             }
