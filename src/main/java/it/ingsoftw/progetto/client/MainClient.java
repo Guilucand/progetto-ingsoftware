@@ -1,9 +1,7 @@
 package it.ingsoftw.progetto.client;
 
-import java.awt.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
 import it.ingsoftw.progetto.common.IClientListener;
 import it.ingsoftw.progetto.common.IClientRmiFactory;
@@ -32,7 +30,7 @@ public class MainClient {
 //        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
 //        double ratio = dim.height / 1080.0;
-        System.setProperty("sun.java2d.uiScale", "2");//String.valueOf((int)ratio));
+        System.setProperty("sun.java2d.uiScale", "1");//String.valueOf((int)ratio));
 
         try {
             // Connessione al server
@@ -56,7 +54,7 @@ public class MainClient {
             //new AdminPanel(ILogin.LoginStatus.PRIMARY_LOGGED,serverFactory.getAdminInterface());
 
             // Avvio della GUI di login
-            new ClientGUI(loginInterface, (status, username) -> {
+            new LoginGUI(loginInterface, (status, username) -> {
 
                 // Callback in caso di login andato a buon fine
                 switch (status) {

@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
 
 import java.util.concurrent.TimeUnit;
 
-public class ClientGUI extends JFrame{
+public class LoginGUI extends JFrame{
     private JTextField usernameTextField;
     private JPasswordField passwordTextField;
     private  JPanel MainPanel;
@@ -30,7 +30,7 @@ public class ClientGUI extends JFrame{
     private IClientGuiCallback resultsCallback;
     private int limit_access = 5;
 
-    public ClientGUI(ILogin loginInterface, IClientGuiCallback resultsCallback){
+    public LoginGUI(ILogin loginInterface, IClientGuiCallback resultsCallback){
 
         // Con 'super' chiamo il costruttore della classe JFrame
         // a cui passo il titolo della finestra
