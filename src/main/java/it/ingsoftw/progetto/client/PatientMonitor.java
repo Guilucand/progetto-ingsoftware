@@ -179,6 +179,15 @@ public class PatientMonitor extends JPanel {
 
                 break;
 
+            case AddedDiagnosisMessage.CONSTRUCTOR:
+
+                // NASCONDI IMMAGINE
+//                setImage("./img/diagnosis.png",alarmLabel);
+//                addToPopup(message);
+
+
+                break;
+
             case RequestStoppedAlarmReportMessage.CONSTRUCTOR:
 
                 setImage("./img/alarmPaper.png",alarmLabel);
