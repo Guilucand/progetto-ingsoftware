@@ -14,6 +14,12 @@ import java.util.List;
 public interface IRecovery extends Remote {
 
     /**
+     * Ritorna l'identificativo del ricovero
+     * @return l'identificativo
+     */
+    int getKey() throws RemoteException;
+
+    /**
      * Aggiunge la diagnosi
      * @return true se aggiunta con successo
      * @throws RemoteException

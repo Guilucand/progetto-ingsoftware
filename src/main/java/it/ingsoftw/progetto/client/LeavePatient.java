@@ -17,7 +17,7 @@ public class LeavePatient extends JFrame{
     private JPanel MainPanel;
 
 
-    public LeavePatient(IRoom stanza, String user, Storico storico){
+    public LeavePatient(IRecovery recovery, String user, Storico storico){
 
         super("Lettera-Dimissioni");
 
@@ -62,7 +62,6 @@ public class LeavePatient extends JFrame{
 
                     //dimettipaziente
                     try {
-                        IRecovery recovery = stanza.getCurrentRecovery();
                         if (!recovery.leavePatient(leavePatientLetter))
                             return;
                     } catch (RemoteException e1) {

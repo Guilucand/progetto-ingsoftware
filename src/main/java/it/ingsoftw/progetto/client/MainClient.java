@@ -32,7 +32,7 @@ public class MainClient {
 //        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
 //        double ratio = dim.height / 1080.0;
-        System.setProperty("sun.java2d.uiScale", "1");//String.valueOf((int)ratio));
+        System.setProperty("sun.java2d.uiScale", "2");//String.valueOf((int)ratio));
 
         try {
             // Connessione al server
@@ -65,7 +65,7 @@ public class MainClient {
                         break;
 
                     default:
-                        Logged(loginInterface, username,status);
+                        Logged(username, status);
                         break;
                 }
             });
@@ -103,9 +103,9 @@ public class MainClient {
 
     }
 
-    private static void Logged(ILogin loginInterface, String username, ILogin.LoginStatus status) throws RemoteException {
+    private static void Logged(String username, ILogin.LoginStatus status) throws RemoteException {
 
-        MonitorGUI monitorGUI = new MonitorGUI(loginInterface, username,status, serverFactory);
+        MonitorGUI monitorGUI = new MonitorGUI(username, status, serverFactory);
 
         if (messagesDispatcher == null) {
             messagesDispatcher = new MessagesDispatcher(serverFactory.getMessageInterface(), monitorGUI);

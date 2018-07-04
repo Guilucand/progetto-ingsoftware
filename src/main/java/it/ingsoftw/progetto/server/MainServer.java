@@ -79,10 +79,10 @@ public class MainServer {
                 }
 
 
-                for (int i = 1; i <= 10; i += 2) {
-                    patientsDatabase.addPatient(new PatientData("PATIENT" + String.valueOf(i), "A" + i, "B" + i, LocalDate.now(), "C" + i));
-                    recoveryDatabase.addRecovery("PATIENT" + String.valueOf(i), String.valueOf(i));
-                }
+//                for (int i = 1; i <= 10; i += 2) {
+//                    patientsDatabase.addPatient(new PatientData("PATIENT" + String.valueOf(i), "A" + i, "B" + i, LocalDate.now(), "C" + i));
+//                    recoveryDatabase.addRecovery("PATIENT" + String.valueOf(i), String.valueOf(i));
+//                }
 
 
             } catch (Exception e) {

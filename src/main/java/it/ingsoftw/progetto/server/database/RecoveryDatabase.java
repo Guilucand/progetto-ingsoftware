@@ -15,12 +15,9 @@ import it.ingsoftw.progetto.common.AlarmData;
 import it.ingsoftw.progetto.common.IRecoveryHistory;
 import it.ingsoftw.progetto.common.MonitorData;
 import it.ingsoftw.progetto.common.PatientData;
-import it.ingsoftw.progetto.common.messages.AlarmStopMessage;
-import it.ingsoftw.progetto.common.messages.PatientAddedMessage;
+import it.ingsoftw.progetto.common.messages.*;
 import it.ingsoftw.progetto.common.messages.persistent.AlarmStartMessage;
-import it.ingsoftw.progetto.common.messages.MonitorDataChangedMessage;
 import it.ingsoftw.progetto.common.messages.persistent.RequestDiagnosisMessage;
-import it.ingsoftw.progetto.common.messages.DimissionMessage;
 import it.ingsoftw.progetto.common.messages.persistent.RequestStoppedAlarmReportMessage;
 import javafx.util.Pair;
 
@@ -74,6 +71,8 @@ public class RecoveryDatabase implements IRecoveryDatabase {
             return false;
         }
         messageDatabase.removePersistentMessage(new RequestDiagnosisMessage(recoveryKey, mapRecoveryToRoom(recoveryKey)));
+        messageDatabase.addVolatileMessage(new AddedDiagnosisMessage(recoveryKey, mapRecoveryToRoom(recoveryKey), diagnosis));
+
         return true;
     }
 
@@ -424,7 +423,7 @@ public class RecoveryDatabase implements IRecoveryDatabase {
 
     @Override
     public List<IRecoveryHistory.RecoveryInfo> getRecoveryInfos(LocalDateTime begin, LocalDateTime end) {
-        String sql = "SELECT recoveryKey, patientCode, startDate, endDate, diagnosis, dimissionLetter " +
+        String sql = "SELECT key, patientCode, startDate, endDate, diagnosis, dimissionLetter " +
                 "FROM recovery " +
                 "WHERE startDate BETWEEN ? AND ?;";
 
@@ -450,5 +449,35 @@ public class RecoveryDatabase implements IRecoveryDatabase {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public IRecoveryHistory.RecoveryInfo getRecoveryInfoFromKey(int recoveryKey) {
+        String sql = "SELECT key, patientCode, startDate, endDate, diagnosis, dimissionLetter " +
+                "FROM recovery " +
+                "WHERE key = ?;";
+
+
+        try {
+            PreparedStatement getRecovery = connection.prepareStatement(sql);
+            getRecovery.setInt(1, recoveryKey);
+
+            ResultSet result = getRecovery.executeQuery();
+            if (result.next()) {
+                Timestamp endTimestamp = result.getTimestamp(4);
+
+
+                return new IRecoveryHistory.RecoveryInfo(
+                        result.getInt(1),
+                        result.getString(2),
+                        result.getTimestamp(3).toLocalDateTime(),
+                        (endTimestamp != null) ? endTimestamp.toLocalDateTime() : null,
+                        result.getString(5),
+                        result.getString(6));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

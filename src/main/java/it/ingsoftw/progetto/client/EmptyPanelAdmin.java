@@ -20,7 +20,10 @@ public class EmptyPanelAdmin extends JPanel{
     private ILogin.LoginStatus status;
     private IAdmin adminInterface;
 
-    public EmptyPanelAdmin(MonitorGUI mgui , ILogin.LoginStatus status,String username , IAdmin adminInterface){
+    public EmptyPanelAdmin(MonitorGUI mgui,
+                           ILogin.LoginStatus status,
+                           String username,
+                           IAdmin adminInterface){
 
         this.Monitor=mgui;
         this.status=status;

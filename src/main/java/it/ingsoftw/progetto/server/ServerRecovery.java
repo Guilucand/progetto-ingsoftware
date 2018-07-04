@@ -42,6 +42,11 @@ public class ServerRecovery extends UnicastRemoteObject implements IRecovery {
     }
 
     @Override
+    public int getKey() {
+        return recoveryKey;
+    }
+
+    @Override
     public boolean addDiagnosis(String diagnosis) {
         if (diagnosis == null)
             return false;

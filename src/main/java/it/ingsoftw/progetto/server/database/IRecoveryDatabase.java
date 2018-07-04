@@ -43,4 +43,6 @@ public interface IRecoveryDatabase {
     List<Pair<LocalDateTime, MonitorData>> getMonitorData(int recoveryKey, LocalDateTime begin, LocalDateTime end);
 
     List<IRecoveryHistory.RecoveryInfo> getRecoveryInfos(LocalDateTime begin, LocalDateTime end);
+
+    IRecoveryHistory.RecoveryInfo getRecoveryInfoFromKey(int recoveryKey);
 }

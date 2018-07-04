@@ -37,4 +37,11 @@ public interface IClientRmiFactory extends Remote {
      */
     IMessage getMessageInterface() throws RemoteException;
 
+    /**
+     * Ritorna un'interfaccia per la consultazione
+     * dello storico dei ricoveri
+     * @return
+     * @throws RemoteException
+     */
+    IRecoveryHistory getRecoveryHistoryInterface() throws RemoteException;
 }

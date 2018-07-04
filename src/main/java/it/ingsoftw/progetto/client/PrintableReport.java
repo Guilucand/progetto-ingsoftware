@@ -4,8 +4,8 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
+import it.ingsoftw.progetto.common.IRecoveryHistory;
 import it.ingsoftw.progetto.common.IRoom;
-import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
 
 import java.awt.*;
@@ -15,21 +15,22 @@ import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 public class PrintableReport extends JPanel {
 
     private boolean printable;
-    private IRoom room;
+    private IRecoveryHistory recoveryHistory;
+    private IRecoveryHistory.RecoveryInfo recoveryInfo;
     private ArrayList<XYChart> graphicList;
     private static final int YLengthPDF = 1200;
 
 
-    PrintableReport(boolean printable, IRoom room, ArrayList<XYChart> graphicList ) throws RemoteException {
+    PrintableReport(boolean printable, int recoveryKey, IRecoveryHistory recoveryHistory, ArrayList<XYChart> graphicList ) throws RemoteException {
 
-        this.room = room;
+        this.recoveryHistory = recoveryHistory;
+        this.recoveryInfo = recoveryHistory.getRecoveryFromKey(recoveryKey);
         this.graphicList = graphicList;
         this.printable = printable;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -48,10 +49,9 @@ public class PrintableReport extends JPanel {
 
         this.setBorder(new EmptyBorder(40, 30, 30, 30));
 
-        this.add(new InfoField(room));
+        this.add(new InfoField(recoveryInfo, recoveryHistory));
 
         this.add(new GraphicField(graphicList));
-
     }
 
 

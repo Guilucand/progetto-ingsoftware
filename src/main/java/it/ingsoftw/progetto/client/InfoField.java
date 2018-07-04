@@ -1,5 +1,6 @@
 package it.ingsoftw.progetto.client;
 
+import it.ingsoftw.progetto.common.IRecoveryHistory;
 import it.ingsoftw.progetto.common.IRoom;
 import it.ingsoftw.progetto.common.PatientData;
 
@@ -17,13 +18,13 @@ public class InfoField extends JPanel{
     private JLabel birthlocationParameter;
     private JPanel MainPanel;
 
-    public InfoField(IRoom room) throws RemoteException {
+    public InfoField(IRecoveryHistory.RecoveryInfo recoveryInfo, IRecoveryHistory recoveryHistory) throws RemoteException {
 
         this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
         this.setPreferredSize(new Dimension(595,300));
 
-        PatientData datipaz = room.getCurrentRecovery().getPatientData();
+        PatientData datipaz = recoveryHistory.getPatientData(recoveryInfo.getPatientCode());
 
         nameParameter.setText(datipaz.getName());
         surnameParameter.setText(datipaz.getSurname());

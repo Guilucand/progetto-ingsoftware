@@ -60,7 +60,6 @@ public class Storico extends  JFrame{
     private JButton dimettiButton;
     private JButton esciDalloStoricoButton;
     private JButton stampaReportButton;
-    private IRecovery patient;
     private PatientData patientData;
     private JFrame leavePatientFrame;
     XYChart chartSBP;
@@ -76,6 +75,9 @@ public class Storico extends  JFrame{
     private ArrayList<XYChart> GraphicList;
 
     Timer updateChartTimer;
+    private IRecovery recovery;
+    private IRecoveryHistory recoveryHistory;
+    private IRecoveryHistory.RecoveryInfo recoveryInfo;
 
     public void updateVsData(MonitorData data) {
         if (data != null) {
@@ -86,9 +88,12 @@ public class Storico extends  JFrame{
         }
     }
 
-    public Storico(IRoom room, ILogin.LoginStatus status, String user) throws RemoteException {
+    public Storico(IRecovery recovery, IRecoveryHistory recoveryHistory, ILogin.LoginStatus status, String user) throws RemoteException {
 
         super("Storico");
+        this.recovery = recovery;
+        this.recoveryHistory = recoveryHistory;
+        this.recoveryInfo = recoveryHistory.getRecoveryFromKey(recovery.getKey());
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -106,10 +111,9 @@ public class Storico extends  JFrame{
 
         if(!(status == ILogin.LoginStatus.PRIMARY_LOGGED)) dimettiButton.setVisible(false);
 
-        patient = room.getCurrentRecovery();
         setImage("./img/image.png",imageLabel);
 
-        patientData = patient.getPatientData();
+        patientData = recoveryHistory.getPatientData(recoveryInfo.getPatientCode());
 
         if (patientData != null) {
             nameParameter.setText(patientData.getName());
@@ -161,7 +165,7 @@ public class Storico extends  JFrame{
         this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
         this.setVisible(true);
 
-        dimettiButton.addActionListener(e -> leavePatientFrame = new LeavePatient(room, user, questo()));
+        dimettiButton.addActionListener(e -> leavePatientFrame = new LeavePatient(recovery, user, questo()));
         esciDalloStoricoButton.addActionListener(e -> {
             if (leavePatientFrame == null){
                 dispose();
@@ -190,7 +194,7 @@ public class Storico extends  JFrame{
 
                 PrintableReport printReport = null;
                 try {
-                    printReport = new PrintableReport(true, room ,GraphicList);
+                    printReport = new PrintableReport(true, recovery.getKey(), recoveryHistory ,GraphicList);
                 } catch (RemoteException e1) {
                     e1.printStackTrace();
                 }
@@ -223,7 +227,7 @@ public class Storico extends  JFrame{
 
         List<Pair<LocalDateTime, MonitorData>> historyData;
         try {
-            historyData = patient.getLastVsData(minutes * (60 / RecoveryDatabase.SNAPSHOT_SECONDS_INTERVAL));
+            historyData = recovery.getLastVsData(minutes * (60 / RecoveryDatabase.SNAPSHOT_SECONDS_INTERVAL));
         } catch (RemoteException e) {
             e.printStackTrace();
             historyData = null;

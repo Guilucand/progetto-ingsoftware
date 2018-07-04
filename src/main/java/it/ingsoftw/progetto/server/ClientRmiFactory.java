@@ -63,10 +63,12 @@ public class ClientRmiFactory extends UnicastRemoteObject implements IClientRmiF
         return messageInterface;
     }
 
+    @Override
     public IRecoveryHistory getRecoveryHistoryInterface() throws RemoteException {
         if (recoveryHistoryInterface == null)
             recoveryHistoryInterface = new ServerRecoveryHistory(databaseConnection.getMessageInterface(),
-                    databaseConnection.getRecoveryInterface());
+                    databaseConnection.getRecoveryInterface(),
+                    databaseConnection.getPatientsInterface());
         return recoveryHistoryInterface;
     }
 }

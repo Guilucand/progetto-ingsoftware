@@ -54,6 +54,8 @@ public class PatientMonitor extends JPanel {
     private boolean showpop;
 
     private Storico historyWindow;
+    private IRecoveryHistory recoveryHistory;
+
 
     final static String EMPTYROOM = "emptyRoomPanel";
     final static String PATIENTROOM = "fullRoomPanel";
@@ -201,9 +203,10 @@ public class PatientMonitor extends JPanel {
         this.repaint();
     }
 
-    public PatientMonitor(int roomNumber, IRoom room, ILogin.LoginStatus loginStatus, String user) throws RemoteException {
+    public PatientMonitor(int roomNumber, IRoom room, IRecoveryHistory recoveryHistory, String user, ILogin.LoginStatus loginStatus) throws RemoteException {
 
         this.roomNumber = roomNumber;
+        this.recoveryHistory = recoveryHistory;
         this.loginStatus = loginStatus;
 
         this.room = room;
@@ -274,7 +277,7 @@ public class PatientMonitor extends JPanel {
                 super.mousePressed(e);
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     try {
-                        historyWindow = new Storico(room, loginStatus, user);
+                        historyWindow = new Storico(recovery, PatientMonitor.this.recoveryHistory, loginStatus, user);
                         historyWindow.updateVsData(recovery.getCurrentMonitorData());
                     } catch (RemoteException e1) {
                         e1.printStackTrace();

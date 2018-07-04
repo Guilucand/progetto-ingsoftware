@@ -5,11 +5,7 @@ import it.ingsoftw.progetto.common.*;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
@@ -19,7 +15,7 @@ public class MonitorGUI extends JFrame{
     private JPanel topPanel;
     private JPanel midPanel;
     private JPanel bottomPanel;
-    private ILogin loginInterface;
+    private ILogin.LoginStatus loginStatus;
     private String username;
     private IClientRmiFactory serverFactory;
     private IMonitor monitorInterface;
@@ -29,14 +25,14 @@ public class MonitorGUI extends JFrame{
     private HashMap<String, PatientMonitor> patientMonitors;
 
 
-    public MonitorGUI(ILogin loginInterface, String username, ILogin.LoginStatus status,IClientRmiFactory serverFactory) throws RemoteException {
+    public MonitorGUI(String username, ILogin.LoginStatus status, IClientRmiFactory serverFactory) throws RemoteException {
 
         super("Monitor");
 
         this.setResizable(false);
 
         this.patientMonitors = new HashMap<>();
-        this.loginInterface = loginInterface;
+        this.loginStatus = serverFactory.getLoginInterface().isLogged();
         this.username = username;
         this.status = status;
 
@@ -87,8 +83,8 @@ public class MonitorGUI extends JFrame{
             patientMonitors.put(String.valueOf(i),
                     new PatientMonitor(i,
                             monitorInterface.getRoomByNumber(i),
-                            loginInterface.isLogged(),
-                            username)
+                            serverFactory.getRecoveryHistoryInterface(), username, loginStatus
+                    )
                     );
         }
 
@@ -100,9 +96,9 @@ public class MonitorGUI extends JFrame{
 
             if(i == 0){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin(loginInterface.isLogged(), adminInterface, username);
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(loginStatus, adminInterface, username);
 
-                switch (loginInterface.isLogged()) {
+                switch (loginStatus) {
 
                     case PRIMARY_LOGGED:
                     case ADMIN_LOGGED:
@@ -117,7 +113,7 @@ public class MonitorGUI extends JFrame{
             }
             else if(i == 3){
 
-                EmptyPanelAdmin epa = new EmptyPanelAdmin(this,loginInterface.isLogged(), username, adminInterface);
+                EmptyPanelAdmin epa = new EmptyPanelAdmin(this,loginStatus, username, adminInterface);
                 epa.getPanel().remove(epa.getButtonreport());
 
                 bottomPanel.add(epa.getPanel(), i);
@@ -149,7 +145,14 @@ public class MonitorGUI extends JFrame{
         JMenuItem exit = new JMenuItem("esci");
         menu.add(exit);
 
-        changepassword.addActionListener(e -> new ChangePassword(loginInterface));
+        changepassword.addActionListener(e ->
+        {
+            try {
+                new ChangePassword(serverFactory.getLoginInterface());
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+        });
 
         showreport.addActionListener(e -> new ReportFrame(status,username));
 
