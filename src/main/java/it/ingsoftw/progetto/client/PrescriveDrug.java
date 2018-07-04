@@ -5,10 +5,7 @@ import it.ingsoftw.progetto.common.DrugPrescription;
 import it.ingsoftw.progetto.common.IRecovery;
 import it.ingsoftw.progetto.common.User;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.Date;
@@ -47,6 +44,8 @@ public class PrescriveDrug extends JFrame{
         super("Prescrizione dei farmaci");
         this.patient = patient;
 
+        this.scrollpaneTable.setVisible(false);
+
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -70,6 +69,31 @@ public class PrescriveDrug extends JFrame{
 
         this.setVisible(true);
 
+
+
+        drugNameTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+
+                    drugListDB = drugsQuery.queryDatabase(drugNameTextField.getText(),DrugsQuery.QueryType.Drug,true);
+
+                    initTable();
+
+                    listafarmaci.clear();
+                    for(Drug drug : drugListDB){
+
+                        listafarmaci.addElement(drug);
+
+                    }
+
+                }
+
+
+            }
+        });
 
         findDrugButton.addActionListener(e -> {
 
@@ -198,7 +222,7 @@ public class PrescriveDrug extends JFrame{
         };*/
 
 
-        tabellaFarmaci.setModel(new DefaultTableModel(data,nomicolonne));
+       // tabellaFarmaci.setModel(new DefaultTableModel(data,nomicolonne));
         //tabella = new JTable(data,nomicolonne);
         //tabella.setPreferredScrollableViewportSize(new Dimension(500,50));
         //tabella.setFillsViewportHeight(true);

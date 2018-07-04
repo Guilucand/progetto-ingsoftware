@@ -38,7 +38,7 @@ public class RequestDiagnosisMessage extends MessageObject {
 
     @Override
     public String getMessageText() {
-        return "Crea lettera di dimissione";
+        return "Crea lettera di diagnosi iniziale del paziente";
     }
 
     @Override

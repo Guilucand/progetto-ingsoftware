@@ -5,10 +5,7 @@ import it.ingsoftw.progetto.common.*;
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -170,6 +167,12 @@ public class DoseDrug extends JFrame{
                     drugName.setText(selectedDrug.drug.commercialName);
 
                 }
+            }
+        });
+        quantityTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
             }
         });
     }
