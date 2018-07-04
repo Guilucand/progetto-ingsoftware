@@ -66,8 +66,8 @@ public class ReportFrame extends JFrame{
         if (recoveryInfoList == null)
             return;
 
-        for (int i = 0; i < recoveryInfoList.size(); i++)
-            recoveryListModel.add(i, recoveryInfoList.get(i).getBeginDate().format(Date));
+//        for (int i = 0; i < recoveryInfoList.size(); i++)
+//            recoveryListModel.add(i, recoveryInfoList.get(i).getBeginDate().format(Date));
 
 
         for (IRecoveryHistory.RecoveryInfo recoveryInfo : recoveryInfoList) {
