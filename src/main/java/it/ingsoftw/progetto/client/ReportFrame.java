@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReportFrame extends JFrame{
+    private final DefaultListModel<String> recoveryListModel;
     private JList recoveryList;
     private JPanel MainPanel;
     private JScrollPane scrollMainPanel;
@@ -33,6 +34,7 @@ public class ReportFrame extends JFrame{
         super("Pannello dei Report");
         this.recoveryHistory = recoveryHistory;
         this.printableReports = new ArrayList<>();
+        this.reportMainPanel.setLayout(new BoxLayout(reportMainPanel, BoxLayout.PAGE_AXIS));
 
         this.setContentPane(MainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -49,6 +51,9 @@ public class ReportFrame extends JFrame{
 
         List<IRecoveryHistory.RecoveryInfo> recoveryInfoList;
 
+        this.recoveryListModel = new DefaultListModel<>();
+        this.recoveryList.setModel(recoveryListModel);
+
         LocalDateTime now = LocalDateTime.now();
 
         try {
@@ -60,6 +65,10 @@ public class ReportFrame extends JFrame{
 
         if (recoveryInfoList == null)
             return;
+
+        for (int i = 0; i < recoveryInfoList.size(); i++)
+            recoveryListModel.add(i, recoveryInfoList.get(i).getBeginDate().format(Date));
+
 
         for (IRecoveryHistory.RecoveryInfo recoveryInfo : recoveryInfoList) {
 
@@ -89,6 +98,7 @@ public class ReportFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                PrintableReport.saveMultipleReports("reportSettimana.pdf", printableReports);
                 System.out.println("Stampa il report");
 
 

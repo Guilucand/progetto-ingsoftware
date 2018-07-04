@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.7.4)  4 JUL 2018 11:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.6.11)  4 JUL 2018 12:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **Documentazione.tex
 (./Documentazione.tex
 LaTeX2e <2017-04-15>
-Babel <3.12> and hyphenation patterns for 84 language(s) loaded.
+Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
@@ -42,7 +42,7 @@ File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 Package graphics Info: Driver file: pdftex.def on input line 99.
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
-File: pdftex.def 2017/06/24 v1.0g Graphics/color driver for pdftex
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
@@ -86,52 +86,51 @@ File: uni-global.def 2013/05/13 UCS: Unicode global data
 \uc@temptokena=\toks21
 )
 (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2017/06/29 3.12 The Babel package
+Package: babel 2018/02/14 3.18 The Babel package
 
 (/usr/share/texlive/texmf-dist/tex/generic/babel/switch.def
-File: switch.def 2017/06/29 3.12 Babel switching mechanism
+File: switch.def 2018/02/14 3.18 Babel switching mechanism
 )
 (/usr/share/texlive/texmf-dist/tex/generic/babel-italian/italian.ldf
 Language: italian 2015/03/26 v1.3n Italian support from the babel system
 
 (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
-File: babel.def 2017/06/29 3.12 Babel common definitions
-
-(/usr/share/texlive/texmf-dist/tex/generic/babel/switch.def
-File: switch.def 2017/06/29 3.12 Babel switching mechanism
-)
+File: babel.def 2018/02/14 3.18 Babel common definitions
 \babel@savecnt=\count89
 \U@D=\dimen112
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
+\bbl@dirlevel=\count90
 )
-\it@lettering=\count90
-\it@doublequoteactive=\count91
-\it@ISOcompliance=\count92
+\it@lettering=\count91
+\it@doublequoteactive=\count92
+\it@ISOcompliance=\count93
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2017/01/02 v2.4 e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count93
+Package: etoolbox 2018/02/11 v2.5e e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count94
 )
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty
 Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
 )
 (/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx.sty
 (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2017/07/19 L3 programming layer (loader) 
+Package: expl3 2018/02/21 L3 programming layer (loader) 
 
 (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3-code.tex
-Package: expl3 2017/07/19 L3 programming layer (code)
-\c_max_int=\count94
-\l_tmpa_int=\count95
-\l_tmpb_int=\count96
-\g_tmpa_int=\count97
-\g_tmpb_int=\count98
-\g__intarray_font_int=\count99
-\g__prg_map_int=\count100
-\c_log_iow=\count101
-\l_iow_line_count_int=\count102
-\l__iow_line_target_int=\count103
-\l__iow_one_indent_int=\count104
-\l__iow_indent_int=\count105
+Package: expl3 2018/02/21 L3 programming layer (code)
+\c_max_int=\count95
+\l_tmpa_int=\count96
+\l_tmpb_int=\count97
+\g_tmpa_int=\count98
+\g_tmpb_int=\count99
+\g__intarray_font_int=\count100
+\g__prg_map_int=\count101
+\c_log_iow=\count102
+\l_iow_line_count_int=\count103
+\l__iow_line_target_int=\count104
+\l__iow_one_indent_int=\count105
+\l__iow_indent_int=\count106
 \c_zero_dim=\dimen113
 \c_max_dim=\dimen114
 \l_tmpa_dim=\dimen115
@@ -150,77 +149,77 @@ Package: expl3 2017/07/19 L3 programming layer (code)
 \l_tmpb_muskip=\muskip13
 \g_tmpa_muskip=\muskip14
 \g_tmpb_muskip=\muskip15
-\l_keys_choice_int=\count106
-\c__fp_leading_shift_int=\count107
-\c__fp_middle_shift_int=\count108
-\c__fp_trailing_shift_int=\count109
-\c__fp_big_leading_shift_int=\count110
-\c__fp_big_middle_shift_int=\count111
-\c__fp_big_trailing_shift_int=\count112
-\c__fp_Bigg_leading_shift_int=\count113
-\c__fp_Bigg_middle_shift_int=\count114
-\c__fp_Bigg_trailing_shift_int=\count115
-\c__fp_rand_size_int=\count116
-\c__fp_rand_four_int=\count117
-\c__fp_rand_eight_int=\count118
-\l__sort_length_int=\count119
-\l__sort_min_int=\count120
-\l__sort_top_int=\count121
-\l__sort_max_int=\count122
-\l__sort_true_max_int=\count123
-\l__sort_block_int=\count124
-\l__sort_begin_int=\count125
-\l__sort_end_int=\count126
-\l__sort_A_int=\count127
-\l__sort_B_int=\count128
-\l__sort_C_int=\count129
-\l__tl_build_start_index_int=\count130
-\l__tl_build_index_int=\count131
-\l__tl_analysis_normal_int=\count132
-\l__tl_analysis_index_int=\count133
-\l__tl_analysis_nesting_int=\count134
-\l__tl_analysis_type_int=\count135
-\l__regex_internal_a_int=\count136
-\l__regex_internal_b_int=\count137
-\l__regex_internal_c_int=\count138
-\l__regex_balance_int=\count139
-\l__regex_group_level_int=\count140
-\l__regex_mode_int=\count141
-\c__regex_cs_in_class_mode_int=\count142
-\c__regex_cs_mode_int=\count143
-\l__regex_catcodes_int=\count144
-\l__regex_default_catcodes_int=\count145
-\c__regex_catcode_D_int=\count146
-\c__regex_catcode_S_int=\count147
-\c__regex_catcode_L_int=\count148
-\c__regex_catcode_O_int=\count149
-\c__regex_catcode_A_int=\count150
-\c__regex_all_catcodes_int=\count151
-\l__regex_show_lines_int=\count152
-\l__regex_min_state_int=\count153
-\l__regex_max_state_int=\count154
-\l__regex_left_state_int=\count155
-\l__regex_right_state_int=\count156
-\l__regex_capturing_group_int=\count157
-\l__regex_min_pos_int=\count158
-\l__regex_max_pos_int=\count159
-\l__regex_curr_pos_int=\count160
-\l__regex_start_pos_int=\count161
-\l__regex_success_pos_int=\count162
-\l__regex_curr_char_int=\count163
-\l__regex_curr_catcode_int=\count164
-\l__regex_last_char_int=\count165
-\l__regex_case_changed_char_int=\count166
-\l__regex_curr_state_int=\count167
-\l__regex_step_int=\count168
-\l__regex_min_active_int=\count169
-\l__regex_max_active_int=\count170
-\l__regex_replacement_csnames_int=\count171
-\l__regex_match_count_int=\count172
-\l__regex_min_submatch_int=\count173
-\l__regex_submatch_int=\count174
-\l__regex_zeroth_submatch_int=\count175
-\g__debug_trace_regex_int=\count176
+\l_keys_choice_int=\count107
+\c__fp_leading_shift_int=\count108
+\c__fp_middle_shift_int=\count109
+\c__fp_trailing_shift_int=\count110
+\c__fp_big_leading_shift_int=\count111
+\c__fp_big_middle_shift_int=\count112
+\c__fp_big_trailing_shift_int=\count113
+\c__fp_Bigg_leading_shift_int=\count114
+\c__fp_Bigg_middle_shift_int=\count115
+\c__fp_Bigg_trailing_shift_int=\count116
+\c__fp_rand_size_int=\count117
+\c__fp_rand_four_int=\count118
+\c__fp_rand_eight_int=\count119
+\l__sort_length_int=\count120
+\l__sort_min_int=\count121
+\l__sort_top_int=\count122
+\l__sort_max_int=\count123
+\l__sort_true_max_int=\count124
+\l__sort_block_int=\count125
+\l__sort_begin_int=\count126
+\l__sort_end_int=\count127
+\l__sort_A_int=\count128
+\l__sort_B_int=\count129
+\l__sort_C_int=\count130
+\l__tl_build_start_index_int=\count131
+\l__tl_build_index_int=\count132
+\l__tl_analysis_normal_int=\count133
+\l__tl_analysis_index_int=\count134
+\l__tl_analysis_nesting_int=\count135
+\l__tl_analysis_type_int=\count136
+\l__regex_internal_a_int=\count137
+\l__regex_internal_b_int=\count138
+\l__regex_internal_c_int=\count139
+\l__regex_balance_int=\count140
+\l__regex_group_level_int=\count141
+\l__regex_mode_int=\count142
+\c__regex_cs_in_class_mode_int=\count143
+\c__regex_cs_mode_int=\count144
+\l__regex_catcodes_int=\count145
+\l__regex_default_catcodes_int=\count146
+\c__regex_catcode_D_int=\count147
+\c__regex_catcode_S_int=\count148
+\c__regex_catcode_L_int=\count149
+\c__regex_catcode_O_int=\count150
+\c__regex_catcode_A_int=\count151
+\c__regex_all_catcodes_int=\count152
+\l__regex_show_lines_int=\count153
+\l__regex_min_state_int=\count154
+\l__regex_max_state_int=\count155
+\l__regex_left_state_int=\count156
+\l__regex_right_state_int=\count157
+\l__regex_capturing_group_int=\count158
+\l__regex_min_pos_int=\count159
+\l__regex_max_pos_int=\count160
+\l__regex_curr_pos_int=\count161
+\l__regex_start_pos_int=\count162
+\l__regex_success_pos_int=\count163
+\l__regex_curr_char_int=\count164
+\l__regex_curr_catcode_int=\count165
+\l__regex_last_char_int=\count166
+\l__regex_case_changed_char_int=\count167
+\l__regex_curr_state_int=\count168
+\l__regex_step_int=\count169
+\l__regex_min_active_int=\count170
+\l__regex_max_active_int=\count171
+\l__regex_replacement_csnames_int=\count172
+\l__regex_match_count_int=\count173
+\l__regex_min_submatch_int=\count174
+\l__regex_submatch_int=\count175
+\l__regex_zeroth_submatch_int=\count176
+\g__regex_trace_regex_int=\count177
 \c_empty_box=\box26
 \l_tmpa_box=\box27
 \l_tmpb_box=\box28
@@ -264,18 +263,18 @@ Package: expl3 2017/07/19 L3 programming layer (code)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3pdfmode.def
 File: l3pdfmode.def 2017/03/18 v L3 Experimental driver: PDF mode
-\l__driver_color_stack_int=\count177
+\l__driver_color_stack_int=\count178
 \l__driver_tmp_box=\box41
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
-Package: xparse 2017/07/19 L3 Experimental document command parser
-\l__xparse_current_arg_int=\count178
-\g__xparse_grabber_int=\count179
-\l__xparse_m_args_int=\count180
-\l__xparse_mandatory_args_int=\count181
-\l__xparse_v_nesting_int=\count182
+Package: xparse 2018/02/21 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count179
+\g__xparse_grabber_int=\count180
+\l__xparse_m_args_int=\count181
+\l__xparse_mandatory_args_int=\count182
+\l__xparse_v_nesting_int=\count183
 )
-Package: siunitx 2017/08/02 v2.7j A comprehensive (SI) units package
+Package: siunitx 2017/11/26 v2.7k A comprehensive (SI) units package
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
@@ -286,31 +285,31 @@ File: amsgen.sty 1999/11/30 v2.0 generic functions
 \ex@=\dimen144
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
-Package: l3keys2e 2017/07/19 LaTeX2e option processing using LaTeX3 keys
+Package: l3keys2e 2018/02/21 LaTeX2e option processing using LaTeX3 keys
 )
 \l__siunitx_tmp_box=\box42
 \l__siunitx_tmp_dim=\dimen145
-\l__siunitx_tmp_int=\count183
-\l__siunitx_number_mantissa_length_int=\count184
-\l__siunitx_number_uncert_length_int=\count185
-\l__siunitx_round_int=\count186
-\l__siunitx_process_decimal_int=\count187
-\l__siunitx_process_uncertainty_int=\count188
-\l__siunitx_process_fixed_int=\count189
-\l__siunitx_process_integer_min_int=\count190
-\l__siunitx_process_precision_int=\count191
-\l__siunitx_group_min_int=\count192
+\l__siunitx_tmp_int=\count184
+\l__siunitx_number_mantissa_length_int=\count185
+\l__siunitx_number_uncert_length_int=\count186
+\l__siunitx_round_int=\count187
+\l__siunitx_process_decimal_int=\count188
+\l__siunitx_process_uncertainty_int=\count189
+\l__siunitx_process_fixed_int=\count190
+\l__siunitx_process_integer_min_int=\count191
+\l__siunitx_process_precision_int=\count192
+\l__siunitx_group_min_int=\count193
 \l__siunitx_angle_marker_box=\box43
 \l__siunitx_angle_unit_box=\box44
 \l__siunitx_angle_marker_dim=\dimen146
 \l__siunitx_angle_unit_dim=\dimen147
-\l__siunitx_unit_int=\count193
-\l__siunitx_unit_denominator_int=\count194
-\l__siunitx_unit_numerator_int=\count195
-\l__siunitx_unit_prefix_int=\count196
-\l__siunitx_unit_prefix_base_int=\count197
-\l__siunitx_unit_prefix_gram_int=\count198
-\l__siunitx_number_product_int=\count199
+\l__siunitx_unit_int=\count194
+\l__siunitx_unit_denominator_int=\count195
+\l__siunitx_unit_numerator_int=\count196
+\l__siunitx_unit_prefix_int=\count197
+\l__siunitx_unit_prefix_base_int=\count198
+\l__siunitx_unit_prefix_gram_int=\count199
+\l__siunitx_number_product_int=\count266
 \c__siunitx_one_fill_skip=\skip51
 \l__siunitx_table_unit_align_skip=\skip52
 \l__siunitx_table_exponent_dim=\dimen148
@@ -331,125 +330,123 @@ Package: l3keys2e 2017/07/19 LaTeX2e option processing using LaTeX3 keys
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \DeclareBinaryPrefix with sig. 'mmm' on line 7247.
+. Defining command \DeclareBinaryPrefix with sig. 'mmm' on line 7250.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \DeclareSIPostPower with sig. 'mm' on line 7250.
+. Defining command \DeclareSIPostPower with sig. 'mm' on line 7253.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \DeclareSIPrefix with sig. 'mmm' on line 7253.
+. Defining command \DeclareSIPrefix with sig. 'mmm' on line 7256.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \DeclareSIPrePower with sig. 'mm' on line 7256.
+. Defining command \DeclareSIPrePower with sig. 'mm' on line 7259.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \DeclareSIQualifier with sig. 'mm' on line 7259.
+. Defining command \DeclareSIQualifier with sig. 'mm' on line 7262.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \DeclareSIUnit with sig. 'O{}mm' on line 7262.
+. Defining command \DeclareSIUnit with sig. 'O{}mm' on line 7265.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \DeclareSIUnitWithOptions with sig. 'mmm' on line 7265.
+. Defining command \DeclareSIUnitWithOptions with sig. 'mmm' on line 7268.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \ang with sig. 'o>{\SplitArgument {2}{;}}m' on line 7280.
+. Defining command \ang with sig. 'o>{\SplitArgument {2}{;}}m' on line 7283.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \num with sig. 'om' on line 7289.
+. Defining command \num with sig. 'om' on line 7292.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \numlist with sig. 'o>{\SplitList {;}}m' on line 7298.
+. Defining command \numlist with sig. 'o>{\SplitList {;}}m' on line 7301.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \numrange with sig. 'omm' on line 7307.
+. Defining command \numrange with sig. 'omm' on line 7310.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \SIlist with sig. 'o>{\SplitList {;}}mm' on line 7319.
+. Defining command \SIlist with sig. 'o>{\SplitList {;}}mm' on line 7322.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \SIrange with sig. 'ommm' on line 7331.
+. Defining command \SIrange with sig. 'ommm' on line 7334.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \SI with sig. 'omom' on line 7343.
+. Defining command \SI with sig. 'omom' on line 7346.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \sisetup with sig. 'm' on line 7346.
+. Defining command \sisetup with sig. 'm' on line 7349.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \tablenum with sig. 'om' on line 7361.
+. Defining command \tablenum with sig. 'om' on line 7364.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \si with sig. 'om' on line 7373.
+. Defining command \si with sig. 'om' on line 7376.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \numInBookmark with sig. 'om' on line 7420.
+. Defining command \numInBookmark with sig. 'om' on line 7423.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \numrangeInBookmark with sig. 'omm' on line 7422.
+. Defining command \numrangeInBookmark with sig. 'omm' on line 7425.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \SIInBookmark with sig. 'omom' on line 7424.
+. Defining command \SIInBookmark with sig. 'omom' on line 7427.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \SIlistInBookmark with sig. 'omm' on line 7426.
+. Defining command \SIlistInBookmark with sig. 'omm' on line 7429.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \SIrangeInBookmark with sig. 'ommm' on line 7428.
+. Defining command \SIrangeInBookmark with sig. 'ommm' on line 7431.
 .................................................
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
-. Defining command \siInBookmark with sig. 'om' on line 7429.
+. Defining command \siInBookmark with sig. 'om' on line 7432.
 .................................................
 \g__file_internal_ior=\read1
 
-(/usr/share/texlive/texmf-dist/tex/latex/beamer/translator/translator.sty
-Package: translator 2010/06/12 ver 1.10
-
-(/usr/share/texlive/texmf-dist/tex/latex/beamer/translator/translator-language-
-mappings.tex)))
+(/usr/share/texlive/texmf-dist/tex/latex/translator/translator.sty
+Package: translator 2018/01/04 v1.12 Easy translation of strings in LaTeX
+))
 (/usr/share/texlive/texmf-dist/tex/latex/textgreek/textgreek.sty
 Package: textgreek 2011/10/09 v0.7 Greek symbols in text
 Package textgreek Info: Loading the definitions for the Greek fontencoding. on 
@@ -468,13 +465,13 @@ Package textgreek Info: Loaded fontmap: {eur/*/*}{U/eur/*/*} {phv/*/*}{U/psy/*/
 (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
 \multirow@colwidth=\skip55
-\multirow@cntb=\count266
+\multirow@cntb=\count267
 \multirow@dima=\skip56
 \bigstrutjot=\dimen157
 )
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count267
+\c@float@type=\count268
 \float@exts=\toks23
 \float@box=\box49
 \@float@everytoks=\toks24
@@ -493,9 +490,9 @@ Package ifvtex Info: VTeX not detected.
 (/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-\Gm@cnth=\count268
-\Gm@cntv=\count269
-\c@Gm@tempcnt=\count270
+\Gm@cnth=\count269
+\Gm@cntv=\count270
+\c@Gm@tempcnt=\count271
 \Gm@bindingoffset=\dimen158
 \Gm@wd@mp=\dimen159
 \Gm@odd@mp=\dimen160
@@ -539,16 +536,16 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count271
+\scratchcounter=\count272
 \scratchdimen=\dimen166
 \scratchbox=\box51
-\nofMPsegments=\count272
-\nofMParguments=\count273
+\nofMPsegments=\count273
+\nofMParguments=\count274
 \everyMPshowfont=\toks26
-\MPscratchCnt=\count274
+\MPscratchCnt=\count275
 \MPscratchDim=\dimen167
-\MPnumerator=\count275
-\makeMPintoPDFobject=\count276
+\MPnumerator=\count276
+\makeMPintoPDFobject=\count277
 \everyMPtoPDFconversion=\toks27
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
@@ -584,7 +581,7 @@ Package etexcmds Info: Could not find \expanded.
 (etexcmds)             In the latter case, load this package earlier.
 )))
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
-Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO
+Package: pdftexcmds 2018/01/21 v0.26 Utility functions of pdfTeX for LuaTeX (HO
 )
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
@@ -694,12 +691,12 @@ italian.ldf    See the documentation concerning the babel-italian typesetting
 italian.ldf    on input line 24.
 
 
-(/usr/share/texlive/texmf-dist/tex/latex/beamer/translator/dicts/translator-bas
-ic-dictionary/translator-basic-dictionary-English.dict
+(/usr/share/texlive/texmf-dist/tex/latex/translator/translator-basic-dictionary
+-English.dict
 Dictionary: translator-basic-dictionary, Language: English 
 )
 (/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx-abbreviations.cfg
-File: siunitx-abbreviations.cfg 2017/08/02 v2.7j siunitx: Abbreviated units
+File: siunitx-abbreviations.cfg 2017/11/26 v2.7k siunitx: Abbreviated units
 )
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -735,12 +732,12 @@ File: siunitx-abbreviations.cfg 2017/08/02 v2.7j siunitx: Abbreviated units
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c__siunitx_mathsf_int=\count277
+\c__siunitx_mathsf_int=\count278
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 24.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 24.
-\c__siunitx_mathtt_int=\count278
+\c__siunitx_mathtt_int=\count279
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 32.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -752,197 +749,214 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 39.
-<documenti/useCase_infermiere.pdf, id=7, pagebox=cropbox, 844.15375pt x 1195.46
-625pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--46
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 47--49
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--53
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--56
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 57--58
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 64--66
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 67--68
+
+ []
+
+<documenti/useCase_infermiere.pdf, id=7, 844.15375pt x 1195.46625pt>
 File: documenti/useCase_infermiere.pdf Graphic file (type pdf)
 <use documenti/useCase_infermiere.pdf>
-Package pdftex.def Info: documenti/useCase_infermiere.pdf  used on input line 5
-5. on input line 55.
-Package pdftex.def Info: Requested size: 409.71692pt x 580.23824pt on input lin
-e 55.
-
+Package pdftex.def Info: documenti/useCase_infermiere.pdf  used on input line 7
+9.
+(pdftex.def)             Requested size: 409.71692pt x 580.23824pt.
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
-)
-<documenti/useCase_medici.pdf, id=8, pagebox=cropbox, 844.15375pt x 1195.46625p
-t>
+) [2]
+<documenti/useCase_medici.pdf, id=12, 844.15375pt x 1195.46625pt>
 File: documenti/useCase_medici.pdf Graphic file (type pdf)
 <use documenti/useCase_medici.pdf>
-Package pdftex.def Info: documenti/useCase_medici.pdf  used on input line 65. o
-n input line 65.
-Package pdftex.def Info: Requested size: 409.71692pt x 580.23824pt on input lin
-e 65.
- [2 <./documenti/useCase_infermiere.pdf
+Package pdftex.def Info: documenti/useCase_medici.pdf  used on input line 89.
+(pdftex.def)             Requested size: 409.71692pt x 580.23824pt.
+ [3 <./documenti/useCase_infermiere.pdf
 
-pdfTeX warning: /usr/bin/pdflatex (file ./documenti/useCase_infermiere.pdf): PD
-F inclusion: invalid other resource which is no dict (key 'ProcSets', type <arr
-ay>); ignored.
->] [3 <./documenti/useCase_medici.pdf
+pdfTeX warning: pdflatex (file ./documenti/useCase_infermiere.pdf): PDF inclusi
+on: invalid other resource which is no dict (key 'ProcSets', type <array>); ign
+ored.
+>] [4 <./documenti/useCase_medici.pdf
 
-pdfTeX warning: /usr/bin/pdflatex (file ./documenti/useCase_medici.pdf): PDF in
-clusion: invalid other resource which is no dict (key 'ProcSets', type <array>)
-; ignored.
+pdfTeX warning: pdflatex (file ./documenti/useCase_medici.pdf): PDF inclusion: 
+invalid other resource which is no dict (key 'ProcSets', type <array>); ignored
+.
 >]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 81.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 105.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 94.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 118.
  (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 )
-Overfull \hbox (78.11015pt too wide) in paragraph at lines 89--134
+Overfull \hbox (78.11015pt too wide) in paragraph at lines 113--158
  [] 
  []
 
-<documenti/Activity_Sequence_diagram_Login.pdf, id=54, pagebox=cropbox, 779.913
-76pt x 443.6575pt>
+<documenti/Activity_Sequence_diagram_Login.pdf, id=57, 779.91376pt x 443.6575pt
+>
 File: documenti/Activity_Sequence_diagram_Login.pdf Graphic file (type pdf)
 <use documenti/Activity_Sequence_diagram_Login.pdf>
 Package pdftex.def Info: documenti/Activity_Sequence_diagram_Login.pdf  used on
- input line 140. on input line 140.
-Package pdftex.def Info: Requested size: 500.77129pt x 284.86726pt on input lin
-e 140.
+ input line 164.
+(pdftex.def)             Requested size: 500.77129pt x 284.86726pt.
 
-Overfull \hbox (45.52718pt too wide) in paragraph at lines 140--141
+Overfull \hbox (45.52718pt too wide) in paragraph at lines 164--165
 [][] 
  []
 
-[4]
-Overfull \hbox (14.69165pt too wide) in paragraph at lines 160--200
+[5]
+Overfull \hbox (14.69165pt too wide) in paragraph at lines 184--224
  [] 
  []
 
-[5 <./documenti/Activity_Sequence_diagram_Login.pdf
+[6 <./documenti/Activity_Sequence_diagram_Login.pdf
 
-pdfTeX warning: /usr/bin/pdflatex (file ./documenti/Activity_Sequence_diagram_L
-ogin.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSet
-s', type <array>); ignored.
+pdfTeX warning: pdflatex (file ./documenti/Activity_Sequence_diagram_Login.pdf)
+: PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type 
+<array>); ignored.
 >]
-<documenti/Activity_Sequence_diagram_Ricovero.pdf, id=75, pagebox=cropbox, 779.
-91376pt x 475.7775pt>
+<documenti/Activity_Sequence_diagram_Ricovero.pdf, id=78, 779.91376pt x 475.777
+5pt>
 File: documenti/Activity_Sequence_diagram_Ricovero.pdf Graphic file (type pdf)
 <use documenti/Activity_Sequence_diagram_Ricovero.pdf>
 Package pdftex.def Info: documenti/Activity_Sequence_diagram_Ricovero.pdf  used
- on input line 208. on input line 208.
-Package pdftex.def Info: Requested size: 500.77129pt x 305.49113pt on input lin
-e 208.
+ on input line 232.
+(pdftex.def)             Requested size: 500.77129pt x 305.49113pt.
 
-Overfull \hbox (45.52718pt too wide) in paragraph at lines 208--209
+Overfull \hbox (45.52718pt too wide) in paragraph at lines 232--233
 [][] 
  []
 
-[6 <./documenti/Activity_Sequence_diagram_Ricovero.pdf
+[7 <./documenti/Activity_Sequence_diagram_Ricovero.pdf
 
-pdfTeX warning: /usr/bin/pdflatex (file ./documenti/Activity_Sequence_diagram_R
-icovero.pdf): PDF inclusion: invalid other resource which is no dict (key 'Proc
-Sets', type <array>); ignored.
+pdfTeX warning: pdflatex (file ./documenti/Activity_Sequence_diagram_Ricovero.p
+df): PDF inclusion: invalid other resource which is no dict (key 'ProcSets', ty
+pe <array>); ignored.
 >]
-Overfull \hbox (64.58002pt too wide) in paragraph at lines 227--274
+Overfull \hbox (64.58002pt too wide) in paragraph at lines 251--298
  [] 
  []
 
-<documenti/Activity_diagram_getioneUtenti.pdf, id=93, pagebox=cropbox, 502.8787
-5pt x 547.04375pt>
+<documenti/Activity_diagram_getioneUtenti.pdf, id=97, 502.87875pt x 547.04375pt
+>
 File: documenti/Activity_diagram_getioneUtenti.pdf Graphic file (type pdf)
 <use documenti/Activity_diagram_getioneUtenti.pdf>
 Package pdftex.def Info: documenti/Activity_diagram_getioneUtenti.pdf  used on 
-input line 280. on input line 280.
-Package pdftex.def Info: Requested size: 500.77129pt x 544.74692pt on input lin
-e 280.
+input line 304.
+(pdftex.def)             Requested size: 500.77129pt x 544.74692pt.
 
-Overfull \hbox (45.52718pt too wide) in paragraph at lines 280--281
+Overfull \hbox (45.52718pt too wide) in paragraph at lines 304--305
 [][] 
  []
 
-[7]
-<documenti/sequence_diagram_getioneUtenti.pdf, id=98, pagebox=cropbox, 470.7587
-4pt x 825.0825pt>
+[8]
+<documenti/sequence_diagram_getioneUtenti.pdf, id=101, 470.75874pt x 825.0825pt
+>
 File: documenti/sequence_diagram_getioneUtenti.pdf Graphic file (type pdf)
 <use documenti/sequence_diagram_getioneUtenti.pdf>
 Package pdftex.def Info: documenti/sequence_diagram_getioneUtenti.pdf  used on 
-input line 290. on input line 290.
-Package pdftex.def Info: Requested size: 409.71692pt x 718.10556pt on input lin
-e 290.
- [8 <./documenti/Activity_diagram_getioneUtenti.pdf
+input line 314.
+(pdftex.def)             Requested size: 409.71692pt x 718.10556pt.
+ [9 <./documenti/Activity_diagram_getioneUtenti.pdf
 
-pdfTeX warning: /usr/bin/pdflatex (file ./documenti/Activity_diagram_getioneUte
-nti.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets
-', type <array>); ignored.
+pdfTeX warning: pdflatex (file ./documenti/Activity_diagram_getioneUtenti.pdf):
+ PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type <
+array>); ignored.
 >]
 Overfull \vbox (11.03465pt too high) has occurred while \output is active []
 
 
-[9 <./documenti/sequence_diagram_getioneUtenti.pdf
+[10 <./documenti/sequence_diagram_getioneUtenti.pdf
 
-pdfTeX warning: /usr/bin/pdflatex (file ./documenti/sequence_diagram_getioneUte
-nti.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets
-', type <array>); ignored.
->]
-Overfull \hbox (63.4707pt too wide) in paragraph at lines 309--345
- [] 
- []
-
-<documenti/Diagrams_prescrizioni.pdf, id=128, pagebox=cropbox, 824.07875pt x 42
-0.57124pt>
-File: documenti/Diagrams_prescrizioni.pdf Graphic file (type pdf)
-<use documenti/Diagrams_prescrizioni.pdf>
-Package pdftex.def Info: documenti/Diagrams_prescrizioni.pdf  used on input lin
-e 353. on input line 353.
-Package pdftex.def Info: Requested size: 500.77129pt x 255.57265pt on input lin
-e 353.
-
-Overfull \hbox (45.52718pt too wide) in paragraph at lines 353--354
-[][] 
- []
-
-[10 <./documenti/Diagrams_prescrizioni.pdf
-
-pdfTeX warning: /usr/bin/pdflatex (file ./documenti/Diagrams_prescrizioni.pdf):
+pdfTeX warning: pdflatex (file ./documenti/sequence_diagram_getioneUtenti.pdf):
  PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type <
 array>); ignored.
 >]
-Overfull \hbox (15.12059pt too wide) in paragraph at lines 371--411
+Overfull \hbox (63.4707pt too wide) in paragraph at lines 333--369
  [] 
  []
 
-<documenti/Diagrams_monitorAgg.pdf, id=146, pagebox=cropbox, 677.53125pt x 459.
-7175pt>
-File: documenti/Diagrams_monitorAgg.pdf Graphic file (type pdf)
-<use documenti/Diagrams_monitorAgg.pdf>
-Package pdftex.def Info: documenti/Diagrams_monitorAgg.pdf  used on input line 
-419. on input line 419.
-Package pdftex.def Info: Requested size: 500.77129pt x 339.79279pt on input lin
-e 419.
+<documenti/Diagrams_prescrizioni.pdf, id=131, 824.07875pt x 420.57124pt>
+File: documenti/Diagrams_prescrizioni.pdf Graphic file (type pdf)
+<use documenti/Diagrams_prescrizioni.pdf>
+Package pdftex.def Info: documenti/Diagrams_prescrizioni.pdf  used on input lin
+e 377.
+(pdftex.def)             Requested size: 500.77129pt x 255.57265pt.
 
-Overfull \hbox (45.52718pt too wide) in paragraph at lines 419--420
+Overfull \hbox (45.52718pt too wide) in paragraph at lines 377--378
 [][] 
  []
 
-[11] [12 <./documenti/Diagrams_monitorAgg.pdf
+[11 <./documenti/Diagrams_prescrizioni.pdf
 
-pdfTeX warning: /usr/bin/pdflatex (file ./documenti/Diagrams_monitorAgg.pdf): P
-DF inclusion: invalid other resource which is no dict (key 'ProcSets', type <ar
-ray>); ignored.
->] (./Documentazione.aux)
+pdfTeX warning: pdflatex (file ./documenti/Diagrams_prescrizioni.pdf): PDF incl
+usion: invalid other resource which is no dict (key 'ProcSets', type <array>); 
+ignored.
+>]
+Overfull \hbox (15.12059pt too wide) in paragraph at lines 395--435
+ [] 
+ []
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+<documenti/Diagrams_monitorAgg.pdf, id=149, 677.53125pt x 459.7175pt>
+File: documenti/Diagrams_monitorAgg.pdf Graphic file (type pdf)
+<use documenti/Diagrams_monitorAgg.pdf>
+Package pdftex.def Info: documenti/Diagrams_monitorAgg.pdf  used on input line 
+443.
+(pdftex.def)             Requested size: 500.77129pt x 339.79279pt.
 
- ) 
+Overfull \hbox (45.52718pt too wide) in paragraph at lines 443--444
+[][] 
+ []
+
+[12] [13 <./documenti/Diagrams_monitorAgg.pdf
+
+pdfTeX warning: pdflatex (file ./documenti/Diagrams_monitorAgg.pdf): PDF inclus
+ion: invalid other resource which is no dict (key 'ProcSets', type <array>); ig
+nored.
+>] (./Documentazione.aux) ) 
 Here is how much of TeX's memory you used:
- 15437 strings out of 492990
- 310994 string characters out of 6135006
- 330541 words of memory out of 5000000
- 18849 multiletter control sequences out of 15000+600000
+ 15718 strings out of 492982
+ 316450 string characters out of 6134896
+ 337079 words of memory out of 5000000
+ 19141 multiletter control sequences out of 15000+600000
  545969 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,7n,33p,10387b,631s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/urw/times/utmr8a.pfb>
-Output written on Documentazione.pdf (12 pages, 377302 bytes).
+ 41i,7n,36p,10387b,631s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/
+8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+Output written on Documentazione.pdf (13 pages, 380023 bytes).
 PDF statistics:
- 178 PDF objects out of 1000 (max. 8388607)
- 118 compressed objects within 2 object streams
+ 182 PDF objects out of 1000 (max. 8388607)
+ 121 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

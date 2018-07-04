@@ -173,7 +173,7 @@ public class Storico extends  JFrame{
                     e1.printStackTrace();
                 }
 
-                printReport.printToPdf("here");
+                printReport.printToPdf("report.pdf");
 
 
             }
